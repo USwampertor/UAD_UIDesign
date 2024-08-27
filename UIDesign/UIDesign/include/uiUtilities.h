@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+#include <filesystem>
 #include <list>
 #include <map>
 #include <queue>
@@ -7,7 +9,6 @@
 #include <vector>
 #include <string>
 
-#include <cmath>
 #define NOMINMAX
 
 
@@ -26,7 +27,21 @@ using Queue = std::queue<T, A>;
 template<typename T, typename A = std::deque<T>>
 using Stack = std::stack<T, A>;
 
+using String = std::string;
+
+using WString = std::string;
+
 template<typename T, typename A = std::allocator<T>>
 using Vector = std::vector<T, A>;
 
-using String = std::string;
+using Path = std::filesystem::path;
+
+using DirectoryEntry = std::filesystem::directory_entry;
+
+struct FileSystem
+{
+  
+  static const Path CurrentPath() { return std::filesystem::current_path(); }
+  static void SetCurrentPath(const Path& p) { return std::filesystem::current_path(p); }
+
+};
