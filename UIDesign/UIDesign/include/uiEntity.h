@@ -5,38 +5,43 @@
 
 #include "uiAnimation.h"
 #include "uiAnimator.h"
+#include "uiComponent.h"
 
 #include <SFML/Main.hpp>
 #include <SFML/Graphics.hpp>
 
-struct Transform2D
-{
-public:
-
-
-public:
-  sf::Vector2f position;
-  sf::Vector2f scale;
-  sf::Vector2f rotation;
-};
 
 class Entity
 {
 public:
 
+  void AddComponent(Component* newComponent);
+
+  //template <typename T = Component*>
+  //void RemoveComponent<T>();
+  //
+  //template <typename T>
+  //void CreateComponent<T>();
+
+  void Initialize();
+
+  Component* GetComponent(String type);
+
   void Move(sf::Vector2f delta);
 
   void Scale(sf::Vector2f delta);
 
-  void Rotate(sf::Vector2f delta);
+  void Rotate(float delta);
 
   void SetPosition(sf::Vector2f newPosition);
 
-  void SetRotation(sf::Vector2f newRotation);
+  void SetRotation(float newRotation);
 
   void SetScale(sf::Vector2f newScale);
 
   void Update(float delta);
+
+  void PropagateTransform();
 
   Entity() = default;
 
@@ -44,7 +49,7 @@ public:
 
   Transform2D m_transform;
 
-  Animator* m_animator;
+  Vector<Component*> m_components;
 
 private:
 

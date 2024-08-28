@@ -204,6 +204,7 @@
     <ClInclude Include="include\imstb_truetype.h" />
     <ClInclude Include="include\uiAnimation.h" />
     <ClInclude Include="include\uiAnimator.h" />
+    <ClInclude Include="include\uiComponent.h" />
     <ClInclude Include="include\uiEntity.h" />
     <ClInclude Include="include\uiUtilities.h" />
   </ItemGroup>
