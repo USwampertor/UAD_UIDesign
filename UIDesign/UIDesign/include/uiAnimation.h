@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uiUtilities.h"
+#include "uiResource.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -10,12 +11,16 @@ struct Frame
   float interval;
 };
 
-class Animation
+class Animation : public Resource
 {
 public:
   Animation() = default;
   
   ~Animation() = default;
+
+  static eRESOURCETYPE GetType() { return eRESOURCETYPE::ANIMATION; }
+  virtual SizeT GetHashID() const override {  };
+
 
   void AddFrame(sf::Texture* newFrame);
 

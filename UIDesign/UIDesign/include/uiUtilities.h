@@ -1,17 +1,31 @@
 #pragma once
 
+#include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <filesystem>
 #include <list>
+#include <limits>
 #include <map>
+#include <memory>
 #include <queue>
 #include <stack>
+#include <type_traits>
 #include <utility> 
 #include <vector>
 #include <string>
 
+#include "uiPlatformTypes.h"
+
+#include <SFML/System/Vector2.hpp>
+
 #define NOMINMAX
 
+#define RAPIDJSON_HAS_STDSTRING 1
+
+// STD OBJECTS
+
+using DirectoryEntry = std::filesystem::directory_entry;
 
 template<typename T, typename A = std::allocator<T>>
 using List = std::list<T, A>;
@@ -22,34 +36,65 @@ template< typename KEY,
           typename A = std::allocator<std::pair<const KEY, T>>>
 using Map = std::map<KEY, T, B, A>;
 
+template<typename T>
+using NumericLimits = std::numeric_limits<T>;
+
 template<typename T, typename A = std::deque<T>>
 using Queue = std::queue<T, A>;
-
-template<typename T, typename A = std::deque<T>>
-using Stack = std::stack<T, A>;
-
-using String = std::string;
-
-using WString = std::string;
-
-template<typename T, typename A = std::allocator<T>>
-using Vector = std::vector<T, A>;
 
 template<typename T, typename A>
 using Pair = std::pair<T, A>;
 
 using Path = std::filesystem::path;
 
-using DirectoryEntry = std::filesystem::directory_entry;
+using RunTimeError = std::runtime_error;
 
-using int32 = int32_t;
+template<typename T>
+using SharedPtr = std::shared_ptr<T>;
+
+template<typename T, typename A = std::deque<T>>
+using Stack = std::stack<T, A>;
+
+using StdException = std::exception;
+
+using String = std::string;
+
+template<typename T>
+using UniquePtr = std::unique_ptr<T>;
+
+template<typename T, typename A = std::allocator<T>>
+using Vector = std::vector<T, A>;
+
+template<typename T>
+using WeakPtr = std::weak_ptr<T>;
+
+using WString = std::string;
+
+
+// SFML OBJECTS
+
+using Vector2f = sf::Vector2f;
+
+// FUNCTIONS
+
+template <typename T, typename... Args>
+UniquePtr<T> MakeUniqueObject(Args&&... args) {
+  return std::make_unique<T>(std::forward<Args>(args)...);
+}
+
+template <typename T, typename... Args>
+SharedPtr<T> MakeSharedObject(Args&&... args) {
+  return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+// UTILITIES
+
+
 
 struct FileSystem
 {
-  
   static const Path CurrentPath() { return std::filesystem::current_path(); }
   static void SetCurrentPath(const Path& p) { return std::filesystem::current_path(p); }
-
 };
 
 struct Utils
@@ -60,9 +105,9 @@ struct Utils
   }
 
   template<typename ... Args>
-  static String format(const String& format, Args ... args) {
+  static String Format(const String& format, Args ... args) {
     int size_s = std::snprintf(nullptr, 0, format.c_str(), args ...) + 1; // Extra space for '\0'
-    if (size_s <= 0) { throwRuntimeError("Error during formatting."); }
+    if (size_s <= 0) { ThrowRuntimeError("Error during formatting."); }
     auto size = static_cast<size_t>(size_s);
     auto buf = std::make_unique<char[]>(size);
     std::snprintf(buf.get(), size, format.c_str(), args ...);
@@ -71,24 +116,24 @@ struct Utils
 
   template<typename T>
   static String 
-  toString(const T& number) {
+  ToString(const T& number) {
     return std::to_string(number);
   }
 
   static void 
-  throwException(const String& message) {
+  ThrowException(const String& message) {
     throw::std::exception(message.c_str());
   }
 
   static void 
-  throwRuntimeError(const String& message) {
+  ThrowRuntimeError(const String& message) {
     throw::std::runtime_error(message.c_str());
   }
 
   static const String BLANK;
 
   static WString
-  toWide(String str) {
+  ToWide(String str) {
     WString stemp = WString(str.begin(), str.end());
     return stemp;
 
@@ -96,7 +141,7 @@ struct Utils
 
   template<typename T, typename A>
   static Pair<T, A>
-  makePair(T value1, A value2) {
+  MakePair(T value1, A value2) {
     return std::make_pair(value1, value2);
   }
 };

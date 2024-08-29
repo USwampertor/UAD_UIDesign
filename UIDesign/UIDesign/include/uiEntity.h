@@ -6,52 +6,114 @@
 #include "uiAnimation.h"
 #include "uiAnimator.h"
 #include "uiComponent.h"
+#include "uiUtilities.h"
 
 #include <SFML/Main.hpp>
 #include <SFML/Graphics.hpp>
-
 
 class Entity
 {
 public:
 
-  void AddComponent(Component* newComponent);
-
-  //template <typename T = Component*>
-  //void RemoveComponent<T>();
-  //
-  //template <typename T>
-  //void CreateComponent<T>();
-
-  void Initialize();
-
-  Component* GetComponent(String type);
-
-  void Move(sf::Vector2f delta);
-
-  void Scale(sf::Vector2f delta);
-
-  void Rotate(float delta);
-
-  void SetPosition(sf::Vector2f newPosition);
-
-  void SetRotation(float newRotation);
-
-  void SetScale(sf::Vector2f newScale);
-
-  void Update(float delta);
-
-  void PropagateTransform();
-
-  Entity() = default;
+  Entity()
+  {
+    m_transform = MakeUniqueObject<Transform2D>();
+    m_components.clear();
+    m_children.clear();
+  }
 
   ~Entity() = default;
 
-  Transform2D m_transform;
+  template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
+  void AddComponent(T* newComponent)
+  {
+    if (m_components.find(T::GetType()) == m_components.end())
+    {
+      m_components.insert(Utils::MakePair(T::GetType(), newComponent));
+    }
+  }
 
-  Vector<Component*> m_components;
+  template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
+  T* GetComponent()
+  {
+    if (m_components.find(T::GetType()) != m_components.end())
+    {
+      return reinterpret_cast<T*>(m_components.at(T::GetType()));
+    }
+    return nullptr;
+  }
+
+  template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
+  void RemoveComponent()
+  {
+    if (m_components.find(T::GetType()) != m_components.end())
+    {
+      m_components.erase(T::GetType());
+    }
+  }
+  //
+  template <typename T, 
+            typename = std::enable_if_t<std::is_base_of<Component, T>::value>, 
+            typename ... Args>
+  T* CreateComponent(Args ... args)
+  {
+    if (m_components.find(T::GetType()) == m_components.end())
+    {
+      T* newComponent = new T();
+      newComponent->Initialize(args ...);
+      m_components.insert(Utils::MakePair(T::GetType(), newComponent));
+      return newComponent;
+    }
+    return nullptr;
+  }
+
+  virtual void Initialize()
+  {
+    SetPosition(sf::Vector2f(0.0f, 0.0f));
+    SetRotation(0.0f);
+    SetScale(sf::Vector2f(1.0f, 1.0f));
+  }
+
+  virtual void Update(const float& delta)
+  {
+    for (auto& [key, component] : m_components)
+    {
+      component->Update(delta);
+    }
+  }
+
+  Transform2D& GetTransform()
+  {
+    return *m_transform;
+  }
+
+
+  void Destroy();
+
+  void Move(const sf::Vector2f& delta);
+
+  void Scale(const sf::Vector2f& delta);
+
+  void Rotate(const float& delta);
+
+  void SetPosition(const sf::Vector2f& newPosition);
+
+  void SetScale(const sf::Vector2f& newScale);
+
+  void SetRotation(const float& newRotation);
 
 private:
 
-};
+  void PropagateTransform();
 
+protected:
+
+  UniquePtr<Transform2D> m_transform;
+
+private:
+
+
+  Map<String, Component*> m_components;
+
+  Vector<UniquePtr<Entity>> m_children;
+};

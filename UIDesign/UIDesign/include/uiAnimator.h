@@ -2,29 +2,46 @@
 
 #include "uiAnimation.h"
 #include "uiComponent.h"
-#include "uiUtilities.h";
+#include "uiUtilities.h"
 
 #include <SFML/Graphics.hpp>
 
-enum eANIMATIONSTATE : int
+
+enum eANIMATIONSTATE : uint32
 {
-  PLAYING = 0,
-  PAUSED = 1,
-  STOPPED = 2
+  STOPPED = 0,
+  PLAYING = 1,
+  PAUSED  = 2
 };
 
 class Animator : public Component
 {
 public:
-  void AddAnimation(Animation* newAnimation, String newName);
+  static String GetType() { return "Animator"; }
 
-  void SetAnimation(String animationKey);
+  Animator()
+  {
+    m_state = eANIMATIONSTATE::STOPPED;
+    m_sprite = MakeUniqueObject<sf::Sprite>();
+    m_sprite->setOrigin(Vector2f(0.5f, 0.5f));
+    m_offset->Reset();
+  }
 
-  virtual void Update(float delta) override;
+  virtual void Initialize() override 
+  {
+  }
+  
+  virtual void PropagateTransform(const Transform2D& newTransform) override;
 
-  void SetCurrentTime(float newValue);
+  virtual void Update(const float& delta) override;
+  
+  void AddAnimation(SharedPtr<Animation> newAnimation, const String& newName);
 
-  void SetLoop(String animationKey, bool ifLoop);
+  void SetAnimation(const String& animationKey);
+
+  void SetCurrentTime(const float& newValue);
+
+  void SetLoop(const String& animationKey, const bool& ifLoop);
 
   void Play();
 
@@ -32,26 +49,20 @@ public:
 
   void Stop();
 
-  virtual String GetType() override { return "Animator"; }
+  void Flip();
 
-  virtual void Initialize() override 
-  {
-    m_sprite = new sf::Sprite();
-    m_state = eANIMATIONSTATE::STOPPED;
-    m_sprite->setOrigin(sf::Vector2f(0.5f, 0.5f));
-  }
+  const eANIMATIONSTATE& GetState();
 
-  sf::Sprite* GetSprite();
+  sf::Sprite& GetSprite();
 
-  Map<String, Animation*> m_animations;
+  Map<String, SharedPtr<Animation>> m_animations;
 
-  sf::Sprite* m_sprite;
+  UniquePtr<sf::Sprite> m_sprite;
 
-  Animation* m_currentAnimation;
+  SharedPtr<Animation> m_currentAnimation;
+
+private:
 
   eANIMATIONSTATE m_state;
 
-  virtual void PropagateTransform(Transform2D* newTransform) override;
-
 };
-

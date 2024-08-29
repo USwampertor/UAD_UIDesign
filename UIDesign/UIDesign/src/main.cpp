@@ -4,6 +4,7 @@
 #include "uiAnimation.h"
 #include "uiAnimator.h"
 #include "uiEntity.h"
+#include "uiUtilities.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -23,8 +24,8 @@ int main() {
   {
     sf::Texture* t = new sf::Texture();
     std::string p = std::filesystem::current_path().string();
-    std::cout << Utils::format("%s", p.c_str()) << std::endl;
-    if (t->loadFromFile(Utils::format("%s/../resources/sprite1.png", FileSystem::CurrentPath().string().c_str()),
+    std::cout << Utils::Format("%s", p.c_str()) << std::endl;
+    if (t->loadFromFile(Utils::Format("%s/../resources/sprite1.png", FileSystem::CurrentPath().string().c_str()),
                          sf::IntRect(i * 128, 0, 128, 128)))
     {
       t->setSmooth(true);
@@ -32,27 +33,24 @@ int main() {
     }
   }
 
-  Animation* animation = new Animation();
-  animation->Initialize(textures, 500.0f);
-  animation->SetLoop(true);
+  // Animation* animation = new Animation();
+  // animation->Initialize(textures, 500.0f);
+  // animation->SetLoop(true);
 
-  Animator* animator = new Animator();
-  animator->Initialize();
-  animator->AddAnimation(animation, String("idle"));
-  std::cout << Utils::toString(animator->GetSprite()->getPosition().x) << " " <<
-               Utils::toString(animator->GetSprite()->getPosition().y) << std::endl;
+  // Animator* animator = new Animator();
+  // animator->Initialize();
+  // animator->AddAnimation(animation, String("idle"));
+  // std::cout << Utils::toString(animator->GetSprite()->getPosition().x) << " " <<
+  //              Utils::toString(animator->GetSprite()->getPosition().y) << std::endl;
   
   Entity* e = new Entity();
   e->Initialize();
-  e->AddComponent(animator);
-  reinterpret_cast<Animator*>(e->GetComponent("Animator"))->SetAnimation("idle");
-  reinterpret_cast<Animator*>(e->GetComponent("Animator"))->Play();
-
-  std::cout << Utils::toString(e->m_transform.position.x) << " " <<
-               Utils::toString(e->m_transform.position.y) << std::endl;
-
-  std::cout << Utils::toString(animator->GetSprite()->getPosition().x) << " " <<
-               Utils::toString(animator->GetSprite()->getPosition().y) << std::endl;
+  // e->AddComponent(animator);
+  auto animator = e->CreateComponent<Animator>();
+  animator->Initialize();
+  // animator->AddAnimation(animation, String("idle"));
+  e->GetComponent<Animator>()->SetAnimation("idle");
+  e->GetComponent<Animator>()->Play();
 
   sf::Clock deltaClock;
   while (window.isOpen()) {
@@ -88,18 +86,17 @@ int main() {
     ImGui::SFML::Update(window, dt);
     e->Update(dt.asMilliseconds());
 
-    ImGui::Begin("Hello, world!");
-    ImGui::Button("Look at this pretty button");
-    ImGui::Text(std::to_string(e->m_transform.position.x).c_str());
-    ImGui::Text(std::to_string(e->m_transform.position.y).c_str());
+    ImGui::Begin("Coordinates");
+    ImGui::Text(std::to_string(e->GetTransform().position.x).c_str());
+    ImGui::Text(std::to_string(e->GetTransform().position.y).c_str());
     ImGui::End();
-    ImGui::Begin("Test 2");
-    ImGui::End();
+    // ImGui::Begin("Test 2");
+    // ImGui::End();
 
     window.clear();
-    //Here start drawing
-    window.draw(*(reinterpret_cast<Animator*>(e->GetComponent("Animator"))->GetSprite()));
-
+    // Here start drawing
+    // window.draw(*(reinterpret_cast<Animator*>(e->GetComponentOfType<Animator*>())->GetSprite()));
+    window.draw(e->GetComponent<Animator>()->GetSprite());
 
     ImGui::SFML::Render(window);
     window.display();
