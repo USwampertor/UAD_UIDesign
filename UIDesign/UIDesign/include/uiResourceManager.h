@@ -7,6 +7,9 @@
 
 class ResourceManager : public Module<ResourceManager>
 {
+
+
+
   Map<uint32, SharedPtr<Resource>> m_resources;
 };
 
