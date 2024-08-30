@@ -2,6 +2,7 @@
 
 #include "uiUtilities.h"
 #include "uiResource.h"
+#include "uiTexture.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -19,20 +20,18 @@ public:
   ~Animation() = default;
 
   static eRESOURCETYPE GetType() { return eRESOURCETYPE::ANIMATION; }
-  virtual SizeT GetHashID() const override {  };
 
+  void Initialize(Vector<SharedPtr<Texture>> newTextures, const float& duration);
 
-  void AddFrame(sf::Texture* newFrame);
+  void Update(const float& delta);
 
-  void Initialize(Vector<sf::Texture*> newTextures, float duration);
+  void AddFrame(SharedPtr<Texture> newFrame);
 
-  void Update(float delta);
+  void SetCurrentTime(const float& newValue);
 
-  void SetCurrentTime(float newValue);
+  void SetLoop(const bool& ifLoop);
 
-  void SetLoop(bool ifLoop);
-
-  sf::Texture* GetCurrentFrame();
+  SharedPtr<Texture> GetCurrentFrame();
 
 public:
 
@@ -40,7 +39,7 @@ public:
 
   float m_animationTime;
 
-  Vector<sf::Texture*> m_frames;
+  Vector<SharedPtr<Texture>> m_frames;
 
   bool m_loop;
 

@@ -4,6 +4,8 @@
 #include "uiAnimation.h"
 #include "uiAnimator.h"
 #include "uiEntity.h"
+#include "uiResourceManager.h"
+#include "uiTexture.h"
 #include "uiUtilities.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
@@ -14,6 +16,7 @@
 #include <iostream>
 
 int main() {
+  ResourceManager::StartUp();
   sf::RenderWindow window(sf::VideoMode(640, 480), "");
   window.setFramerateLimit(60);
   ImGui::SFML::Init(window);
@@ -24,6 +27,8 @@ int main() {
   {
     sf::Texture* t = new sf::Texture();
     std::string p = std::filesystem::current_path().string();
+    String texturePath = Utils::Format("%s/../resources/sprite1.png", FileSystem::CurrentPath().string().c_str());
+    SharedPtr<Texture> tex = ResourceManager()::Instance().LoadResource(texturePath);
     std::cout << Utils::Format("%s", p.c_str()) << std::endl;
     if (t->loadFromFile(Utils::Format("%s/../resources/sprite1.png", FileSystem::CurrentPath().string().c_str()),
                          sf::IntRect(i * 128, 0, 128, 128)))

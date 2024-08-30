@@ -5,4 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-class Texture : public Resource, public sf::Texture {};
+class Texture : public Resource, public sf::Texture 
+{
+  static eRESOURCETYPE GetType() { return eRESOURCETYPE::TEXTURE; }
+};

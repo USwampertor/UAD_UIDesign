@@ -13,5 +13,4 @@ enum eRESOURCETYPE : uint32
 class Resource
 {
   static eRESOURCETYPE GetType() { assert(true && "IMPLEMENT THIS"); return (eRESOURCETYPE::NONE); }
-  virtual SizeT GetHashID() const = 0;
 };

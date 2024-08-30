@@ -11,7 +11,7 @@ void Animator::PropagateTransform(const Transform2D& newTransform)
 
 void Animator::Update(const float& delta)
 {
-  if (m_state == eANIMATIONSTATE::PLAYING)
+  if (m_state == eANIMATIONSTATE::PLAYING && m_currentAnimation != nullptr)
   {
     m_currentAnimation->Update(delta);
     m_sprite->setTexture(*m_currentAnimation->GetCurrentFrame());

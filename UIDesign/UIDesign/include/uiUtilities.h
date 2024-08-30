@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cmath>
 #include <filesystem>
+#include <functional>
 #include <list>
 #include <limits>
 #include <map>
@@ -26,6 +27,9 @@
 // STD OBJECTS
 
 using DirectoryEntry = std::filesystem::directory_entry;
+
+template<typename T>
+using Hash = std::hash<T>;
 
 template<typename T, typename A = std::allocator<T>>
 using List = std::list<T, A>;
