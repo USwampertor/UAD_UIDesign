@@ -63,6 +63,8 @@ public:
 
 private:
 
+  float m_currentTime;
+
   eANIMATIONSTATE m_state;
 
 };

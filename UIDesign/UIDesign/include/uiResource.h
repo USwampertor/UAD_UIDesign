@@ -8,6 +8,7 @@ enum eRESOURCETYPE : uint32
   TEXTURE,
   SOUND,
   ANIMATION,
+  ATLAS,
 };
 
 class Resource

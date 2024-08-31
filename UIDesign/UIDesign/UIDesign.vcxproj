@@ -208,8 +208,10 @@
     <ClInclude Include="include\imstb_rectpack.h" />
     <ClInclude Include="include\imstb_textedit.h" />
     <ClInclude Include="include\imstb_truetype.h" />
+    <ClInclude Include="include\uiJSON.h" />
     <ClInclude Include="include\uiAnimation.h" />
     <ClInclude Include="include\uiAnimator.h" />
+    <ClInclude Include="include\uiAtlas.h" />
     <ClInclude Include="include\uiBoxCollider.h" />
     <ClInclude Include="include\uiComponent.h" />
     <ClInclude Include="include\uiEntity.h" />

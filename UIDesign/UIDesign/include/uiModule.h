@@ -9,15 +9,18 @@ class Module
 public:
 
   /**
-    * Returns a reference to the instance
-    */
+   * Returns a reference to the instance
+   */
   static T&
-    Instance() {
-    if (!IsStartedUp()) {
+  Instance() 
+  {
+    if (!IsStartedUp()) 
+    {
       Utils::ThrowException("Trying to access a module but it hasn't been started.");
     }
 
-    if (IsDestroyed()) {
+    if (IsDestroyed()) 
+    {
       Utils::ThrowException("Trying to access a destroyed module.");
     }
 
@@ -25,15 +28,18 @@ public:
   }
 
   /**
-    * Returns a pointer to the instance
-    */
+   * Returns a pointer to the instance
+   */
   static T*
-    InstancePtr() {
-    if (!IsStartedUp()) {
+  InstancePtr() 
+  {
+    if (!IsStartedUp())
+    {
       Utils::ThrowException("Trying to access a module but it hasn't been started.");
     }
 
-    if (IsDestroyed()) {
+    if (IsDestroyed()) 
+    {
       Utils::ThrowException("Trying to access a destroyed module.");
     }
 
@@ -43,29 +49,34 @@ public:
 
   template<class... Args>
   static void
-    StartUp(Args&& ...args) {
-    if (IsStartedUp()) {
+  StartUp(Args&& ...args) 
+  {
+    if (IsStartedUp()) 
+    {
       Utils::ThrowException("Trying to start an already started module.");
     }
 
     _instance() = Ui_new<T>(std::forward<Args>(args)...);
     IsStartedUp() = true;
 
-    static_cast<Module*>(_instance())->onStartUp();
+    static_cast<Module*>(_instance())->OnStartUp();
   }
 
   template<class SubType, class... Args>
   static void
-    StartUp(Args&& ...args) {
+  StartUp(Args&& ...args) 
+  {
     static_assert(std::is_base_of<T, SubType>::value,
       "Provided type isn't derived from type the Module is initialized with.");
 
-    if (IsStartedUp()) {
+    if (IsStartedUp()) 
+    {
       Utils::ThrowException("Trying to start an already started module.");
     }
 
     _instance() = Ui_new<SubType>(std::forward<Args>(args)...);
-    if (nullptr == _instance()) {
+    if (nullptr == _instance()) 
+    {
       Utils::ThrowException("Instance failed to initialize");
     }
     IsStartedUp() = true;
@@ -74,12 +85,15 @@ public:
   }
 
   static void
-    ShutDown() {
-    if (IsDestroyed()) {
+  ShutDown() 
+  {
+    if (IsDestroyed()) 
+    {
       Utils::ThrowException("Trying to shut down an already shut down module.");
     }
 
-    if (!IsStartedUp()) {
+    if (!IsStartedUp()) 
+    {
       Utils::ThrowException("Trying to shut down a module which was never started.");
     }
 
@@ -90,14 +104,17 @@ public:
   }
 
   static bool
-    IsStarted() {
+  IsStarted() 
+  {
     return IsStartedUp() && !IsDestroyed();
   }
 
   static void
-    SetModule(T* obj) {
+  SetModule(T* obj) 
+  {
     _instance() = obj;
-    if (nullptr == _instance()) {
+    if (nullptr == _instance()) 
+    {
       Utils::ThrowException("Instance failed to be set");
     }
     IsStartedUp() = true;
@@ -114,38 +131,41 @@ protected:
     * Virtual destructor
     */
   virtual
-    ~Module() = default;
+  ~Module() = default;
 
   Module(Module&&) = delete;
 
   Module(const Module&) = delete;
 
   Module&
-    operator=(Module&&) = delete;
+  operator=(Module&&) = delete;
 
   Module&
-    operator=(const Module&) = delete;
+  operator=(const Module&) = delete;
 
   virtual void
-    OnStartUp() {}
+  OnStartUp() {}
 
   virtual void
-    OnShutDown() {}
+  OnShutDown() {}
 
   static T*&
-    _instance() {
+  _instance() 
+  {
     static T* inst = nullptr;
     return inst;
   }
 
   static bool&
-    IsDestroyed() {
+  IsDestroyed() 
+  {
     static bool inst = false;
     return inst;
   }
 
   static bool&
-    IsStartedUp() {
+  IsStartedUp() 
+  {
     static bool inst = false;
     return inst;
   }

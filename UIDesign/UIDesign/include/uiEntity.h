@@ -25,22 +25,24 @@ public:
   ~Entity() = default;
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
-  void AddComponent(T* newComponent)
+  void AddComponent(SharedPtr<T> newComponent)
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
-      m_components.insert(Utils::MakePair(T::GetType(), newComponent));
+      // m_components.insert(Utils::MakePair(T::GetType(), newComponent));
     }
   }
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
-  T* GetComponent()
+  SharedPtr<T> GetComponent()
   {
     if (m_components.find(T::GetType()) != m_components.end())
     {
-      return reinterpret_cast<T*>(m_components.at(T::GetType()));
+      return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
+    
+      // auto it = m_components.find(T::GetType());
+      // return REINTERPRETPOINTER(it->second.get());
     }
-    return nullptr;
   }
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
@@ -55,16 +57,15 @@ public:
   template <typename T, 
             typename = std::enable_if_t<std::is_base_of<Component, T>::value>, 
             typename ... Args>
-  T* CreateComponent(Args ... args)
+  SharedPtr<T> CreateComponent(Args ... args)
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
-      T* newComponent = new T();
-      newComponent->Initialize(args ...);
-      m_components.insert(Utils::MakePair(T::GetType(), newComponent));
-      return newComponent;
+      m_components.insert(Utils::MakePair(T::GetType(), MakeSharedObject<T>()));
+      m_components.at(T::GetType())->Initialize(args ...);
+      // return REINTERPRETPOINTER(T*, *m_components[T::GetType()].get());
+      return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
     }
-    return nullptr;
   }
 
   virtual void Initialize()
@@ -85,6 +86,11 @@ public:
   Transform2D& GetTransform()
   {
     return *m_transform;
+  }
+
+  Vector<UniquePtr<Entity>>& Children()
+  {
+    return m_children;
   }
 
 
@@ -110,10 +116,9 @@ protected:
 
   UniquePtr<Transform2D> m_transform;
 
-private:
+public:
 
-
-  Map<String, Component*> m_components;
+  Map<String, SharedPtr<Component>> m_components;
 
   Vector<UniquePtr<Entity>> m_children;
 };

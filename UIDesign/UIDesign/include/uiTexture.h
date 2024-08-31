@@ -7,5 +7,6 @@
 
 class Texture : public Resource, public sf::Texture 
 {
+public:
   static eRESOURCETYPE GetType() { return eRESOURCETYPE::TEXTURE; }
 };

@@ -8,7 +8,13 @@ class Scene
 {
 public:
 
-  Entity* m_root;
+  void Initialize()
+  {
+    m_root = MakeUniqueObject<Entity>();
+    m_root->Initialize();
+  }
+
+  UniquePtr<Entity> m_root;
 
   
 

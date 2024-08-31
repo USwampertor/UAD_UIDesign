@@ -5,18 +5,21 @@
 #include <cmath>
 #include <filesystem>
 #include <functional>
+#include <fstream>
 #include <list>
 #include <limits>
 #include <map>
 #include <memory>
 #include <queue>
 #include <stack>
+#include <sstream>
+#include <string>
 #include <type_traits>
 #include <utility> 
 #include <vector>
-#include <string>
 
 #include "uiPlatformTypes.h"
+
 
 #include <SFML/System/Vector2.hpp>
 
@@ -61,6 +64,8 @@ using Stack = std::stack<T, A>;
 
 using StdException = std::exception;
 
+using SStream = std::stringstream;
+
 using String = std::string;
 
 template<typename T>
@@ -74,6 +79,11 @@ using WeakPtr = std::weak_ptr<T>;
 
 using WString = std::string;
 
+using FStream = std::fstream;
+
+using IFStream = std::ifstream;
+
+using OFStream = std::ofstream;
 
 // SFML OBJECTS
 
@@ -91,6 +101,12 @@ SharedPtr<T> MakeSharedObject(Args&&... args) {
   return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
+#define MAKEUNIQUEOBJECT(T, ...) std::make_unique<T>(__VA_ARGS__)
+
+#define MAKESHAREDOBJECT(T, ...) std::make_shared<T>(__VA_ARGS__)
+
+#define REINTERPRETPOINTER(T, ...) std::reinterpret_pointer_cast<T>(__VA_ARGS__)
+
 // UTILITIES
 
 
@@ -99,6 +115,18 @@ struct FileSystem
 {
   static const Path CurrentPath() { return std::filesystem::current_path(); }
   static void SetCurrentPath(const Path& p) { return std::filesystem::current_path(p); }
+  static String GetAllStringFromFile(const Path& p) 
+  {
+    IFStream f;
+    f.open(p.string().c_str());
+    if (!f.is_open())
+    {
+      return "";
+    }
+    SStream buffer;
+    buffer << f.rdbuf();
+    return buffer.str();
+  }
 };
 
 struct Utils

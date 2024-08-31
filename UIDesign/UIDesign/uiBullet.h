@@ -13,8 +13,8 @@ class Bullet : Entity
 
   virtual void Initialize() override 
   {
-    collider = CreateComponent<BoxCollider>();
-    animator = CreateComponent<Animator>();
+    CreateComponent<BoxCollider>();
+    CreateComponent<Animator>();
   
   }
 };

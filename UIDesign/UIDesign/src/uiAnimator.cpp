@@ -13,8 +13,16 @@ void Animator::Update(const float& delta)
 {
   if (m_state == eANIMATIONSTATE::PLAYING && m_currentAnimation != nullptr)
   {
-    m_currentAnimation->Update(delta);
-    m_sprite->setTexture(*m_currentAnimation->GetCurrentFrame());
+    // m_currentAnimation->Update(delta);
+
+    m_currentTime += delta;
+    if (m_currentAnimation->m_loop && m_currentTime > m_currentAnimation->m_animationTime)
+    {
+      m_currentTime = std::fmod(m_currentTime, m_currentAnimation->m_animationTime);
+    }
+    m_currentTime = std::clamp(m_currentTime, 0.0f, m_currentAnimation->m_animationTime - 0.1f);
+
+    m_sprite->setTexture(*m_currentAnimation->GetCurrentFrame(m_currentTime));
   }
 }
 
@@ -33,8 +41,16 @@ void Animator::SetAnimation(const String& animationKey)
 
 void Animator::SetCurrentTime(const float& newValue)
 {
-  m_currentAnimation->SetCurrentTime(newValue);
-  m_sprite->setTexture(*m_currentAnimation->GetCurrentFrame());
+  // m_currentAnimation->SetCurrentTime(newValue);
+
+  m_currentTime = newValue;
+  if (m_currentAnimation->m_loop && m_currentTime > m_currentAnimation->m_animationTime)
+  {
+    m_currentTime = std::fmod(newValue, m_currentAnimation->m_animationTime);
+  }
+  m_currentTime = std::clamp(m_currentTime, 0.0f, m_currentAnimation->m_animationTime - 0.1f);
+
+  m_sprite->setTexture(*m_currentAnimation->GetCurrentFrame(m_currentTime));
 }
 
 void Animator::SetLoop(const String& animationKey, const bool& ifLoop)
