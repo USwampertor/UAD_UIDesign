@@ -22,25 +22,9 @@
 int main() {
   ResourceManager::StartUp();
   sf::RenderWindow window(sf::VideoMode(640, 480), "");
-  window.setFramerateLimit(60);
+  window.setFramerateLimit(144);
   ImGui::SFML::Init(window);
 
-  // Vector<sf::Texture*> textures;
-
-  // for (int i = 0; i < 6; ++i)
-  // {
-  //   sf::Texture* t = new sf::Texture();
-  //   std::string p = std::filesystem::current_path().string();
-  //   String texturePath = Utils::Format("%s/../resources/sprite1.png", FileSystem::CurrentPath().string().c_str());
-  //   SharedPtr<Texture> tex = ResourceManager::Instance().LoadResource<Texture>(texturePath);
-  //   std::cout << Utils::Format("%s", p.c_str()) << std::endl;
-  //   if (t->loadFromFile(Utils::Format("%s/../resources/sprite1.png", FileSystem::CurrentPath().string().c_str()),
-  //                        sf::IntRect(i * 128, 0, 128, 128)))
-  //   {
-  //     t->setSmooth(true);
-  //     textures.push_back(t);
-  //   }
-  // }
   String atlasPath = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   SharedPtr<Atlas> atlas = ResourceManager::Instance().LoadResource<Atlas>(atlasPath);
   SharedPtr<Animation> animation = ResourceManager::Instance().CreateResource<Animation>("idleEnemy");

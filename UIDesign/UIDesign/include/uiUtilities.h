@@ -107,6 +107,8 @@ SharedPtr<T> MakeSharedObject(Args&&... args) {
 
 #define REINTERPRETPOINTER(T, ...) std::reinterpret_pointer_cast<T>(__VA_ARGS__)
 
+#define STATICPOINTER(T, ...) std::static_pointer_cast<T>(__VA_ARGS__)
+
 // UTILITIES
 
 
