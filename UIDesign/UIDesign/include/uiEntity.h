@@ -22,6 +22,8 @@ public:
     m_children.clear();
   }
 
+  Entity(Entity&) = default;
+
   ~Entity() = default;
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>

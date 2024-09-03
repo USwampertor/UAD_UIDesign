@@ -16,8 +16,6 @@ class CODEC
   
 };
 
-
-
 class ResourceManager : public Module<ResourceManager>
 {
 public:

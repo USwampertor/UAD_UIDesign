@@ -4,7 +4,10 @@
 #include "uiAnimation.h"
 #include "uiAnimator.h"
 #include "uiAtlas.h"
+#include "uiBullet.h"
 #include "uiEntity.h"
+#include "uiInput.h"
+#include "uiInputMapping.h"
 #include "uiResourceManager.h"
 #include "uiTexture.h"
 #include "uiUtilities.h"
@@ -20,38 +23,34 @@
 #include <iostream>
 
 int main() {
-  ResourceManager::StartUp();
   sf::RenderWindow window(sf::VideoMode(640, 480), "");
   window.setFramerateLimit(144);
   ImGui::SFML::Init(window);
+  ResourceManager::StartUp();
+  InputManager::StartUp();
+  InputManager::Instance().SetDisplaySize(640, 480);
+
+
 
   String atlasPath = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   SharedPtr<Atlas> atlas = ResourceManager::Instance().LoadResource<Atlas>(atlasPath);
   SharedPtr<Animation> animation = ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
   animation->Initialize(atlas->m_atlas, 400.0f);
-  // Animation* animation = new Animation();
-  // animation->Initialize(textures, 500.0f);
   animation->SetLoop(true);
 
-  // Animator* animator = new Animator();
-  // animator->Initialize();
-  // animator->AddAnimation(animation, String("idle"));
-  // std::cout << Utils::toString(animator->GetSprite()->getPosition().x) << " " <<
-  //              Utils::toString(animator->GetSprite()->getPosition().y) << std::endl;
-  
-  UniquePtr<Entity> e = MakeUniqueObject<Entity>();
+  UniquePtr<BulletEntity> e = MakeUniqueObject<BulletEntity>();
+
   e->Initialize();
-  // e->AddComponent(animator);
   e->CreateComponent<Animator>();
   e->GetComponent<Animator>()->Initialize();
   e->GetComponent<Animator>()->AddAnimation(animation, String("idle"));
   e->GetComponent<Animator>()->SetAnimation("idle");
   e->GetComponent<Animator>()->Play();
-
+  e->m_map = MakeSharedObject<InputMapping>(InputManager::Instance());
   SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   scene->Initialize();
   std::srand(std::time(nullptr));
-  for (int i = 0; i < 100; ++i)
+  for (int i = 0; i < 10000; ++i)
   {
     scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());
     scene->m_root->m_children[i]->Initialize();
@@ -67,34 +66,18 @@ int main() {
   sf::Clock deltaClock;
   sf::Time dt;
   while (window.isOpen()) {
+    InputManager::Instance().Update();
+
+    {
+      
+    }
+
     sf::Event event;
     float delta = dt.asMilliseconds();
     float fps = 1000.0f / dt.asMilliseconds();
     while (window.pollEvent(event)) {
       ImGui::SFML::ProcessEvent(window, event);
-
-      if (event.type == sf::Event::Closed) {
-        window.close();
-      }
-      if (event.type == sf::Event::KeyPressed)
-      {
-        if (event.key.scancode == sf::Keyboard::Scan::W)
-        {
-          e->Move(sf::Vector2f(0.0f, -10.0f));
-        }
-        if (event.key.scancode == sf::Keyboard::Scan::S)
-        {
-          e->Move(sf::Vector2f(0.0f, 10.0f));
-        }
-        if (event.key.scancode == sf::Keyboard::Scan::A)
-        {
-          e->Move(sf::Vector2f(-10.0f, 0.0f));
-        }
-        if (event.key.scancode == sf::Keyboard::Scan::D)
-        {
-          e->Move(sf::Vector2f(10.0f, 0.0f));
-        }
-      }
+      if (event.type == sf::Event::Closed) { window.close(); }
     }
 
     ImGui::SFML::Update(window, dt);
@@ -110,12 +93,9 @@ int main() {
     ImGui::Text(std::to_string(e->GetTransform().position.y).c_str());
     ImGui::Text(Utils::ToString(fps).c_str());
     ImGui::End();
-    // ImGui::Begin("Test 2");
-    // ImGui::End();
 
     window.clear();
     // Here start drawing
-    // window.draw(*(reinterpret_cast<Animator*>(e->GetComponentOfType<Animator*>())->GetSprite()));
     for (int i = 0; i < scene->m_root->m_children.size(); ++i)
     {
       window.draw(scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite());

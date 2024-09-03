@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -95,7 +95,7 @@
       <PreprocessorDefinitions>CY_CORE_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/;$(DEVLIBS)better-enums/include/</AdditionalIncludeDirectories>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
@@ -106,7 +106,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/;$(DEVLIBS)SFPhysics/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;SFPhysics_d.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;SFPhysics_d.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,7 +118,7 @@
       <PreprocessorDefinitions>CY_CORE_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/;$(DEVLIBS)better-enums/include/</AdditionalIncludeDirectories>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
@@ -141,7 +141,7 @@
       <PreprocessorDefinitions>CY_CORE_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/;$(DEVLIBS)better-enums/include/</AdditionalIncludeDirectories>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
@@ -152,7 +152,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)SFML/lib/$(PlatformTarget)/;$(DEVLIBS)SFPhysics/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <ImportLibrary>$(SolutionDir)lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;SFPhysics_d.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;SFPhysics_d.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,7 +164,7 @@
       <PreprocessorDefinitions>CY_CORE_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(Projectname)/include/;$(DEVLIBS)SFML/include/;$(DEVLIBS)rapidjson/include/;$(DEVLIBS)SFPhysics/include/;$(DEVLIBS)better-enums/include/</AdditionalIncludeDirectories>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
@@ -191,12 +191,13 @@
     <ClCompile Include="src\uiAnimation.cpp" />
     <ClCompile Include="src\uiAnimator.cpp" />
     <ClCompile Include="src\uiBoxCollider.cpp" />
+    <ClCompile Include="src\uiBullet.cpp" />
     <ClCompile Include="src\uiEntity.cpp" />
+    <ClCompile Include="src\uiInputMapping.cpp" />
     <ClCompile Include="src\uiMemoryAllocator.cpp" />
     <ClCompile Include="src\uiModule.cpp" />
     <ClCompile Include="src\uiResourceManager.cpp" />
     <ClCompile Include="src\uiScene.cpp" />
-    <ClCompile Include="uiBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\imconfig-SFML.h" />
@@ -208,6 +209,10 @@
     <ClInclude Include="include\imstb_rectpack.h" />
     <ClInclude Include="include\imstb_textedit.h" />
     <ClInclude Include="include\imstb_truetype.h" />
+    <ClInclude Include="include\uiBullet.h" />
+    <ClInclude Include="include\uiInput.h" />
+    <ClInclude Include="include\uiInputAction.h" />
+    <ClInclude Include="include\uiInputMapping.h" />
     <ClInclude Include="include\uiJSON.h" />
     <ClInclude Include="include\uiAnimation.h" />
     <ClInclude Include="include\uiAnimator.h" />
@@ -218,13 +223,13 @@
     <ClInclude Include="include\uiMemoryAllocator.h" />
     <ClInclude Include="include\uiModule.h" />
     <ClInclude Include="include\uiPlatformTypes.h" />
+    <ClInclude Include="include\uiPrerequisites.h" />
     <ClInclude Include="include\uiResource.h" />
     <ClInclude Include="include\uiResourceManager.h" />
     <ClInclude Include="include\uiScene.h" />
     <ClInclude Include="include\uiSprite.h" />
     <ClInclude Include="include\uiTexture.h" />
     <ClInclude Include="include\uiUtilities.h" />
-    <ClInclude Include="uiBullet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
