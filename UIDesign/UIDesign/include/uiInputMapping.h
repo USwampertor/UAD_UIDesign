@@ -9,8 +9,10 @@
 class InputMapping // : public gainput::InputMap
 {
 public:
-  InputMapping(InputManager& manager, const String& name = 0)
-    : gainput::InputMap(manager, name.c_str()) {}
+  InputMapping() = default;// (InputManager& manager, const String& name = 0)
+    // : gainput::InputMap(manager, name.c_str()) {}
+
+  ~InputMapping() = default;
 
   template <typename T>
   void BindAction(SharedPtr<InputAction> action, T button);
@@ -21,6 +23,6 @@ public:
 
   void RemoveAction(const String& actionName);
 
-  // Map<uint32, SharedPtr<InputAction>> m_actions;
+  Map<Input::eINPUTCODE, SharedPtr<InputAction>> m_actions;
 };
 

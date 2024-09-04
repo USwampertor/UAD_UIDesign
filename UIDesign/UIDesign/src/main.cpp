@@ -28,7 +28,7 @@ int main() {
   ImGui::SFML::Init(window);
   ResourceManager::StartUp();
   InputManager::StartUp();
-  InputManager::Instance().SetDisplaySize(640, 480);
+  InputManager::Instance();
 
 
 
@@ -46,7 +46,7 @@ int main() {
   e->GetComponent<Animator>()->AddAnimation(animation, String("idle"));
   e->GetComponent<Animator>()->SetAnimation("idle");
   e->GetComponent<Animator>()->Play();
-  e->m_map = MakeSharedObject<InputMapping>(InputManager::Instance());
+  // e->m_map = MakeSharedObject<InputMapping>(InputManager::Instance());
   SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   scene->Initialize();
   std::srand(std::time(nullptr));
@@ -66,11 +66,7 @@ int main() {
   sf::Clock deltaClock;
   sf::Time dt;
   while (window.isOpen()) {
-    InputManager::Instance().Update();
-
-    {
-      
-    }
+    InputManager::Instance().Update(dt.asMilliseconds());
 
     sf::Event event;
     float delta = dt.asMilliseconds();
