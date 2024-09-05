@@ -7,6 +7,7 @@
 #include "uiBullet.h"
 #include "uiEntity.h"
 #include "uiInput.h"
+#include "uiInputManager.h"
 #include "uiInputMapping.h"
 #include "uiResourceManager.h"
 #include "uiTexture.h"
@@ -28,7 +29,7 @@ int main() {
   ImGui::SFML::Init(window);
   ResourceManager::StartUp();
   InputManager::StartUp();
-  InputManager::Instance();
+  // InputManager::Instance();
 
 
 
@@ -46,11 +47,11 @@ int main() {
   e->GetComponent<Animator>()->AddAnimation(animation, String("idle"));
   e->GetComponent<Animator>()->SetAnimation("idle");
   e->GetComponent<Animator>()->Play();
-  // e->m_map = MakeSharedObject<InputMapping>(InputManager::Instance());
+  e->m_map = MakeSharedObject<InputMapping>();
   SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   scene->Initialize();
   std::srand(std::time(nullptr));
-  for (int i = 0; i < 10000; ++i)
+  for (int i = 0; i < 100; ++i)
   {
     scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());
     scene->m_root->m_children[i]->Initialize();
@@ -73,6 +74,7 @@ int main() {
     float fps = 1000.0f / dt.asMilliseconds();
     while (window.pollEvent(event)) {
       ImGui::SFML::ProcessEvent(window, event);
+      InputManager::Instance().PollEvents(event);
       if (event.type == sf::Event::Closed) { window.close(); }
     }
 

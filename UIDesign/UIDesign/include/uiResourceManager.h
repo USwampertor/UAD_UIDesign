@@ -1,5 +1,7 @@
 #pragma once
 
+#include "uiPrerequisites.h"
+
 #include "uiAnimation.h"
 #include "uiAtlas.h"
 #include "uiJSON.h"

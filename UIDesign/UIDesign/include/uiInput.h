@@ -17,291 +17,382 @@ namespace Input
   using DeviceData  = sf::Joystick::Identification;
   
   BETTER_ENUM(
-    eINPUTSTATE, 
-    uint32, 
+    eINPUTSTATE,
+    uint32,
     PRESSED,
     HELD,
     RELEASED,
-    INACTIVE 
+    INACTIVE
   )
 
   BETTER_ENUM(
-    eDEVICEHEXVALUE, 
+    eDEVICEHEXVALUE,
     uint32,
     MOUSE = 1,
+    MOUSEWHEEL,
     JOYSTICK,
+    JOYSTICKAXIS,
     KEYBOARD,
-    KEYSCAN 
+    KEYSCAN
   )
 
   BETTER_ENUM(
     eINPUTCODE, 
-    int64,
-    MouseLeft                       = 0x001,
-    MouseRight                      = 0x011,
-    MouseMiddle                     = 0x021,
-    MouseXButton1                   = 0x031,
-    MouseXButton2                   = 0x041,
-    MouseWheelVertical              = 0x051,
-    MouseWheelHorizontal            = 0x061,
-    JoystickAxisX                   = 0x002,
-    JoystickAxisY                   = 0x012,
-    JoystickAxisZ                   = 0x022,
-    JoystickAxisR                   = 0x032,
-    JoystickAxisU                   = 0x042,
-    JoystickAxisV                   = 0x052,
-    JoystickAxisHatX                = 0x062,
-    JoystickAxisHatY                = 0x072,
-    KeyCodeUnknown                  = 0xF03,
-    KeyCodeA                        = 0x003,
-    KeyCodeB                        = 0x013,            
-    KeyCodeC                        = 0x023,            
-    KeyCodeD                        = 0x033,            
-    KeyCodeE                        = 0x043,            
-    KeyCodeF                        = 0x053,            
-    KeyCodeG                        = 0x063,            
-    KeyCodeH                        = 0x073,            
-    KeyCodeI                        = 0x083,            
-    KeyCodeJ                        = 0x093,            
-    KeyCodeK                        = 0x0A3,            
-    KeyCodeL                        = 0x0B3,            
-    KeyCodeM                        = 0x0C3,            
-    KeyCodeN                        = 0x0D3,            
-    KeyCodeO                        = 0x0E3,            
-    KeyCodeP                        = 0x0F3,            
-    KeyCodeQ                        = 0x103,            
-    KeyCodeR                        = 0x113,            
-    KeyCodeS                        = 0x123,            
-    KeyCodeT                        = 0x133,            
-    KeyCodeU                        = 0x143,            
-    KeyCodeV                        = 0x153,            
-    KeyCodeW                        = 0x163,            
-    KeyCodeX                        = 0x173,            
-    KeyCodeY                        = 0x183,            
-    KeyCodeZ                        = 0x193,          
-    KeyCodeNum0                     = 0x1A3,         
-    KeyCodeNum1                     = 0x1B3,         
-    KeyCodeNum2                     = 0x1C3,         
-    KeyCodeNum3                     = 0x1D3,         
-    KeyCodeNum4                     = 0x1E3,         
-    KeyCodeNum5                     = 0x1F3,         
-    KeyCodeNum6                     = 0x203,         
-    KeyCodeNum7                     = 0x213,         
-    KeyCodeNum8                     = 0x223,         
-    KeyCodeNum9                     = 0x233,         
-    KeyCodeEscape                   = 0x243,
-    KeyCodeLControl                 = 0x253,
-    KeyCodeLShift                   = 0x263,
-    KeyCodeLAlt                     = 0x273,
-    KeyCodeLSystem                  = 0x283,
-    KeyCodeRControl                 = 0x293,
-    KeyCodeRShift                   = 0x2A3,
-    KeyCodeRAlt                     = 0x2B3,
-    KeyCodeRSystem                  = 0x2C3,
-    KeyCodeMenu                     = 0x2D3,
-    KeyCodeLBracket                 = 0x2E3,
-    KeyCodeRBracket                 = 0x2F3,
-    KeyCodeSemicolon                = 0x303
-    )/*
-    KeyCodeComma                    = 0x313,
-    KeyCodePeriod                   = 0x323,
-    KeyCodeApostrophe               = 0x343,
-    KeyCodeSlash                    = 0x353,
-    KeyCodeBackslash                = 0x363,
-    KeyCodeGrave                    = 0x373,
-    KeyCodeEqual                    = 0x383,
-    KeyCodeHyphen                   = 0x393,
-    KeyCodeSpace                    = 0x3A3,
-    KeyCodeEnter                    = 0x3B3,
-    KeyCodeBackspace                = 0x3C3,
-    KeyCodeTab                      = 0x3D3,
-    KeyCodePageUp                   = 0x3E3,
-    KeyCodePageDown                 = 0x3F3,
-    KeyCodeEnd                      = 0x403,
-    KeyCodeHome                     = 0x413,
-    KeyCodeInsert                   = 0x423,
-    KeyCodeDelete                   = 0x433,
-    KeyCodeAdd                      = 0x443,
-    KeyCodeSubtract                 = 0x453,
-    KeyCodeMultiply                 = 0x463,
-    KeyCodeDivide                   = 0x473,
-    KeyCodeLeft                     = 0x483,
-    KeyCodeRight                    = 0x493,
-    KeyCodeUp                       = 0x4A3,
-    KeyCodeDown                     = 0x4B3,
-    KeyCodeNumpad0                  = 0x4C3,      
-    KeyCodeNumpad1                  = 0x4D3,      
-    KeyCodeNumpad2                  = 0x4E3,      
-    KeyCodeNumpad3                  = 0x4F3,      
-    KeyCodeNumpad4                  = 0x503,      
-    KeyCodeNumpad5                  = 0x513,      
-    KeyCodeNumpad6                  = 0x523,      
-    KeyCodeNumpad7                  = 0x533,      
-    KeyCodeNumpad8                  = 0x543,      
-    KeyCodeNumpad9                  = 0x553,      
-    KeyCodeF1                       = 0x563,           
-    KeyCodeF2                       = 0x573,           
-    KeyCodeF3                       = 0x583,           
-    KeyCodeF4                       = 0x593,           
-    KeyCodeF5                       = 0x5A3,           
-    KeyCodeF6                       = 0x5B3,           
-    KeyCodeF7                       = 0x5C3,           
-    KeyCodeF8                       = 0x5D3,           
-    KeyCodeF9                       = 0x5E3,           
-    KeyCodeF10                      = 0x5F3,          
-    KeyCodeF11                      = 0x603,          
-    KeyCodeF12                      = 0x613,          
-    KeyCodeF13                      = 0x623,          
-    KeyCodeF14                      = 0x633,          
-    KeyCodeF15                      = 0x643,          
-    KeyCodePause                    = 0x653,        
-    KeyScanUnknown                  = 0xF04,
-    KeyScanA                        = 0x004,
-    KeyScanB                        = 0x014,
-    KeyScanC                        = 0x024,
-    KeyScanD                        = 0x034,
-    KeyScanE                        = 0x044,
-    KeyScanF                        = 0x054,
-    KeyScanG                        = 0x064,
-    KeyScanH                        = 0x074,
-    KeyScanI                        = 0x084,
-    KeyScanJ                        = 0x094,
-    KeyScanK                        = 0x0A4,
-    KeyScanL                        = 0x0B4,
-    KeyScanM                        = 0x0C4,
-    KeyScanN                        = 0x0D4,
-    KeyScanO                        = 0x0E4,
-    KeyScanP                        = 0x0F4,
-    KeyScanQ                        = 0x104,
-    KeyScanR                        = 0x114,
-    KeyScanS                        = 0x124,
-    KeyScanT                        = 0x134,
-    KeyScanU                        = 0x144,
-    KeyScanV                        = 0x154,
-    KeyScanW                        = 0x164,
-    KeyScanX                        = 0x174,
-    KeyScanY                        = 0x184,
-    KeyScanZ                        = 0x194,
-    KeyScanNum1                     = 0x1A4,
-    KeyScanNum2                     = 0x1B4,
-    KeyScanNum3                     = 0x1C4,
-    KeyScanNum4                     = 0x1D4,
-    KeyScanNum5                     = 0x1E4,
-    KeyScanNum6                     = 0x1F4,
-    KeyScanNum7                     = 0x104,
-    KeyScanNum8                     = 0x114,
-    KeyScanNum9                     = 0x124,
-    KeyScanNum0                     = 0x134,
-    KeyScanEnter                    = 0x144,
-    KeyScanEscape                   = 0x154,
-    KeyScanBackspace                = 0x164,
-    KeyScanTab                      = 0x174,
-    KeyScanSpace                    = 0x184,
-    KeyScanHyphen                   = 0x194,
-    KeyScanEqual                    = 0x1A4,
-    KeyScanLBracket                 = 0x1B4,
-    KeyScanRBracket                 = 0x1C4,
-    KeyScanBackslash                = 0x1D4,
-    KeyScanSemicolon                = 0x1E4,
-    KeyScanApostrophe               = 0x1F4,
-    KeyScanGrave                    = 0x204,
-    KeyScanComma                    = 0x214,
-    KeyScanPeriod                   = 0x224,
-    KeyScanSlash                    = 0x234,
-    KeyScanF1                       = 0x244,
-    KeyScanF2                       = 0x254,
-    KeyScanF3                       = 0x264,
-    KeyScanF4                       = 0x274,
-    KeyScanF5                       = 0x284,
-    KeyScanF6                       = 0x294,
-    KeyScanF7                       = 0x2A4,
-    KeyScanF8                       = 0x2B4,
-    KeyScanF9                       = 0x2C4,
-    KeyScanF10                      = 0x2D4,
-    KeyScanF11                      = 0x2E4,
-    KeyScanF12                      = 0x2F4,
-    KeyScanF13                      = 0x304,
-    KeyScanF14                      = 0x314,
-    KeyScanF15                      = 0x324,
-    KeyScanF16                      = 0x334,
-    KeyScanF17                      = 0x344,
-    KeyScanF18                      = 0x354,
-    KeyScanF19                      = 0x364,
-    KeyScanF20                      = 0x374,
-    KeyScanF21                      = 0x384,
-    KeyScanF22                      = 0x394,
-    KeyScanF23                      = 0x3A4,
-    KeyScanF24                      = 0x3B4,
-    KeyScanCapsLock                 = 0x3C4,
-    KeyScanPrintScreen              = 0x3D4,
-    KeyScanScrollLock               = 0x3E4,
-    KeyScanPause                    = 0x3F4,
-    KeyScanInsert                   = 0x404,
-    KeyScanHome                     = 0x414,
-    KeyScanPageUp                   = 0x424,
-    KeyScanDelete                   = 0x434,
-    KeyScanEnd                      = 0x444,
-    KeyScanPageDown                 = 0x454,
-    KeyScanRight                    = 0x464,
-    KeyScanLeft                     = 0x474,
-    KeyScanDown                     = 0x484,
-    KeyScanUp                       = 0x494,
-    KeyScanNumLock                  = 0x4A4,
-    KeyScanNumpadDivide             = 0x4B4,
-    KeyScanNumpadMultiply           = 0x4C4,
-    KeyScanNumpadMinus              = 0x4D4,
-    KeyScanNumpadPlus               = 0x4E4,
-    KeyScanNumpadEqual              = 0x4F4,
-    KeyScanNumpadEnter              = 0x504,
-    KeyScanNumpadDecimal            = 0x514,
-    KeyScanNumpad1                  = 0x524,
-    KeyScanNumpad2                  = 0x534,
-    KeyScanNumpad3                  = 0x544,
-    KeyScanNumpad4                  = 0x554,
-    KeyScanNumpad5                  = 0x564,
-    KeyScanNumpad6                  = 0x574,
-    KeyScanNumpad7                  = 0x584,
-    KeyScanNumpad8                  = 0x594,
-    KeyScanNumpad9                  = 0x5A4,
-    KeyScanNumpad0                  = 0x5B4,
-    KeyScanNonUsBackslash           = 0x5C4,
-    KeyScanApplication              = 0x5D4,
-    KeyScanExecute                  = 0x5E4,
-    KeyScanModeChange               = 0x5F4,
-    KeyScanHelp                     = 0x604,
-    KeyScanMenu                     = 0x614,
-    KeyScanSelect                   = 0x624,
-    KeyScanRedo                     = 0x634,
-    KeyScanUndo                     = 0x644,
-    KeyScanCut                      = 0x654,
-    KeyScanCopy                     = 0x664,
-    KeyScanPaste                    = 0x674,
-    KeyScanVolumeMute               = 0x684,
-    KeyScanVolumeUp                 = 0x694,
-    KeyScanVolumeDown               = 0x6A4,
-    KeyScanMediaPlayPause           = 0x6B4,
-    KeyScanMediaStop                = 0x6C4,
-    KeyScanMediaNextTrack           = 0x6D4,
-    KeyScanMediaPreviousTrack       = 0x6E4,
-    KeyScanLControl                 = 0x6F4,
-    KeyScanLShift                   = 0x704,
-    KeyScanLAlt                     = 0x714,
-    KeyScanLSystem                  = 0x724,
-    KeyScanRControl                 = 0x734,
-    KeyScanRShift                   = 0x744,
-    KeyScanRAlt                     = 0x754,
-    KeyScanRSystem                  = 0x764,
-    KeyScanBack                     = 0x774,
-    KeyScanForward                  = 0x784,
-    KeyScanRefresh                  = 0x794,
-    KeyScanStop                     = 0x7A4,
-    KeyScanSearch                   = 0x7B4,
-    KeyScanFavorites                = 0x7C4,
-    KeyScanHomePage                 = 0x7D4,
-    KeyScanLaunchApplication1       = 0x7E4,
-    KeyScanLaunchApplication2       = 0x7F4,
-    KeyScanLaunchMail               = 0x804,
-    KeyScanLaunchMediaSelect        = 0x814
+    int32,
+    // Mouse Buttons
+    MouseLeft                       = 0x00000001,
+    MouseRight                      = 0x00000011,
+    MouseMiddle                     = 0x00000021,
+    MouseXButton1                   = 0x00000031,
+    MouseXButton2                   = 0x00000041,
+    // Mouse Wheels                     
+    MouseWheelVertical              = 0x00000002,
+    MouseWheelHorizontal            = 0x00000012,
+    // Joystick Buttons                 
+    JoystickButton1                 = 0x00000003,
+    JoystickButton2                 = 0x00000013,
+    JoystickButton3                 = 0x00000023,
+    JoystickButton4                 = 0x00000033,
+    JoystickButton5                 = 0x00000043,
+    JoystickButton6                 = 0x00000053,
+    JoystickButton7                 = 0x00000063,
+    JoystickButton8                 = 0x00000073,
+    JoystickButton9                 = 0x00000083,
+    JoystickButton10                = 0x00000093,
+    JoystickButton11                = 0x000000A3,
+    JoystickButton12                = 0x000000B3,
+    JoystickButton13                = 0x000000C3,
+    JoystickButton14                = 0x000000D3,
+    JoystickButton15                = 0x000000E3,
+    JoystickButton16                = 0x000000F3,
+    JoystickButton17                = 0x00000103,
+    JoystickButton18                = 0x00000113,
+    JoystickButton19                = 0x00000123,
+    JoystickButton20                = 0x00000133,
+    JoystickButton21                = 0x00000143,
+    JoystickButton22                = 0x00000153,
+    JoystickButton23                = 0x00000163,
+    JoystickButton24                = 0x00000173,
+    JoystickButton25                = 0x00000183,
+    JoystickButton26                = 0x00000193,
+    JoystickButton27                = 0x000001A3,
+    JoystickButton28                = 0x000001B3,
+    JoystickButton29                = 0x000001C3,
+    JoystickButton30                = 0x000001D3,
+    JoystickButton31                = 0x000001E3,
+    JoystickButton32                = 0x000001F3,
+    // Joystick Axis                    
+    JoystickAxisX                   = 0x00000004,
+    JoystickAxisY                   = 0x00000014,
+    JoystickAxisZ                   = 0x00000024,
+    JoystickAxisR                   = 0x00000034,
+    JoystickAxisU                   = 0x00000044,
+    JoystickAxisV                   = 0x00000054,
+    JoystickAxisHatX                = 0x00000064,
+    JoystickAxisHatY                = 0x00000074,
+    // Key codes                        
+    KeyCodeUnknown                  = 0xFFFFFFF5,
+    KeyCodeA                        = 0x00000005,
+    KeyCodeB                        = 0x00000015,            
+    KeyCodeC                        = 0x00000025,            
+    KeyCodeD                        = 0x00000035,            
+    KeyCodeE                        = 0x00000045,            
+    KeyCodeF                        = 0x00000055,            
+    KeyCodeG                        = 0x00000065,            
+    KeyCodeH                        = 0x00000075,            
+    KeyCodeI                        = 0x00000085,            
+    KeyCodeJ                        = 0x00000095,            
+    KeyCodeK                        = 0x000000A5,            
+    KeyCodeL                        = 0x000000B5,            
+    KeyCodeM                        = 0x000000C5,            
+    KeyCodeN                        = 0x000000D5,            
+    KeyCodeO                        = 0x000000E5,            
+    KeyCodeP                        = 0x000000F5,            
+    KeyCodeQ                        = 0x00000105,            
+    KeyCodeR                        = 0x00000115,            
+    KeyCodeS                        = 0x00000125,            
+    KeyCodeT                        = 0x00000135,            
+    KeyCodeU                        = 0x00000145,            
+    KeyCodeV                        = 0x00000155,            
+    KeyCodeW                        = 0x00000165,            
+    KeyCodeX                        = 0x00000175,            
+    KeyCodeY                        = 0x00000185,            
+    KeyCodeZ                        = 0x00000195,          
+    KeyCodeNum0                     = 0x000001A5,         
+    KeyCodeNum1                     = 0x000001B5,         
+    KeyCodeNum2                     = 0x000001C5,         
+    KeyCodeNum3                     = 0x000001D5,         
+    KeyCodeNum4                     = 0x000001E5,         
+    KeyCodeNum5                     = 0x000001F5,         
+    KeyCodeNum6                     = 0x00000205,         
+    KeyCodeNum7                     = 0x00000215,         
+    KeyCodeNum8                     = 0x00000225,         
+    KeyCodeNum9                     = 0x00000235,         
+    KeyCodeEscape                   = 0x00000245,
+    KeyCodeLControl                 = 0x00000255,
+    KeyCodeLShift                   = 0x00000265,
+    KeyCodeLAlt                     = 0x00000275,
+    KeyCodeLSystem                  = 0x00000285,
+    KeyCodeRControl                 = 0x00000295,
+    KeyCodeRShift                   = 0x000002A5,
+    KeyCodeRAlt                     = 0x000002B5,
+    KeyCodeRSystem                  = 0x000002C5,
+    KeyCodeMenu                     = 0x000002D5,
+    KeyCodeLBracket                 = 0x000002E5,
+    KeyCodeRBracket                 = 0x000002F5,
+    KeyCodeSemicolon                = 0x00000305,
+    KeyCodeComma                    = 0x00000315,
+    KeyCodePeriod                   = 0x00000325,
+    KeyCodeApostrophe               = 0x00000345,
+    KeyCodeSlash                    = 0x00000355,
+    KeyCodeBackslash                = 0x00000365,
+    KeyCodeGrave                    = 0x00000375,
+    KeyCodeEqual                    = 0x00000385,
+    KeyCodeHyphen                   = 0x00000395,
+    KeyCodeSpace                    = 0x000003A5,
+    KeyCodeEnter                    = 0x000003B5,
+    KeyCodeBackspace                = 0x000003C5,
+    KeyCodeTab                      = 0x000003D5,
+    KeyCodePageUp                   = 0x000003E5,
+    KeyCodePageDown                 = 0x000003F5,
+    KeyCodeEnd                      = 0x00000405,
+    KeyCodeHome                     = 0x00000415,
+    KeyCodeInsert                   = 0x00000425,
+    KeyCodeDelete                   = 0x00000435,
+    KeyCodeAdd                      = 0x00000445,
+    KeyCodeSubtract                 = 0x00000455,
+    KeyCodeMultiply                 = 0x00000465,
+    KeyCodeDivide                   = 0x00000475,
+    KeyCodeLeft                     = 0x00000485,
+    KeyCodeRight                    = 0x00000495,
+    KeyCodeUp                       = 0x000004A5,
+    KeyCodeDown                     = 0x000004B5,
+    KeyCodeNumpad0                  = 0x000004C5,      
+    KeyCodeNumpad1                  = 0x000004D5,      
+    KeyCodeNumpad2                  = 0x000004E5,      
+    KeyCodeNumpad3                  = 0x000004F5,      
+    KeyCodeNumpad4                  = 0x00000505,      
+    KeyCodeNumpad5                  = 0x00000515,      
+    KeyCodeNumpad6                  = 0x00000525,      
+    KeyCodeNumpad7                  = 0x00000535,      
+    KeyCodeNumpad8                  = 0x00000545,      
+    KeyCodeNumpad9                  = 0x00000555,      
+    KeyCodeF1                       = 0x00000565,           
+    KeyCodeF2                       = 0x00000575,           
+    KeyCodeF3                       = 0x00000585,           
+    KeyCodeF4                       = 0x00000595,           
+    KeyCodeF5                       = 0x000005A5,           
+    KeyCodeF6                       = 0x000005B5,           
+    KeyCodeF7                       = 0x000005C5,           
+    KeyCodeF8                       = 0x000005D5,           
+    KeyCodeF9                       = 0x000005E5,           
+    KeyCodeF10                      = 0x000005F5,          
+    KeyCodeF11                      = 0x00000605,          
+    KeyCodeF12                      = 0x00000615,          
+    KeyCodeF13                      = 0x00000625,          
+    KeyCodeF14                      = 0x00000635,          
+    KeyCodeF15                      = 0x00000645,          
+    KeyCodePause                    = 0x00000655        
+    )/*                                 
+    KeyCodeComma                    = 0x000313,
+    KeyCodePeriod                   = 0x000323,
+    KeyCodeApostrophe               = 0x000343,
+    KeyCodeSlash                    = 0x000353,
+    KeyCodeBackslash                = 0x000363,
+    KeyCodeGrave                    = 0x000373,
+    KeyCodeEqual                    = 0x000383,
+    KeyCodeHyphen                   = 0x000393,
+    KeyCodeSpace                    = 0x0003A3,
+    KeyCodeEnter                    = 0x0003B3,
+    KeyCodeBackspace                = 0x0003C3,
+    KeyCodeTab                      = 0x0003D3,
+    KeyCodePageUp                   = 0x0003E3,
+    KeyCodePageDown                 = 0x0003F3,
+    KeyCodeEnd                      = 0x000403,
+    KeyCodeHome                     = 0x000413,
+    KeyCodeInsert                   = 0x000423,
+    KeyCodeDelete                   = 0x000433,
+    KeyCodeAdd                      = 0x000443,
+    KeyCodeSubtract                 = 0x000453,
+    KeyCodeMultiply                 = 0x000463,
+    KeyCodeDivide                   = 0x000473,
+    KeyCodeLeft                     = 0x000483,
+    KeyCodeRight                    = 0x000493,
+    KeyCodeUp                       = 0x0004A3,
+    KeyCodeDown                     = 0x0004B3,
+    KeyCodeNumpad0                  = 0x0004C3,
+    KeyCodeNumpad1                  = 0x0004D3,
+    KeyCodeNumpad2                  = 0x0004E3,
+    KeyCodeNumpad3                  = 0x0004F3,
+    KeyCodeNumpad4                  = 0x000503,
+    KeyCodeNumpad5                  = 0x000513,
+    KeyCodeNumpad6                  = 0x000523,
+    KeyCodeNumpad7                  = 0x000533,
+    KeyCodeNumpad8                  = 0x000543,
+    KeyCodeNumpad9                  = 0x000553,
+    KeyCodeF1                       = 0x000563,
+    KeyCodeF2                       = 0x000573,
+    KeyCodeF3                       = 0x000583,
+    KeyCodeF4                       = 0x000593,
+    KeyCodeF5                       = 0x0005A3,
+    KeyCodeF6                       = 0x0005B3,
+    KeyCodeF7                       = 0x0005C3,
+    KeyCodeF8                       = 0x0005D3,
+    KeyCodeF9                       = 0x0005E3,
+    KeyCodeF10                      = 0x0005F3,
+    KeyCodeF11                      = 0x000603,
+    KeyCodeF12                      = 0x000613,
+    KeyCodeF13                      = 0x000623,
+    KeyCodeF14                      = 0x000633,
+    KeyCodeF15                      = 0x000643,
+    KeyCodePause                    = 0x000653,
+    KeyScanUnknown                  = 0x000F04,
+    KeyScanA                        = 0x000004,
+    KeyScanB                        = 0x000014,
+    KeyScanC                        = 0x000024,
+    KeyScanD                        = 0x000034,
+    KeyScanE                        = 0x000044,
+    KeyScanF                        = 0x000054,
+    KeyScanG                        = 0x000064,
+    KeyScanH                        = 0x000074,
+    KeyScanI                        = 0x000084,
+    KeyScanJ                        = 0x000094,
+    KeyScanK                        = 0x0000A4,
+    KeyScanL                        = 0x0000B4,
+    KeyScanM                        = 0x0000C4,
+    KeyScanN                        = 0x0000D4,
+    KeyScanO                        = 0x0000E4,
+    KeyScanP                        = 0x0000F4,
+    KeyScanQ                        = 0x000104,
+    KeyScanR                        = 0x000114,
+    KeyScanS                        = 0x000124,
+    KeyScanT                        = 0x000134,
+    KeyScanU                        = 0x000144,
+    KeyScanV                        = 0x000154,
+    KeyScanW                        = 0x000164,
+    KeyScanX                        = 0x000174,
+    KeyScanY                        = 0x000184,
+    KeyScanZ                        = 0x000194,
+    KeyScanNum1                     = 0x0001A4,
+    KeyScanNum2                     = 0x0001B4,
+    KeyScanNum3                     = 0x0001C4,
+    KeyScanNum4                     = 0x0001D4,
+    KeyScanNum5                     = 0x0001E4,
+    KeyScanNum6                     = 0x0001F4,
+    KeyScanNum7                     = 0x000104,
+    KeyScanNum8                     = 0x000114,
+    KeyScanNum9                     = 0x000124,
+    KeyScanNum0                     = 0x000134,
+    KeyScanEnter                    = 0x000144,
+    KeyScanEscape                   = 0x000154,
+    KeyScanBackspace                = 0x000164,
+    KeyScanTab                      = 0x000174,
+    KeyScanSpace                    = 0x000184,
+    KeyScanHyphen                   = 0x000194,
+    KeyScanEqual                    = 0x0001A4,
+    KeyScanLBracket                 = 0x0001B4,
+    KeyScanRBracket                 = 0x0001C4,
+    KeyScanBackslash                = 0x0001D4,
+    KeyScanSemicolon                = 0x0001E4,
+    KeyScanApostrophe               = 0x0001F4,
+    KeyScanGrave                    = 0x000204,
+    KeyScanComma                    = 0x000214,
+    KeyScanPeriod                   = 0x000224,
+    KeyScanSlash                    = 0x000234,
+    KeyScanF1                       = 0x000244,
+    KeyScanF2                       = 0x000254,
+    KeyScanF3                       = 0x000264,
+    KeyScanF4                       = 0x000274,
+    KeyScanF5                       = 0x000284,
+    KeyScanF6                       = 0x000294,
+    KeyScanF7                       = 0x0002A4,
+    KeyScanF8                       = 0x0002B4,
+    KeyScanF9                       = 0x0002C4,
+    KeyScanF10                      = 0x0002D4,
+    KeyScanF11                      = 0x0002E4,
+    KeyScanF12                      = 0x0002F4,
+    KeyScanF13                      = 0x000304,
+    KeyScanF14                      = 0x000314,
+    KeyScanF15                      = 0x000324,
+    KeyScanF16                      = 0x000334,
+    KeyScanF17                      = 0x000344,
+    KeyScanF18                      = 0x000354,
+    KeyScanF19                      = 0x000364,
+    KeyScanF20                      = 0x000374,
+    KeyScanF21                      = 0x000384,
+    KeyScanF22                      = 0x000394,
+    KeyScanF23                      = 0x0003A4,
+    KeyScanF24                      = 0x0003B4,
+    KeyScanCapsLock                 = 0x0003C4,
+    KeyScanPrintScreen              = 0x0003D4,
+    KeyScanScrollLock               = 0x0003E4,
+    KeyScanPause                    = 0x0003F4,
+    KeyScanInsert                   = 0x000404,
+    KeyScanHome                     = 0x000414,
+    KeyScanPageUp                   = 0x000424,
+    KeyScanDelete                   = 0x000434,
+    KeyScanEnd                      = 0x000444,
+    KeyScanPageDown                 = 0x000454,
+    KeyScanRight                    = 0x000464,
+    KeyScanLeft                     = 0x000474,
+    KeyScanDown                     = 0x000484,
+    KeyScanUp                       = 0x000494,
+    KeyScanNumLock                  = 0x0004A4,
+    KeyScanNumpadDivide             = 0x0004B4,
+    KeyScanNumpadMultiply           = 0x0004C4,
+    KeyScanNumpadMinus              = 0x0004D4,
+    KeyScanNumpadPlus               = 0x0004E4,
+    KeyScanNumpadEqual              = 0x0004F4,
+    KeyScanNumpadEnter              = 0x000504,
+    KeyScanNumpadDecimal            = 0x000514,
+    KeyScanNumpad1                  = 0x000524,
+    KeyScanNumpad2                  = 0x000534,
+    KeyScanNumpad3                  = 0x000544,
+    KeyScanNumpad4                  = 0x000554,
+    KeyScanNumpad5                  = 0x000564,
+    KeyScanNumpad6                  = 0x000574,
+    KeyScanNumpad7                  = 0x000584,
+    KeyScanNumpad8                  = 0x000594,
+    KeyScanNumpad9                  = 0x0005A4,
+    KeyScanNumpad0                  = 0x0005B4,
+    KeyScanNonUsBackslash           = 0x0005C4,
+    KeyScanApplication              = 0x0005D4,
+    KeyScanExecute                  = 0x0005E4,
+    KeyScanModeChange               = 0x0005F4,
+    KeyScanHelp                     = 0x000604,
+    KeyScanMenu                     = 0x000614,
+    KeyScanSelect                   = 0x000624,
+    KeyScanRedo                     = 0x000634,
+    KeyScanUndo                     = 0x000644,
+    KeyScanCut                      = 0x000654,
+    KeyScanCopy                     = 0x000664,
+    KeyScanPaste                    = 0x000674,
+    KeyScanVolumeMute               = 0x000684,
+    KeyScanVolumeUp                 = 0x000694,
+    KeyScanVolumeDown               = 0x0006A4,
+    KeyScanMediaPlayPause           = 0x0006B4,
+    KeyScanMediaStop                = 0x0006C4,
+    KeyScanMediaNextTrack           = 0x0006D4,
+    KeyScanMediaPreviousTrack       = 0x0006E4,
+    KeyScanLControl                 = 0x0006F4,
+    KeyScanLShift                   = 0x000704,
+    KeyScanLAlt                     = 0x000714,
+    KeyScanLSystem                  = 0x000724,
+    KeyScanRControl                 = 0x000734,
+    KeyScanRShift                   = 0x000744,
+    KeyScanRAlt                     = 0x000754,
+    KeyScanRSystem                  = 0x000764,
+    KeyScanBack                     = 0x000774,
+    KeyScanForward                  = 0x000784,
+    KeyScanRefresh                  = 0x000794,
+    KeyScanStop                     = 0x0007A4,
+    KeyScanSearch                   = 0x0007B4,
+    KeyScanFavorites                = 0x0007C4,
+    KeyScanHomePage                 = 0x0007D4,
+    KeyScanLaunchApplication1       = 0x0007E4,
+    KeyScanLaunchApplication2       = 0x0007F4,
+    KeyScanLaunchMail               = 0x000804,
+    KeyScanLaunchMediaSelect        = 0x000814
 
 
    */
@@ -313,136 +404,44 @@ namespace Input
 
 struct InputValue
 {
-  Input::eINPUTSTATE m_state;
+public:
+  InputValue() = default;
+
+  ~InputValue() = default;
   
   const Input::eINPUTSTATE& GetState()
   {
     return m_state;
   }
 
-  const Input::eINPUTSTATE& UpdateState(const Input::eINPUTSTATE& newValue)
+  void UpdateState(const Input::eINPUTSTATE& newValue)
   {
     m_state = newValue;
   }
 
   void* ReadRaw()
   {
-    return m_value;
+    return &m_value;
   }
   
-  template<typename T>
-  const T& ReadValue()
+  const float& ReadValue()
   {
-    return reinterpret_cast<T>(m_value);
+    return m_value;
   }
 
-  void UpdateValue(void* newValue)
+  void UpdateValue(const float& newValue)
   {
-    m_value = m_value;
+    m_value = newValue;
   }
+
+  Input::eINPUTSTATE m_state = Input::eINPUTSTATE::INACTIVE;
 
   float m_timePressed;
 
   float m_timeInactive;
 
-  void* m_value;
+  float m_value;
 };
 
-class InputManager : public Module<InputManager>
-{
-public:
-  void Update(const float& delta)
-  {
-    // for (uint64 i = 0; i < Input::eINPUTCODE::_size(); ++i)
-    // {
-    // 
-    // }
 
-
-    // Keyboard Checking
-    for (int i = 0; i < Input::Keyboard::KeyCount; ++i)
-    {
-      // Input::eINPUTCODE c = SFMLtoInputCode(Input::eDEVICEHEXVALUE::KEYBOARD, i);
-      // if (sf::Keyboard::isKeyPressed(i))
-      // {
-      //   if (m_values[c].m_state == Input::eINPUTSTATE::INVALID)
-      //   {
-      //     m_values[c].UpdateState(Input::eINPUTSTATE::PRESSED);
-      //   }
-      // 
-      // }
-      // else if (sf::Keyboard::isKeyPressed(i))
-      // {
-      // 
-      // }
-    }
-
-    // Mouse Checking
-
-
-    // Joystick Checking
-
-    //
-  }
-
-  Input::eINPUTCODE SFMLtoInputCode(const uint32& device, const uint32& inputCode)
-  {
-    return Input::eINPUTCODE::_from_integral((inputCode < 0 ? 15 : 0) << 16 | (inputCode << 4) | (device));
-  }
-
-  Vector2i GetScreenMousePosition() { return Input::Mouse::getPosition(); }
-  
-  Vector2i GetWindowMousePosition(const sf::Window& w) { return Input::Mouse::getPosition(w); }
-
-  void SetScreenMousePosition(const Vector2i& pos) { Input::Mouse::setPosition(pos); }
-
-  void SetWindowMousePosition(const Vector2i& pos, const sf::Window& w) { Input::Mouse::setPosition(pos, w); }
-
-  void RegisterJoystick(const int& value = 1);
-
-  void RemoveJoystic();
-
-  void NotifyKeyPressed();
-
-  SharedPtr<InputMapping> m_maps;
-
-  Map<Input::eINPUTCODE, InputValue> m_values;
-
-  uint32 m_joysticks;
-
-};
-
-/*
-class InputManager : public gainput::InputManager , public Module<InputManager>
-{
-public:
-  virtual void OnStartUp() override
-  {
-    m_mouse = CreateDevice<InputMouse>();
-    m_keyboard = CreateDevice<InputKeyboard>();
-  }
-
-  DeviceID AddJoystick(const uint32& num = 1);
-
-  DeviceID RemoveJoystick(const uint32& num);
-
-  DeviceID GetMouseID();
-
-  DeviceID GetKeyboardID();
-
-  DeviceID GetJoystickID(const uint32& num);
-
-  InputMouse GetMouse();
-
-  InputKeyboard GetKeyboard();
-
-  InputJoystick GetJoystick(const uint32 num);
-
-  Vector<DeviceID> m_joysticks;
-
-  DeviceID m_keyboard;
-
-  DeviceID m_mouse;
-};
-*/
 

@@ -20,7 +20,25 @@ public:
 
   SharedPtr<InputMapping> m_map;
 
+  void Up()
+  {
+    this->Move(Vector2f(0, -1));
+  }
 
+  void Down()
+  {
+    this->Move(Vector2f(0, 1));
+  }
+
+  void Left()
+  {
+    this->Move(Vector2f(-1, 0));
+  }
+
+  void Right()
+  {
+    this->Move(Vector2f(0, 1));
+  }
 
 };
 

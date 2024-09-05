@@ -1,5 +1,6 @@
 #pragma once
 
+#include "uiPrerequisites.h"
 #include "uiAnimation.h"
 #include "uiComponent.h"
 #include "uiUtilities.h"

@@ -1,7 +1,7 @@
 #pragma once
 
+#include "uiPrerequisites.h"
 #include "uiUtilities.h"
-#include "uiPlatformTypes.h"
 
 enum class eINPUTVALUE : uint32
 {

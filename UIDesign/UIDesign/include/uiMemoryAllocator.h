@@ -13,6 +13,7 @@
 #include <utility>
 
 #include "uiPlatformTypes.h"
+#include "uiPlatformDefines.h"
 #include "uiUtilities.h"
 
 // using namespace functions

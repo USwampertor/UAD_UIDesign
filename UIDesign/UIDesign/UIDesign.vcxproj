@@ -100,6 +100,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
       <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,6 +124,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
       <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,6 +148,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
       <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -169,6 +172,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
       <UseFullPaths>false</UseFullPaths>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -193,6 +197,7 @@
     <ClCompile Include="src\uiBoxCollider.cpp" />
     <ClCompile Include="src\uiBullet.cpp" />
     <ClCompile Include="src\uiEntity.cpp" />
+    <ClCompile Include="src\uiInputManager.cpp" />
     <ClCompile Include="src\uiInputMapping.cpp" />
     <ClCompile Include="src\uiMemoryAllocator.cpp" />
     <ClCompile Include="src\uiModule.cpp" />
@@ -212,6 +217,7 @@
     <ClInclude Include="include\uiBullet.h" />
     <ClInclude Include="include\uiInput.h" />
     <ClInclude Include="include\uiInputAction.h" />
+    <ClInclude Include="include\uiInputManager.h" />
     <ClInclude Include="include\uiInputMapping.h" />
     <ClInclude Include="include\uiJSON.h" />
     <ClInclude Include="include\uiAnimation.h" />
@@ -222,6 +228,7 @@
     <ClInclude Include="include\uiEntity.h" />
     <ClInclude Include="include\uiMemoryAllocator.h" />
     <ClInclude Include="include\uiModule.h" />
+    <ClInclude Include="include\uiPlatformDefines.h" />
     <ClInclude Include="include\uiPlatformTypes.h" />
     <ClInclude Include="include\uiPrerequisites.h" />
     <ClInclude Include="include\uiResource.h" />

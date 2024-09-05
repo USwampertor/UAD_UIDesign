@@ -45,6 +45,7 @@ public:
       // auto it = m_components.find(T::GetType());
       // return REINTERPRETPOINTER(it->second.get());
     }
+    return MakeSharedObject<T>();
   }
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
@@ -68,6 +69,8 @@ public:
       // return REINTERPRETPOINTER(T*, *m_components[T::GetType()].get());
       return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
     }
+    return MakeSharedObject<T>();
+
   }
 
   virtual void Initialize()

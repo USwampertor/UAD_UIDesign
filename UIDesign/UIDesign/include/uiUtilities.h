@@ -1,5 +1,8 @@
 #pragma once
 
+#include "uiPrerequisites.h"
+
+// STD
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -8,6 +11,7 @@
 #include <filesystem>
 #include <functional>
 #include <fstream>
+#include <iostream>
 #include <list>
 #include <limits>
 #include <map>
@@ -18,13 +22,12 @@
 #include <sstream>
 #include <string>
 #include <thread>
+#include <tuple>
 #include <type_traits>
 #include <utility> 
 #include <vector>
 
-#include "uiPlatformTypes.h"
-
-
+// SFML
 #include <SFML/System/Vector2.hpp>
 
 
@@ -109,6 +112,9 @@ using String = std::string;
  */
 using Thread = std::thread;
 
+template<typename T, typename A>
+using Tuple = std::tuple<T, A>;
+
 /**
  * @brief Wrapping of c++ std::unique_lock<Mutex>
  */
@@ -181,6 +187,22 @@ struct FileSystem
 
 struct Utils
 {
+  static String IntToHex(const int32& toValue, bool optionalPrefix = false, char toFillWith = '\0')
+  {
+    SStream stream;
+    stream << std::hex 
+           << std::uppercase // Convert to hex and uppercase
+           << toValue;
+    String prefix = (optionalPrefix ? "0x" : "");
+    if (toFillWith != '\0')
+    {
+      SizeT size = static_cast<SizeT>(6 - stream.str().size());
+      String middle(size, toFillWith);
+      return prefix + middle + stream.str();
+    }
+    return prefix + stream.str();
+  }
+
   static void
   runCommand(const String& commandLine) {
     system(commandLine.c_str());

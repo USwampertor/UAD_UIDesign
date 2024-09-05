@@ -1,5 +1,7 @@
 #pragma once
 
+#include "uiPrerequisites.h"
+
 #include "uiUtilities.h"
 #include "uiInput.h"
 #include "uiInputAction.h"
@@ -14,8 +16,7 @@ public:
 
   ~InputMapping() = default;
 
-  template <typename T>
-  void BindAction(SharedPtr<InputAction> action, T button);
+  void BindAction(SharedPtr<InputAction> action, Input::eINPUTCODE button);
 
   void CreateFloatAction();
 
@@ -23,6 +24,14 @@ public:
 
   void RemoveAction(const String& actionName);
 
+  void OnInputUpdated(const Input::eINPUTCODE& code);
+
+  void Enable();
+
+  void Disable();
+
   Map<Input::eINPUTCODE, SharedPtr<InputAction>> m_actions;
+
+  bool m_enabled;
 };
 

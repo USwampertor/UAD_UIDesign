@@ -1,6 +1,7 @@
 #pragma once
 
-#include "uiMemoryAllocator.h"
+#include "uiPrerequisites.h"
+
 #include "uiUtilities.h"
 
 template <class T>
