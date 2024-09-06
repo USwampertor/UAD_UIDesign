@@ -6,6 +6,9 @@
 #include "uiInput.h"
 #include "uiInputAction.h"
 
+
+class Entity;
+
 // #include <gainput/gainput.h>
 
 class InputMapping // : public gainput::InputMap
@@ -16,7 +19,7 @@ public:
 
   ~InputMapping() = default;
 
-  void BindAction(SharedPtr<InputAction> action, Input::eINPUTCODE button);
+  void BindAction(SharedPtr<InputAction>& action, Input::eINPUTCODE button, SharedPtr<Entity>& obj, InputCallback& c);
 
   void CreateFloatAction();
 

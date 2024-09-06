@@ -48,6 +48,9 @@ using Array = std::array<T, _Size>;
  */
 using Callback = std::function<void(void*)>;
 
+// template<typename ReturnType, typename... Args>
+// using Callback = std::function<ReturnType(Args...)>;
+
 using DirectoryEntry = std::filesystem::directory_entry;
 
 /**
@@ -146,12 +149,12 @@ using Vector2i = sf::Vector2i;
 // FUNCTIONS
 
 template <typename T, typename... Args>
-UniquePtr<T> MakeUniqueObject(Args&&... args) {
+UniquePtr<T> MakeUniqueObject(Args ... args) {
   return std::make_unique<T>(std::forward<Args>(args)...);
 }
 
 template <typename T, typename... Args>
-SharedPtr<T> MakeSharedObject(Args&&... args) {
+SharedPtr<T> MakeSharedObject(Args ... args) {
   return std::make_shared<T>(std::forward<Args>(args)...);
 }
 

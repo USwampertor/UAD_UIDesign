@@ -39,7 +39,7 @@ int main() {
   animation->Initialize(atlas->m_atlas, 400.0f);
   animation->SetLoop(true);
 
-  UniquePtr<BulletEntity> e = MakeUniqueObject<BulletEntity>();
+  SharedPtr<BulletEntity> e = MakeSharedObject<BulletEntity>();
 
   e->Initialize();
   e->CreateComponent<Animator>();
@@ -48,6 +48,8 @@ int main() {
   e->GetComponent<Animator>()->SetAnimation("idle");
   e->GetComponent<Animator>()->Play();
   e->m_map = MakeSharedObject<InputMapping>();
+  SharedPtr<InputAction> upAction = MakeSharedObject<InputAction>(String("Up"), String("Up action"));
+  e->m_map->BindAction(upAction, Input::eINPUTCODE::KeyCodeW, &e, &BulletEntity::Up);
   SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   scene->Initialize();
   std::srand(std::time(nullptr));
