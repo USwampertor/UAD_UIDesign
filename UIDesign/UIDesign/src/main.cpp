@@ -48,12 +48,16 @@ int main() {
   e->GetComponent<Animator>()->SetAnimation("idle");
   e->GetComponent<Animator>()->Play();
   e->m_map = MakeSharedObject<InputMapping>();
-  SharedPtr<InputAction> upAction = MakeSharedObject<InputAction>(String("Up"), String("Up action"));
-  e->m_map->BindAction(upAction, Input::eINPUTCODE::KeyCodeW, &e, &BulletEntity::Up);
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&BulletEntity::Up, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&BulletEntity::Down, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeA, std::bind(&BulletEntity::Left, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeD, std::bind(&BulletEntity::Right, e, std::placeholders::_1));
+  InputManager::Instance().RegisterInputMapping(e->m_map);
+  e->m_map->m_enabled = true;
   SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   scene->Initialize();
   std::srand(std::time(nullptr));
-  for (int i = 0; i < 100; ++i)
+  for (int i = 0; i < 10; ++i)
   {
     scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());
     scene->m_root->m_children[i]->Initialize();
@@ -89,8 +93,12 @@ int main() {
     e->Update(delta);
 
     ImGui::Begin("Coordinates");
-    ImGui::Text(std::to_string(e->GetTransform().position.x).c_str());
-    ImGui::Text(std::to_string(e->GetTransform().position.y).c_str());
+    ImGui::Text(std::to_string(e->m_direction.x).c_str());
+    ImGui::Text(std::to_string(e->m_direction.y).c_str());
+    ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeW][0]->GetState()._to_string());
+    ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeA][0]->GetState()._to_string());
+    ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeS][0]->GetState()._to_string());
+    ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeD][0]->GetState()._to_string());
     ImGui::Text(Utils::ToString(fps).c_str());
     ImGui::End();
 

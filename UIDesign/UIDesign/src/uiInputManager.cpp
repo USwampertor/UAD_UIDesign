@@ -36,15 +36,18 @@ void InputManager::Update(const float& delta)
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::PRESSED);
           m_values[i][0]->m_timePressed = 0.0f;
           m_values[i][0]->m_timeInactive = 0.0f;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::PRESSED)
         {
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::HELD);
           m_values[i][0]->m_timePressed += delta;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::HELD)
         {
           m_values[i][0]->m_timePressed += delta;
+          NotifyInputChange(i, 0);
         }
       }
       else if (!Input::Mouse::isButtonPressed(button))
@@ -56,15 +59,18 @@ void InputManager::Update(const float& delta)
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::RELEASED);
           m_values[i][0]->m_timePressed = 0.0f;
           m_values[i][0]->m_timeInactive = 0.0f;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::RELEASED)
         {
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::INACTIVE);
           m_values[i][0]->m_timeInactive += delta;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::INACTIVE)
         {
           m_values[i][0]->m_timeInactive += delta;
+          NotifyInputChange(i, 0);
         }
       }
 
@@ -81,15 +87,18 @@ void InputManager::Update(const float& delta)
             m_values[i][j]->UpdateState(Input::eINPUTSTATE::PRESSED);
             m_values[i][j]->m_timePressed = 0.0f;
             m_values[i][j]->m_timeInactive = 0.0f;
+            NotifyInputChange(i, j);
           }
           else if (m_values[i][j]->m_state == Input::eINPUTSTATE::PRESSED)
           {
             m_values[i][j]->UpdateState(Input::eINPUTSTATE::HELD);
             m_values[i][j]->m_timePressed += delta;
+            NotifyInputChange(i, j);
           }
           else if (m_values[i][j]->m_state == Input::eINPUTSTATE::HELD)
           {
             m_values[i][j]->m_timePressed += delta;
+            NotifyInputChange(i, j);
           }
         }
         else if (!Input::Joystick::isButtonPressed(j, enumValue))
@@ -101,15 +110,18 @@ void InputManager::Update(const float& delta)
             m_values[i][j]->UpdateState(Input::eINPUTSTATE::RELEASED);
             m_values[i][j]->m_timePressed = 0.0f;
             m_values[i][j]->m_timeInactive = 0.0f;
+            NotifyInputChange(i, j);
           }
           else if (m_values[i][j]->m_state == Input::eINPUTSTATE::RELEASED)
           {
             m_values[i][j]->UpdateState(Input::eINPUTSTATE::INACTIVE);
             m_values[i][j]->m_timeInactive += delta;
+            NotifyInputChange(i, j);
           }
           else if (m_values[i][j]->m_state == Input::eINPUTSTATE::INACTIVE)
           {
             m_values[i][j]->m_timeInactive += delta;
+            NotifyInputChange(i, j);
           }
         }
       }
@@ -122,6 +134,7 @@ void InputManager::Update(const float& delta)
       for (uint32 j = 0; j < m_joysticks; ++j)
       {
         m_values[i][j]->UpdateValue(Input::Joystick::getAxisPosition(j, axis));
+        NotifyInputChange(i, j);
       }
     }
     else if (value == Input::eDEVICEHEXVALUE::KEYBOARD)
@@ -135,15 +148,18 @@ void InputManager::Update(const float& delta)
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::PRESSED);
           m_values[i][0]->m_timePressed = 0.0f;
           m_values[i][0]->m_timeInactive = 0.0f;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::PRESSED)
         {
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::HELD);
           m_values[i][0]->m_timePressed += delta;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::HELD)
         {
           m_values[i][0]->m_timePressed += delta;
+          NotifyInputChange(i, 0);
         }
       }
       else if (!Input::Keyboard::isKeyPressed(key))
@@ -155,15 +171,18 @@ void InputManager::Update(const float& delta)
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::RELEASED);
           m_values[i][0]->m_timePressed = 0.0f;
           m_values[i][0]->m_timeInactive = 0.0f;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::RELEASED)
         {
           m_values[i][0]->UpdateState(Input::eINPUTSTATE::INACTIVE);
           m_values[i][0]->m_timeInactive += delta;
+          NotifyInputChange(i, 0);
         }
         else if (m_values[i][0]->m_state == Input::eINPUTSTATE::INACTIVE)
         {
           m_values[i][0]->m_timeInactive += delta;
+          NotifyInputChange(i, 0);
         }
       }
     }
@@ -202,13 +221,13 @@ void InputManager::RemoveJoystic(const uint32& value)
   // m_joysticks = std::clamp(m_joysticks, 0, static_cast<uint32>(Input::Joystick::Count));
 }
 
-void InputManager::NotifyInputChange(const Input::eINPUTCODE& code)
+void InputManager::NotifyInputChange(const Input::eINPUTCODE& code, const uint32& device)
 {
   for (const SharedPtr<InputMapping>& map : m_maps)
   {
     if (map->m_enabled)
     {
-      map->OnInputUpdated(code);
+      map->OnInputUpdated(code, m_values[code][device]);
     }
   }
 }

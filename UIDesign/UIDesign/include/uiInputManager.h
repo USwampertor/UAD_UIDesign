@@ -52,10 +52,9 @@ public:
 
   void RemoveJoystic(const uint32& value = 1);
 
-  void NotifyInputChange(const Input::eINPUTCODE& code);
+  void NotifyInputChange(const Input::eINPUTCODE& code, const uint32& device = 0);
 
   void RegisterInputMapping(SharedPtr<InputMapping> newMap);
-
 
   Vector<SharedPtr<InputMapping>> m_maps;
 

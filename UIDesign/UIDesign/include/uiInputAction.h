@@ -5,8 +5,8 @@
 #include "uiInput.h"
 #include "uiUtilities.h"
 
-
-using InputCallback = std::function<void(InputValue)>;
+// template<typename ReturnType, typename... Args>
+using InputCallback = Callback<void, SharedPtr<InputValue>>;
 
 class InputAction
 {
@@ -15,15 +15,9 @@ public:
   InputAction() = default;
 
   InputAction(const String& name, 
-              const String& description, 
-              const InputCallback& callback)
+              const String& description)
   : m_name(name),
-    m_description(description),
-    m_action(callback) {}
-
-  InputAction(const String& name, const String& description)
-    : m_name(name),
-      m_description(description) {}
+    m_description(description) {}
 
   ~InputAction() = default;
 
@@ -32,5 +26,6 @@ public:
 
   String m_name;
   String m_description;
+
   InputCallback m_action;
 };

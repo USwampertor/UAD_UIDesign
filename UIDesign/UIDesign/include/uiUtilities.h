@@ -46,10 +46,10 @@ using Array = std::array<T, _Size>;
 /**
  * @brief Wrapping of c++ std::function as callback with raw data
  */
-using Callback = std::function<void(void*)>;
+// using Callback = std::function<void(void*)>;
 
-// template<typename ReturnType, typename... Args>
-// using Callback = std::function<ReturnType(Args...)>;
+template<typename ReturnType, typename... Args>
+using Callback = std::function<ReturnType(Args...)>;
 
 using DirectoryEntry = std::filesystem::directory_entry;
 

@@ -19,19 +19,14 @@ public:
 
   ~InputMapping() = default;
 
-  void BindAction(SharedPtr<InputAction>& action, Input::eINPUTCODE button, SharedPtr<Entity>& obj, InputCallback& c);
+  // void BindAction(Input::eINPUTCODE button, SharedPtr<Entity>& obj, InputCallback& c);
 
-  void CreateFloatAction();
+  // template <typename Callable>
+  void BindAction(Input::eINPUTCODE button, const InputCallback& c);
 
-  void CreateBoolAction();
+  void RemoveAction(Input::eINPUTCODE button);
 
-  void RemoveAction(const String& actionName);
-
-  void OnInputUpdated(const Input::eINPUTCODE& code);
-
-  void Enable();
-
-  void Disable();
+  void OnInputUpdated(const Input::eINPUTCODE& code, const SharedPtr<InputValue> value);
 
   Map<Input::eINPUTCODE, SharedPtr<InputAction>> m_actions;
 

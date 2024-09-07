@@ -20,25 +20,69 @@ public:
 
   SharedPtr<InputMapping> m_map;
 
-  void Up(InputCallback value)
+  void Update(const float& delta) override
   {
-    this->Move(Vector2f(0, -1));
+    Entity::Update(m_speed);
+
+    Move(m_direction * delta * m_speed * 0.01f);
   }
 
-  void Down(InputCallback value)
+  void Up(SharedPtr<InputValue> value)
   {
-    this->Move(Vector2f(0, 1));
+    // this->Move(Vector2f(0, -1));
+    if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
+        value->GetState() == Input::eINPUTSTATE::HELD)
+    {
+      m_direction.y = -1;
+    }
+    else
+    {
+      m_direction.y = 0;
+    }
   }
 
-  void Left(InputCallback value)
+  void Down(SharedPtr<InputValue> value)
   {
-    this->Move(Vector2f(-1, 0));
+    if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
+        value->GetState() == Input::eINPUTSTATE::HELD)
+    {
+      m_direction.y = -1;
+    }
+    else
+    {
+      m_direction.y = 0;
+    }
   }
 
-  void Right(InputCallback value)
+  void Left(SharedPtr<InputValue> value)
   {
-    this->Move(Vector2f(0, 1));
+    if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
+        value->GetState() == Input::eINPUTSTATE::HELD)
+    {
+      m_direction.x = -1;
+    }
+    else
+    {
+      m_direction.x = 0;
+    }
   }
+
+  void Right(SharedPtr<InputValue> value)
+  {
+    if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
+        value->GetState() == Input::eINPUTSTATE::HELD)
+    {
+      m_direction.x = 1;
+    }
+    else
+    {
+      m_direction.x = 0;
+    }
+  }
+
+  float m_speed = 10;
+
+  Vector2f m_direction;
 
 };
 
