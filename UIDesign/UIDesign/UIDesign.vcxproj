@@ -196,6 +196,7 @@
     <ClCompile Include="src\uiAnimator.cpp" />
     <ClCompile Include="src\uiBoxCollider.cpp" />
     <ClCompile Include="src\uiBullet.cpp" />
+    <ClCompile Include="src\uiCamera.cpp" />
     <ClCompile Include="src\uiEntity.cpp" />
     <ClCompile Include="src\uiInputManager.cpp" />
     <ClCompile Include="src\uiInputMapping.cpp" />
@@ -205,6 +206,7 @@
     <ClCompile Include="src\uiScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Boid.h" />
     <ClInclude Include="include\imconfig-SFML.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui-SFML.h" />
@@ -215,6 +217,7 @@
     <ClInclude Include="include\imstb_textedit.h" />
     <ClInclude Include="include\imstb_truetype.h" />
     <ClInclude Include="include\uiBullet.h" />
+    <ClInclude Include="include\uiCamera.h" />
     <ClInclude Include="include\uiInput.h" />
     <ClInclude Include="include\uiInputAction.h" />
     <ClInclude Include="include\uiInputManager.h" />
