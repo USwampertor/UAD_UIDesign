@@ -26,6 +26,7 @@ public:
     m_sprite = MakeUniqueObject<sf::Sprite>();
     m_sprite->setOrigin(Vector2f(0.5f, 0.5f));
     m_offset->Reset();
+    m_currentTime = 0;
   }
 
   virtual void Initialize() override 

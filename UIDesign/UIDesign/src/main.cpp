@@ -33,6 +33,8 @@ int main() {
   // InputManager::Instance();
   bool debugDraw = false;
 
+  sfp::World w(Vector2f(0, 0));
+
   String atlasPath = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   SharedPtr<Atlas> atlas = ResourceManager::Instance().LoadResource<Atlas>(atlasPath);
   SharedPtr<Animation> animation = ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
@@ -42,7 +44,7 @@ int main() {
   SharedPtr<BulletEntity> e = MakeSharedObject<BulletEntity>();
 
   e->Initialize();
-  e->CreateComponent<Animator>();
+  // e->CreateComponent<Animator>();
   e->GetComponent<Animator>()->Initialize();
   e->GetComponent<Animator>()->AddAnimation(animation, String("idle"));
   e->GetComponent<Animator>()->SetAnimation("idle");
@@ -53,6 +55,11 @@ int main() {
   e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&BulletEntity::Up, e, std::placeholders::_1));
   InputManager::Instance().RegisterInputMapping(e->m_map);
   e->m_map->m_enabled = true;
+  e->GetComponent<BoxCollider>()->setStatic(true);
+  e->GetComponent<BoxCollider>()->setSize(Vector2f(e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
+                                                   e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
+  e->GetComponent<BoxCollider>()->setCenter(e->GetTransform().position);
+  w.AddPhysicsBody(*e->GetComponent<BoxCollider>());
   SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   scene->Initialize();
   std::srand(std::time(nullptr));
@@ -67,16 +74,19 @@ int main() {
     scene->m_root->m_children[i]->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
     scene->m_root->m_children[i]->GetComponent<Animator>()->Play();
     scene->m_root->m_children[i]->CreateComponent<BoxCollider>();
-    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setSize(Vector2f(1,1));
-
+    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setStatic(true);
+    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setSize(Vector2f(scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
+                                                                                scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
+    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setCenter(scene->m_root->m_children[i]->GetTransform().position);
+    w.AddPhysicsBody(*scene->m_root->m_children[i]->GetComponent<BoxCollider>());
     scene->m_root->m_children[i]->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
   }
 
   sf::Clock deltaClock;
   sf::Time dt;
+  dt = deltaClock.restart();
   while (window.isOpen()) {
     InputManager::Instance().Update(dt.asMilliseconds());
-
     sf::Event event;
     float delta = dt.asMilliseconds();
     float fps = 1000.0f / dt.asMilliseconds();
@@ -108,6 +118,7 @@ int main() {
     ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeD][0]->GetState()._to_string());
     ImGui::Text(Utils::ToString(fps).c_str());
     ImGui::End();
+    w.UpdatePhysics(10);
 
     window.clear();
     // Here start drawing
@@ -115,11 +126,15 @@ int main() {
     {
       if (debugDraw)
       {
+        window.draw(*scene->m_root->m_children[i]->GetComponent<BoxCollider>());
       }
 
       window.draw(scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite());
     }
-
+    if (debugDraw)
+    {
+      window.draw(*e->GetComponent<BoxCollider>());
+    }
     window.draw(e->GetComponent<Animator>()->GetSprite());
 
     ImGui::SFML::Render(window);

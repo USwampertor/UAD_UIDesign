@@ -30,7 +30,6 @@ public:
   void Update(const float& delta) override
   {
     Entity::Update(m_speed);
-
     Move(m_direction * delta * m_speed * 0.01f);
     if (m_animator->GetState() == eANIMATIONSTATE::STOPPED &&
         (m_direction.x != 0 || m_direction.y != 0))

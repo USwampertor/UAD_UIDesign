@@ -64,12 +64,12 @@ public:
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
-      m_components.insert(Utils::MakePair(T::GetType(), MakeSharedObject<T>()));
-      m_components.at(T::GetType())->Initialize(args ...);
+      m_components.insert(Utils::MakePair(T::GetType(), MakeSharedObject<T>(args ...)));
+      m_components.at(T::GetType())->Initialize();
       // return REINTERPRETPOINTER(T*, *m_components[T::GetType()].get());
       return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
     }
-    return MakeSharedObject<T>();
+    return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
 
   }
 

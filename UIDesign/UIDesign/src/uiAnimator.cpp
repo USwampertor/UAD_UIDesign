@@ -2,7 +2,9 @@
 
 void Animator::PropagateTransform(const Transform2D& newTransform)
 {
-  m_sprite->setPosition(newTransform.position + m_offset->position);
+  
+  Vector2f cornerOffset(m_sprite->getTexture()->getSize().x / 2, m_sprite->getTexture()->getSize().y / 2);
+  m_sprite->setPosition(newTransform.position + m_offset->position - cornerOffset);
   Vector2f scale = { newTransform.scale.x * m_offset->scale.x ,
                      newTransform.scale.y * m_offset->scale.y };
   m_sprite->setScale(scale);
@@ -36,6 +38,7 @@ void Animator::SetAnimation(const String& animationKey)
   if (m_animations.find(animationKey) != m_animations.end())
   {
     m_currentAnimation = m_animations.at(animationKey);
+    m_sprite->setTexture(*m_currentAnimation->GetCurrentFrame(m_currentTime));
   }
 }
 
