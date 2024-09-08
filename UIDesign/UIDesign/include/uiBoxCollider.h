@@ -27,8 +27,14 @@ public:
 
   virtual void Update(const float& delta) override;
 
-  // virtual void collisionCallback(sfp::PhysicsBodyCollisionResult& collision) override;
-  // 
+  virtual void collisionCallback(sfp::PhysicsBodyCollisionResult& collision)
+  {
+    for (auto& callback : onCollisionCallbackList)
+    {
+      callback(collision);
+    }
+  }
+
   // virtual void updateCallback(unsigned int deltaMs) override;
 
 

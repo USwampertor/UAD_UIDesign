@@ -5,6 +5,7 @@
 #include "uiAnimator.h"
 #include "uiAtlas.h"
 #include "uiBullet.h"
+#include "uiBoxCollider.h"
 #include "uiEntity.h"
 #include "uiInput.h"
 #include "uiInputManager.h"
@@ -30,8 +31,7 @@ int main() {
   ResourceManager::StartUp();
   InputManager::StartUp();
   // InputManager::Instance();
-
-
+  bool debugDraw = false;
 
   String atlasPath = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   SharedPtr<Atlas> atlas = ResourceManager::Instance().LoadResource<Atlas>(atlasPath);
@@ -46,12 +46,11 @@ int main() {
   e->GetComponent<Animator>()->Initialize();
   e->GetComponent<Animator>()->AddAnimation(animation, String("idle"));
   e->GetComponent<Animator>()->SetAnimation("idle");
-  e->GetComponent<Animator>()->Play();
   e->m_map = MakeSharedObject<InputMapping>();
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&BulletEntity::Up, e, std::placeholders::_1));
   e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&BulletEntity::Down, e, std::placeholders::_1));
   e->m_map->BindAction(Input::eINPUTCODE::KeyCodeA, std::bind(&BulletEntity::Left, e, std::placeholders::_1));
   e->m_map->BindAction(Input::eINPUTCODE::KeyCodeD, std::bind(&BulletEntity::Right, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&BulletEntity::Up, e, std::placeholders::_1));
   InputManager::Instance().RegisterInputMapping(e->m_map);
   e->m_map->m_enabled = true;
   SharedPtr<Scene> scene = MakeSharedObject<Scene>();
@@ -67,6 +66,9 @@ int main() {
     scene->m_root->m_children[i]->GetComponent<Animator>()->SetAnimation("idle");
     scene->m_root->m_children[i]->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
     scene->m_root->m_children[i]->GetComponent<Animator>()->Play();
+    scene->m_root->m_children[i]->CreateComponent<BoxCollider>();
+    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setSize(Vector2f(1,1));
+
     scene->m_root->m_children[i]->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
   }
 
@@ -92,6 +94,11 @@ int main() {
     }
     e->Update(delta);
 
+    if (InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeL][0]->GetState() == Input::eINPUTSTATE::PRESSED)
+    {
+      debugDraw = !debugDraw;
+    }
+
     ImGui::Begin("Coordinates");
     ImGui::Text(std::to_string(e->m_direction.x).c_str());
     ImGui::Text(std::to_string(e->m_direction.y).c_str());
@@ -106,8 +113,13 @@ int main() {
     // Here start drawing
     for (int i = 0; i < scene->m_root->m_children.size(); ++i)
     {
+      if (debugDraw)
+      {
+      }
+
       window.draw(scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite());
     }
+
     window.draw(e->GetComponent<Animator>()->GetSprite());
 
     ImGui::SFML::Render(window);

@@ -11,31 +11,46 @@
 class BulletEntity : public Entity
 {
 public:
+
   virtual void Initialize()
   {
     Entity::Initialize();
-    CreateComponent<BoxCollider>();
-    CreateComponent<Animator>();
+    m_collider = CreateComponent<BoxCollider>();
+    m_animator = CreateComponent<Animator>();
+    m_collider->setSize(Vector2f(1,1));
   }
 
   SharedPtr<InputMapping> m_map;
+
+  void PrintCollision(sfp::PhysicsBodyCollisionResult&)
+  {
+    isColliding = "COLLISION";
+  }
 
   void Update(const float& delta) override
   {
     Entity::Update(m_speed);
 
     Move(m_direction * delta * m_speed * 0.01f);
+    if (m_animator->GetState() == eANIMATIONSTATE::STOPPED &&
+        (m_direction.x != 0 || m_direction.y != 0))
+    {
+      m_animator->Play();
+    }
+    else if (m_direction.x == 0 && m_direction.y == 0)
+    {
+      m_animator->Stop();
+    }
   }
 
   void Up(SharedPtr<InputValue> value)
   {
-    // this->Move(Vector2f(0, -1));
     if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
         value->GetState() == Input::eINPUTSTATE::HELD)
     {
       m_direction.y = -1;
     }
-    else
+    else if (value->GetState() == Input::eINPUTSTATE::RELEASED)
     {
       m_direction.y = 0;
     }
@@ -46,9 +61,10 @@ public:
     if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
         value->GetState() == Input::eINPUTSTATE::HELD)
     {
-      m_direction.y = -1;
+      m_direction.y = 1;
     }
-    else
+    else if (value->GetState() == Input::eINPUTSTATE::RELEASED)
+      // else
     {
       m_direction.y = 0;
     }
@@ -61,7 +77,8 @@ public:
     {
       m_direction.x = -1;
     }
-    else
+    else if (value->GetState() == Input::eINPUTSTATE::RELEASED)
+      // else
     {
       m_direction.x = 0;
     }
@@ -74,7 +91,7 @@ public:
     {
       m_direction.x = 1;
     }
-    else
+    else if (value->GetState() == Input::eINPUTSTATE::RELEASED)
     {
       m_direction.x = 0;
     }
@@ -84,5 +101,10 @@ public:
 
   Vector2f m_direction;
 
+  SharedPtr<BoxCollider> m_collider;
+
+  SharedPtr<Animator> m_animator;
+
+  String isColliding = "";
 };
 
