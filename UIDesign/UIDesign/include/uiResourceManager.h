@@ -34,6 +34,7 @@ public:
     T::GetType();
     eRESOURCETYPE type = T::GetType();
     SharedPtr<T> newResource = MakeSharedObject<T>();
+    // newResource->Initialize();
     m_resources.insert(Utils::MakePair(Hash<String>()(path), newResource));
     return newResource;
   }
@@ -43,6 +44,7 @@ public:
   {
     eRESOURCETYPE type = T::GetType();
     SharedPtr<T> newResource = MakeSharedObject<T>();
+    // newResource->Initialize();
     if (eRESOURCETYPE::SOUND == type)
     {
 
@@ -92,7 +94,7 @@ public:
   template<typename T, typename = std::enable_if_t<std::is_base_of<Resource, T>::value>>
   SharedPtr<T> GetResource(const String& path)
   {
-    return m_resources[0];
+    return REINTERPRETPOINTER(T, m_resources[0]);
   }
 
   Map<std::size_t, SharedPtr<Resource>> m_resources;

@@ -35,18 +35,23 @@ int main() {
 
   sfp::World w(Vector2f(0, 0));
 
-  String atlasPath = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
-  SharedPtr<Atlas> atlas = ResourceManager::Instance().LoadResource<Atlas>(atlasPath);
-  SharedPtr<Animation> animation = ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
-  animation->Initialize(atlas->m_atlas, 400.0f);
-  animation->SetLoop(true);
+  String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
+  SharedPtr<Atlas> atlas1 = ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
+  SharedPtr<Animation> animation1 = ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
+  String atlasPath2 = Utils::Format("%s/../resources/sprite2.json", FileSystem::CurrentPath().string().c_str());
+  SharedPtr<Atlas> atlas2 = ResourceManager::Instance().LoadResource<Atlas>(atlasPath2);
+  SharedPtr<Animation> animation2 = ResourceManager::Instance().CreateResource<Animation>("idleBullet");
+  animation1->Initialize(atlas1->m_atlas, 400.0f);
+  animation2->Initialize(atlas2->m_atlas, 400.0f);
+  animation1->SetLoop(true);
+  animation2->SetLoop(true);
 
   SharedPtr<BulletEntity> e = MakeSharedObject<BulletEntity>();
 
   e->Initialize();
   // e->CreateComponent<Animator>();
   e->GetComponent<Animator>()->Initialize();
-  e->GetComponent<Animator>()->AddAnimation(animation, String("idle"));
+  e->GetComponent<Animator>()->AddAnimation(animation2, String("idle"));
   e->GetComponent<Animator>()->SetAnimation("idle");
   e->m_map = MakeSharedObject<InputMapping>();
   e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&BulletEntity::Down, e, std::placeholders::_1));
@@ -69,7 +74,7 @@ int main() {
     scene->m_root->m_children[i]->Initialize();
     scene->m_root->m_children[i]->CreateComponent<Animator>();
     scene->m_root->m_children[i]->GetComponent<Animator>()->Initialize();
-    scene->m_root->m_children[i]->GetComponent<Animator>()->AddAnimation(animation, String("idle"));
+    scene->m_root->m_children[i]->GetComponent<Animator>()->AddAnimation(animation1, String("idle"));
     scene->m_root->m_children[i]->GetComponent<Animator>()->SetAnimation("idle");
     scene->m_root->m_children[i]->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
     scene->m_root->m_children[i]->GetComponent<Animator>()->Play();

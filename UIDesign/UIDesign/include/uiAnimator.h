@@ -8,12 +8,13 @@
 #include <SFML/Graphics.hpp>
 
 
-enum eANIMATIONSTATE : uint32
-{
+BETTER_ENUM(
+  eANIMATIONSTATE, 
+  uint32,
   STOPPED = 0,
   PLAYING = 1,
-  PAUSED  = 2
-};
+  PAUSED = 2
+  )
 
 class Animator : public Component
 {
@@ -67,6 +68,6 @@ private:
 
   float m_currentTime;
 
-  eANIMATIONSTATE m_state;
+  eANIMATIONSTATE m_state = eANIMATIONSTATE::STOPPED;
 
 };

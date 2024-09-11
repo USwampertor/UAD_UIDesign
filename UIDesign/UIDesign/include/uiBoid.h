@@ -3,10 +3,10 @@
 
 class Boid
 {
-  static Vector2f Seek()
+  static Vector2f Seek(const Vector2f& start, const Vector2f& end, const float& magnitude)
   {
     Vector2f toReturn;
-
+    toReturn = end - start;
     return toReturn;
   }
 

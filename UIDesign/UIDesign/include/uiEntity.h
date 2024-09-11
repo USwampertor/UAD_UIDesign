@@ -22,6 +22,14 @@ public:
     m_children.clear();
   }
 
+  Entity(const String& newName)
+  {
+    m_transform = MakeUniqueObject<Transform2D>();
+    m_components.clear();
+    m_children.clear();
+    m_name = newName;
+  }
+
   Entity(Entity&) = default;
 
   ~Entity() = default;
@@ -31,7 +39,7 @@ public:
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
-      // m_components.insert(Utils::MakePair(T::GetType(), newComponent));
+      m_components.insert(Utils::MakePair(T::GetType(), newComponent));
     }
   }
 
@@ -41,9 +49,6 @@ public:
     if (m_components.find(T::GetType()) != m_components.end())
     {
       return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
-    
-      // auto it = m_components.find(T::GetType());
-      // return REINTERPRETPOINTER(it->second.get());
     }
     return MakeSharedObject<T>();
   }
@@ -66,7 +71,6 @@ public:
     {
       m_components.insert(Utils::MakePair(T::GetType(), MakeSharedObject<T>(args ...)));
       m_components.at(T::GetType())->Initialize();
-      // return REINTERPRETPOINTER(T*, *m_components[T::GetType()].get());
       return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
     }
     return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
@@ -97,7 +101,11 @@ public:
   {
     return m_children;
   }
-
+  
+  const String& GetName()
+  {
+    return m_name;
+  }
 
   void Destroy();
 
@@ -122,6 +130,8 @@ protected:
   UniquePtr<Transform2D> m_transform;
 
 public:
+
+  String m_name;
 
   Map<String, SharedPtr<Component>> m_components;
 

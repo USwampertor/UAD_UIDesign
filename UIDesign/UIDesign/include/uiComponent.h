@@ -1,6 +1,8 @@
 #pragma once
 #include "uiUtilities.h"
 
+class Entity;
+
 struct Transform2D
 {
 public:
@@ -72,6 +74,7 @@ public:
   }
 
 protected:
+  SharedPtr<Entity> m_parent;
 
   UniquePtr<Transform2D> m_offset;
 };

@@ -18,7 +18,7 @@ public:
 
   UniquePtr<Entity> m_root;
 
-  
+  void AddToScene(SharedPtr<Entity> newEntity);
 
 };
 

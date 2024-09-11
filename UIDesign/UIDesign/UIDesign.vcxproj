@@ -192,21 +192,32 @@
     <ClCompile Include="src\imgui_tables.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\uiParticleEmitter.cpp" />
     <ClCompile Include="src\uiAnimation.cpp" />
     <ClCompile Include="src\uiAnimator.cpp" />
+    <ClCompile Include="src\uiApp.cpp" />
+    <ClCompile Include="src\uiAudioSource.cpp" />
     <ClCompile Include="src\uiBoxCollider.cpp" />
     <ClCompile Include="src\uiBullet.cpp" />
     <ClCompile Include="src\uiCamera.cpp" />
+    <ClCompile Include="src\uiController.cpp" />
+    <ClCompile Include="src\uiEnemy.cpp" />
     <ClCompile Include="src\uiEntity.cpp" />
     <ClCompile Include="src\uiInputManager.cpp" />
     <ClCompile Include="src\uiInputMapping.cpp" />
     <ClCompile Include="src\uiMemoryAllocator.cpp" />
     <ClCompile Include="src\uiModule.cpp" />
+    <ClCompile Include="src\uiPawn.cpp" />
+    <ClCompile Include="src\uiPlayer.cpp" />
     <ClCompile Include="src\uiResourceManager.cpp" />
     <ClCompile Include="src\uiScene.cpp" />
+    <ClCompile Include="src\uiSceneManager.cpp" />
+    <ClCompile Include="uiPlayerController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Boid.h" />
+    <ClInclude Include="include\uiApp.h" />
+    <ClInclude Include="include\uiAudioSource.h" />
+    <ClInclude Include="include\uiBoid.h" />
     <ClInclude Include="include\imconfig-SFML.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui-SFML.h" />
@@ -218,6 +229,8 @@
     <ClInclude Include="include\imstb_truetype.h" />
     <ClInclude Include="include\uiBullet.h" />
     <ClInclude Include="include\uiCamera.h" />
+    <ClInclude Include="include\uiController.h" />
+    <ClInclude Include="include\uiEnemy.h" />
     <ClInclude Include="include\uiInput.h" />
     <ClInclude Include="include\uiInputAction.h" />
     <ClInclude Include="include\uiInputManager.h" />
@@ -231,15 +244,20 @@
     <ClInclude Include="include\uiEntity.h" />
     <ClInclude Include="include\uiMemoryAllocator.h" />
     <ClInclude Include="include\uiModule.h" />
+    <ClInclude Include="include\uiParticleEmitter.h" />
+    <ClInclude Include="include\uiPawn.h" />
     <ClInclude Include="include\uiPlatformDefines.h" />
     <ClInclude Include="include\uiPlatformTypes.h" />
+    <ClInclude Include="include\uiPlayer.h" />
     <ClInclude Include="include\uiPrerequisites.h" />
     <ClInclude Include="include\uiResource.h" />
     <ClInclude Include="include\uiResourceManager.h" />
     <ClInclude Include="include\uiScene.h" />
+    <ClInclude Include="include\uiSceneManager.h" />
     <ClInclude Include="include\uiSprite.h" />
     <ClInclude Include="include\uiTexture.h" />
     <ClInclude Include="include\uiUtilities.h" />
+    <ClInclude Include="uiPlayerController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

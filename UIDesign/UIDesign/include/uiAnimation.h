@@ -1,9 +1,10 @@
 #pragma once
 
 #include "uiPrerequisites.h"
-#include "uiUtilities.h"
+
 #include "uiResource.h"
 #include "uiTexture.h"
+#include "uiUtilities.h"
 
 #include <SFML/Graphics.hpp>
 

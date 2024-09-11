@@ -17,3 +17,4 @@ class Resource
 {
   static eRESOURCETYPE GetType() { assert(true && "IMPLEMENT THIS"); return (eRESOURCETYPE::NONE); }
 };
+

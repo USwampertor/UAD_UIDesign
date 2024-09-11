@@ -8,6 +8,8 @@
 #include "uiInputMapping.h"
 #include "uiUtilities.h"
 
+#include <iostream>
+
 class BulletEntity : public Entity
 {
 public:
@@ -18,6 +20,9 @@ public:
     m_collider = CreateComponent<BoxCollider>();
     m_animator = CreateComponent<Animator>();
     m_collider->setSize(Vector2f(1,1));
+    m_collider->AddCollisionEnterCallback(std::bind(&BulletEntity::EnterCollision, this, std::placeholders::_1));
+    m_collider->AddCollisionStayCallback(std::bind(&BulletEntity::StayCollision, this, std::placeholders::_1));
+    m_collider->AddCollisionExitCallback(std::bind(&BulletEntity::ExitCollision, this, std::placeholders::_1));
   }
 
   SharedPtr<InputMapping> m_map;
@@ -94,6 +99,20 @@ public:
     {
       m_direction.x = 0;
     }
+  }
+
+  void EnterCollision(const PhysicsCollisionResult& c)
+  {
+    std::cout << "Entered Collision" << std::endl;
+  }
+
+  void StayCollision(const PhysicsCollisionResult& c)
+  {
+    std::cout << "Stayed Collision" << std::endl;
+  }
+  void ExitCollision(const PhysicsCollisionResult& c)
+  {
+    std::cout << "Exited Collision" << std::endl;
   }
 
   float m_speed = 10;
