@@ -135,5 +135,5 @@ public:
 
   Map<String, SharedPtr<Component>> m_components;
 
-  Vector<UniquePtr<Entity>> m_children;
+  Vector<SharedPtr<Entity>> m_children;
 };

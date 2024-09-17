@@ -3,9 +3,10 @@
 #include "uiPrerequisites.h"
 
 #include "uiPawn.h"
-class Player : public Pawn
+class Creature : public Pawn
 {
+  float m_hp;
+  float m_maxHp;
 
-  
 };
 

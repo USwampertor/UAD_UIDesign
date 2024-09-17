@@ -93,10 +93,19 @@
     <ClCompile Include="src\uiPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="uiPlayerController.cpp">
+    <ClCompile Include="src\uiEnemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\uiEnemy.cpp">
+    <ClCompile Include="src\uiCreature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\uiSpawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\uiPlayerController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\uiSceneSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -224,10 +233,19 @@
     <ClInclude Include="include\uiPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="uiPlayerController.h">
+    <ClInclude Include="include\uiEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\uiEnemy.h">
+    <ClInclude Include="include\uiCreature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uiSpawner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uiPlayerController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uiSceneSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

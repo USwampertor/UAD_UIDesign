@@ -192,6 +192,7 @@
     <ClCompile Include="src\imgui_tables.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\uiCreature.cpp" />
     <ClCompile Include="src\uiParticleEmitter.cpp" />
     <ClCompile Include="src\uiAnimation.cpp" />
     <ClCompile Include="src\uiAnimator.cpp" />
@@ -209,10 +210,12 @@
     <ClCompile Include="src\uiModule.cpp" />
     <ClCompile Include="src\uiPawn.cpp" />
     <ClCompile Include="src\uiPlayer.cpp" />
+    <ClCompile Include="src\uiPlayerController.cpp" />
     <ClCompile Include="src\uiResourceManager.cpp" />
     <ClCompile Include="src\uiScene.cpp" />
     <ClCompile Include="src\uiSceneManager.cpp" />
-    <ClCompile Include="uiPlayerController.cpp" />
+    <ClCompile Include="src\uiSceneSettings.cpp" />
+    <ClCompile Include="src\uiSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\uiApp.h" />
@@ -230,6 +233,7 @@
     <ClInclude Include="include\uiBullet.h" />
     <ClInclude Include="include\uiCamera.h" />
     <ClInclude Include="include\uiController.h" />
+    <ClInclude Include="include\uiCreature.h" />
     <ClInclude Include="include\uiEnemy.h" />
     <ClInclude Include="include\uiInput.h" />
     <ClInclude Include="include\uiInputAction.h" />
@@ -249,15 +253,17 @@
     <ClInclude Include="include\uiPlatformDefines.h" />
     <ClInclude Include="include\uiPlatformTypes.h" />
     <ClInclude Include="include\uiPlayer.h" />
+    <ClInclude Include="include\uiPlayerController.h" />
     <ClInclude Include="include\uiPrerequisites.h" />
     <ClInclude Include="include\uiResource.h" />
     <ClInclude Include="include\uiResourceManager.h" />
     <ClInclude Include="include\uiScene.h" />
     <ClInclude Include="include\uiSceneManager.h" />
+    <ClInclude Include="include\uiSceneSettings.h" />
+    <ClInclude Include="include\uiSpawner.h" />
     <ClInclude Include="include\uiSprite.h" />
     <ClInclude Include="include\uiTexture.h" />
     <ClInclude Include="include\uiUtilities.h" />
-    <ClInclude Include="uiPlayerController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

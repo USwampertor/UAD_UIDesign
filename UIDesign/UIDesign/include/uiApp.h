@@ -12,6 +12,11 @@ class App : public Module<App>
     ResourceManager::StartUp();
   }
 
+  void LoadResources()
+  {
+
+  }
+
   void Run()
   {
    

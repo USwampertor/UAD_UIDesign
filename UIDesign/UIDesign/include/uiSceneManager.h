@@ -8,7 +8,7 @@
 class SceneManager : public Module<SceneManager>
 {
 
-
+  bool LoadScene(const String& sceneToLoad);
 
   SharedPtr<Scene> m_activeScene;
 
