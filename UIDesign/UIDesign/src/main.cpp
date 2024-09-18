@@ -11,6 +11,7 @@
 #include "uiInputManager.h"
 #include "uiInputMapping.h"
 #include "uiResourceManager.h"
+#include "uiSceneManager.h"
 #include "uiTexture.h"
 #include "uiUtilities.h"
 
@@ -30,6 +31,7 @@ int main() {
   ImGui::SFML::Init(window);
   ResourceManager::StartUp();
   InputManager::StartUp();
+  SceneManager::StartUp();
   // InputManager::Instance();
   bool debugDraw = false;
 
@@ -46,9 +48,14 @@ int main() {
   animation1->SetLoop(true);
   animation2->SetLoop(true);
 
-  SharedPtr<BulletEntity> e = MakeSharedObject<BulletEntity>();
+  SceneManager::Instance().CreateScene("TestScene");
+  SceneManager::Instance().ChangeScene("TestScene");
 
-  e->Initialize();
+  // SharedPtr<BulletEntity> e = MakeSharedObject<BulletEntity>();
+
+  BulletEntity* e = SceneManager::Instance().CreateObject<BulletEntity>();
+
+  // e->Initialize();
   // e->CreateComponent<Animator>();
   e->GetComponent<Animator>()->Initialize();
   e->GetComponent<Animator>()->AddAnimation(animation2, String("idle"));
@@ -65,26 +72,27 @@ int main() {
                                                    e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
   e->GetComponent<BoxCollider>()->setCenter(e->GetTransform().position);
   w.AddPhysicsBody(*e->GetComponent<BoxCollider>());
-  SharedPtr<Scene> scene = MakeSharedObject<Scene>();
-  scene->Initialize();
+  // SharedPtr<Scene> scene = MakeSharedObject<Scene>();
+  // scene->Initialize();
   std::srand(std::time(nullptr));
   for (int i = 0; i < 10; ++i)
   {
-    scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());
-    scene->m_root->m_children[i]->Initialize();
-    scene->m_root->m_children[i]->CreateComponent<Animator>();
-    scene->m_root->m_children[i]->GetComponent<Animator>()->Initialize();
-    scene->m_root->m_children[i]->GetComponent<Animator>()->AddAnimation(animation1, String("idle"));
-    scene->m_root->m_children[i]->GetComponent<Animator>()->SetAnimation("idle");
-    scene->m_root->m_children[i]->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
-    scene->m_root->m_children[i]->GetComponent<Animator>()->Play();
-    scene->m_root->m_children[i]->CreateComponent<BoxCollider>();
-    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setStatic(true);
-    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setSize(Vector2f(scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
-                                                                                scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
-    scene->m_root->m_children[i]->GetComponent<BoxCollider>()->setCenter(scene->m_root->m_children[i]->GetTransform().position);
-    w.AddPhysicsBody(*scene->m_root->m_children[i]->GetComponent<BoxCollider>());
-    scene->m_root->m_children[i]->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
+    Entity* newE = SceneManager::Instance().CreateObject<Entity>();
+    // scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());
+    // newE->Initialize();
+    newE->CreateComponent<Animator>();
+    newE->GetComponent<Animator>()->Initialize();
+    newE->GetComponent<Animator>()->AddAnimation(animation1, String("idle"));
+    newE->GetComponent<Animator>()->SetAnimation("idle");
+    newE->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
+    newE->GetComponent<Animator>()->Play();
+    newE->CreateComponent<BoxCollider>();
+    newE->GetComponent<BoxCollider>()->setStatic(true);
+    newE->GetComponent<BoxCollider>()->setSize(Vector2f(newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
+                                                        newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
+    newE->GetComponent<BoxCollider>()->setCenter(newE->GetTransform().position);
+    w.AddPhysicsBody(*newE->GetComponent<BoxCollider>());
+    newE->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
   }
 
   sf::Clock deltaClock;
@@ -103,15 +111,15 @@ int main() {
 
     ImGui::SFML::Update(window, dt);
 
-    for (int i = 0; i < scene->m_root->m_children.size(); ++i)
-    {
-      scene->m_root->m_children[i]->Update(delta);
-    }
+    SceneManager::Instance().Update(delta);
+    // for (int i = 0; i < scene->m_root->m_children.size(); ++i)
+    // {
+    // }
     e->Update(delta);
 
     if (InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeL][0]->GetState() == Input::eINPUTSTATE::PRESSED)
     {
-      debugDraw = !debugDraw;
+      SceneManager::Instance().m_isDebug = !SceneManager::Instance().m_isDebug;
     }
 
     ImGui::Begin("Coordinates");
@@ -126,21 +134,23 @@ int main() {
     w.UpdatePhysics(10);
 
     window.clear();
-    // Here start drawing
-    for (int i = 0; i < scene->m_root->m_children.size(); ++i)
-    {
-      if (debugDraw)
-      {
-        window.draw(*scene->m_root->m_children[i]->GetComponent<BoxCollider>());
-      }
 
-      window.draw(scene->m_root->m_children[i]->GetComponent<Animator>()->GetSprite());
-    }
-    if (debugDraw)
-    {
-      window.draw(*e->GetComponent<BoxCollider>());
-    }
-    window.draw(e->GetComponent<Animator>()->GetSprite());
+    SceneManager::Instance().UpdateRender(window);
+    // Here start drawing
+    // for (int i = 0; i < SceneManager::Instance().GetActiveScene()->m_entities.size(); ++i)
+    // {
+    //   if (debugDraw)
+    //   {
+    //     window.draw(*SceneManager::Instance().GetActiveScene()->m_entities[i]->GetComponent<BoxCollider>());
+    //   }
+    // 
+    //   window.draw(SceneManager::Instance().GetActiveScene()->m_entities[i]->GetComponent<Animator>()->GetSprite());
+    // }
+    // if (debugDraw)
+    // {
+    //   window.draw(*e->GetComponent<BoxCollider>());
+    // }
+    // window.draw(e->GetComponent<Animator>()->GetSprite());
 
     ImGui::SFML::Render(window);
     window.display();

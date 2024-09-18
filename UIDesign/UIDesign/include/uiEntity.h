@@ -15,18 +15,20 @@ class Entity
 {
 public:
 
+  static String GetType() { assert(true && "IMPLEMENT THIS"); return "Entity"; }
+
   Entity()
   {
     m_transform = MakeUniqueObject<Transform2D>();
     m_components.clear();
-    m_children.clear();
+    // m_children.clear();
   }
 
   Entity(const String& newName)
   {
     m_transform = MakeUniqueObject<Transform2D>();
     m_components.clear();
-    m_children.clear();
+    // m_children.clear();
     m_name = newName;
   }
 
@@ -35,7 +37,7 @@ public:
   ~Entity() = default;
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
-  void AddComponent(SharedPtr<T> newComponent)
+  void AddComponent(SharedPtr<T>& newComponent)
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
@@ -44,13 +46,13 @@ public:
   }
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
-  SharedPtr<T> GetComponent()
+  T* GetComponent()
   {
     if (m_components.find(T::GetType()) != m_components.end())
     {
-      return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
+      return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
     }
-    return MakeSharedObject<T>();
+    return nullptr;
   }
 
   template <typename T, typename = std::enable_if_t<std::is_base_of<Component, T>::value>>
@@ -65,16 +67,25 @@ public:
   template <typename T, 
             typename = std::enable_if_t<std::is_base_of<Component, T>::value>, 
             typename ... Args>
-  SharedPtr<T> CreateComponent(Args ... args)
+  T* CreateComponent(Args ... args)
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
       m_components.insert(Utils::MakePair(T::GetType(), MakeSharedObject<T>(args ...)));
       m_components.at(T::GetType())->Initialize();
-      return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
+      return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
     }
-    return REINTERPRETPOINTER(T, m_components.at(T::GetType()));
+    return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
 
+  }
+
+  virtual void OnInitialize() {}
+
+  virtual void OnCreate() {}
+
+  virtual void OnDestroy() 
+  {
+    
   }
 
   virtual void Initialize()
@@ -97,10 +108,10 @@ public:
     return *m_transform;
   }
 
-  Vector<UniquePtr<Entity>>& Children()
-  {
-    return m_children;
-  }
+  // Vector<UniquePtr<Entity>>& Children()
+  // {
+  //   return m_children;
+  // }
   
   const String& GetName()
   {
@@ -129,11 +140,11 @@ protected:
 
   UniquePtr<Transform2D> m_transform;
 
-public:
+private:
 
   String m_name;
 
   Map<String, SharedPtr<Component>> m_components;
 
-  Vector<SharedPtr<Entity>> m_children;
+  // Vector<SharedPtr<Entity>> m_children;
 };

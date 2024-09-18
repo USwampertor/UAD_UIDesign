@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+
 class BulletEntity : public Entity
 {
 public:
@@ -101,10 +102,7 @@ public:
     }
   }
 
-  void EnterCollision(const PhysicsCollisionResult& c)
-  {
-    std::cout << "Entered Collision" << std::endl;
-  }
+  void EnterCollision(const PhysicsCollisionResult& c);
 
   void StayCollision(const PhysicsCollisionResult& c)
   {
@@ -117,11 +115,13 @@ public:
 
   float m_speed = 10;
 
+  float m_life = 10;
+
   Vector2f m_direction;
 
-  SharedPtr<BoxCollider> m_collider;
+  BoxCollider* m_collider;
 
-  SharedPtr<Animator> m_animator;
+  Animator* m_animator;
 
   String isColliding = "";
 };

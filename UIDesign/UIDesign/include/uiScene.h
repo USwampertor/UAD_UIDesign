@@ -12,46 +12,37 @@ class Scene
 {
 public:
 
-  template <typename T
-            typename = std::enable_if_t<std::is_base_of<Entity, T>::value>>
-  void DestroyObject(T* toDelete)
+  Scene() = default;
+
+  ~Scene() = default;
+
+  Scene(const String& newName)
   {
-
-  }
-
-  template <typename T
-            typename = std::enable_if_t<std::is_base_of<Entity, T>::value>>
-  SharedPtr<T>& FindEntity(T* toFind)
-  {
-
-
-    for (const T& obj : m_root->Children())
-    {
-
-    }
-  }
-  
-  template <typename T, 
-            typename = std::enable_if_t<std::is_base_of<Entity, T>::value>,
-            typename... Args>
-  T* MakeNew(Args ... args)
-  {
-    SharedPtr<T> newEntity = MakeSharedObject<T>(std::forward<Args>(args)...);
-    m_root.push_back(newEntity);
-    return newEntity.get();
+    m_sceneName = newName;
   }
 
   void Initialize()
   {
-    m_root = MakeUniqueObject<Entity>();
-    m_root->Initialize();
+    // m_root = MakeUniqueObject<Entity>();
+    // m_root->Initialize();
+    m_entities.clear();
+  }
+
+  void OnSceneUnload()
+  {
+
+  }
+
+  void OnSceneLoad()
+  {
+
   }
 
   UniquePtr<SceneSettings>& GetSettings();
 
-  UniquePtr<Entity> m_root;
+  // UniquePtr<Entity> m_root;
 
-  void AddToScene(SharedPtr<Entity> newEntity);
+  Vector<SharedPtr<Entity>> m_entities;
 
   UniquePtr<SceneSettings> m_settings;
 
