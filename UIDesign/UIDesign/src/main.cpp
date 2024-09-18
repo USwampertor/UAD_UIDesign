@@ -10,6 +10,7 @@
 #include "uiInput.h"
 #include "uiInputManager.h"
 #include "uiInputMapping.h"
+#include "uiPhysics.h"
 #include "uiResourceManager.h"
 #include "uiSceneManager.h"
 #include "uiTexture.h"
@@ -33,9 +34,9 @@ int main() {
   InputManager::StartUp();
   SceneManager::StartUp();
   // InputManager::Instance();
-  bool debugDraw = false;
-
-  sfp::World w(Vector2f(0, 0));
+  Physics::StartUp();
+  Physics::Instance().SetGravity(Vector2f(0, 0));
+  // sfp::World w(Vector2f(0, 0));
 
   String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   SharedPtr<Atlas> atlas1 = ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
@@ -71,7 +72,8 @@ int main() {
   e->GetComponent<BoxCollider>()->setSize(Vector2f(e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
                                                    e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
   e->GetComponent<BoxCollider>()->setCenter(e->GetTransform().position);
-  w.AddPhysicsBody(*e->GetComponent<BoxCollider>());
+  Physics::Instance().RegisterPhysicsBody(*e->GetComponent<BoxCollider>());
+  // w.AddPhysicsBody(*e->GetComponent<BoxCollider>());
   // SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   // scene->Initialize();
   std::srand(std::time(nullptr));
@@ -91,7 +93,8 @@ int main() {
     newE->GetComponent<BoxCollider>()->setSize(Vector2f(newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
                                                         newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
     newE->GetComponent<BoxCollider>()->setCenter(newE->GetTransform().position);
-    w.AddPhysicsBody(*newE->GetComponent<BoxCollider>());
+    Physics::Instance().RegisterPhysicsBody(*newE->GetComponent<BoxCollider>());
+    // w.AddPhysicsBody(*newE->GetComponent<BoxCollider>());
     newE->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
   }
 
@@ -115,7 +118,7 @@ int main() {
     // for (int i = 0; i < scene->m_root->m_children.size(); ++i)
     // {
     // }
-    e->Update(delta);
+    // e->Update(delta);
 
     if (InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeL][0]->GetState() == Input::eINPUTSTATE::PRESSED)
     {
@@ -131,8 +134,8 @@ int main() {
     ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeD][0]->GetState()._to_string());
     ImGui::Text(Utils::ToString(fps).c_str());
     ImGui::End();
-    w.UpdatePhysics(10);
-
+    // w.UpdatePhysics(10);
+    Physics::Instance().Update(10);
     window.clear();
 
     SceneManager::Instance().UpdateRender(window);

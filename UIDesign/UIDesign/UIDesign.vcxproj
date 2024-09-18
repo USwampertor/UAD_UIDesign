@@ -209,6 +209,7 @@
     <ClCompile Include="src\uiMemoryAllocator.cpp" />
     <ClCompile Include="src\uiModule.cpp" />
     <ClCompile Include="src\uiPawn.cpp" />
+    <ClCompile Include="src\uiPhysics.cpp" />
     <ClCompile Include="src\uiPlayer.cpp" />
     <ClCompile Include="src\uiPlayerController.cpp" />
     <ClCompile Include="src\uiResourceManager.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="include\uiModule.h" />
     <ClInclude Include="include\uiParticleEmitter.h" />
     <ClInclude Include="include\uiPawn.h" />
+    <ClInclude Include="include\uiPhysics.h" />
     <ClInclude Include="include\uiPlatformDefines.h" />
     <ClInclude Include="include\uiPlatformTypes.h" />
     <ClInclude Include="include\uiPlayer.h" />
