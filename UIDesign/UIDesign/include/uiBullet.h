@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uiAnimator.h"
+#include "uiAudioSource.h"
 #include "uiBoxCollider.h"
 #include "uiEntity.h"
 #include "uiInput.h"
@@ -20,17 +21,18 @@ public:
     Entity::Initialize();
     m_collider = CreateComponent<BoxCollider>();
     m_animator = CreateComponent<Animator>();
+    m_source = CreateComponent<AudioSource>();
     m_collider->setSize(Vector2f(1,1));
-    m_collider->AddCollisionEnterCallback(std::bind(&BulletEntity::EnterCollision, this, std::placeholders::_1));
-    m_collider->AddCollisionStayCallback(std::bind(&BulletEntity::StayCollision, this, std::placeholders::_1));
-    m_collider->AddCollisionExitCallback(std::bind(&BulletEntity::ExitCollision, this, std::placeholders::_1));
+    // m_collider->AddCollisionEnterCallback(std::bind(&BulletEntity::EnterCollision, this, std::placeholders::_1));
+    // m_collider->AddCollisionStayCallback(std::bind(&BulletEntity::StayCollision, this, std::placeholders::_1));
+    // m_collider->AddCollisionExitCallback(std::bind(&BulletEntity::ExitCollision, this, std::placeholders::_1));
   }
 
   SharedPtr<InputMapping> m_map;
 
   void PrintCollision(sfp::PhysicsBodyCollisionResult&)
   {
-    isColliding = "COLLISION";
+    // isColliding = "COLLISION";
   }
 
   void Update(const float& delta) override
@@ -102,6 +104,15 @@ public:
     }
   }
 
+  void PlaySound(SharedPtr<InputValue> value)
+  {
+    if (value->GetState() == Input::eINPUTSTATE::PRESSED)
+    {
+      m_source->PlayOnce();
+      std::cout << "Play" << std::endl;
+    }
+  }
+
   void EnterCollision(const PhysicsCollisionResult& c);
 
   void StayCollision(const PhysicsCollisionResult& c)
@@ -122,6 +133,8 @@ public:
   BoxCollider* m_collider;
 
   Animator* m_animator;
+
+  AudioSource* m_source;
 
   String isColliding = "";
 };

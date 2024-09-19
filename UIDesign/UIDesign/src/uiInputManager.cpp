@@ -24,6 +24,7 @@ void InputManager::Update(const float& delta)
     auto tuple = InputCodeToSFML(i);
     Input::eDEVICEHEXVALUE value = Input::eDEVICEHEXVALUE::_from_integral(std::get<0>(tuple));
     int32 enumValue = std::get<1>(tuple);
+
     // Check for mouse values
     if (value == Input::eDEVICEHEXVALUE::MOUSE)
     {

@@ -9,14 +9,12 @@
 #include "uiResource.h"
 #include "uiScene.h"
 #include "uiTexture.h"
+#include "uiMusicClip.h"
+#include "uiAudioClip.h"
 #include "uiUtilities.h"
 
 #include <iostream>
 
-class CODEC
-{
-  
-};
 
 class ResourceManager : public Module<ResourceManager>
 {
@@ -47,7 +45,11 @@ public:
     // newResource->Initialize();
     if (eRESOURCETYPE::SOUND == type)
     {
-
+      REINTERPRETPOINTER(AudioClip, newResource)->loadFromFile(path);
+    }
+    else if (eRESOURCETYPE::MUSIC == type)
+    {
+      REINTERPRETPOINTER(MusicClip, newResource)->openFromFile(path);
     }
     else if (eRESOURCETYPE::TEXTURE == type)
     {

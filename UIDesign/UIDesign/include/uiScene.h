@@ -44,6 +44,8 @@ public:
 
   Vector<SharedPtr<Entity>> m_entities;
 
+  Vector<Entity*> m_toRemove;
+
   UniquePtr<SceneSettings> m_settings;
 
   String m_sceneName;

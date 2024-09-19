@@ -7,13 +7,18 @@
 #include <SFPhysics/SFPhysics.h>
 
 using PhysicsBody = sfp::PhysicsBody;
+using World = sfp::World;
+using PhysicsCollisionResult = sfp::PhysicsBodyCollisionResult;
+
+
+class BoxCollider;
 
 class Physics : public Module<Physics>
 {
 public:
   virtual void OnStartUp() override
   {
-    m_world = { Vector2f(0,0) };
+    m_world = MakeUniqueObject<World>(Vector2f(0, 0));
   }
 
   void SetGravity(const Vector2f& gravity);
@@ -24,6 +29,8 @@ public:
 
   void Update(const float& delta);
 
-  sfp::World m_world;
+  UniquePtr<World> m_world;
+
+  Vector<BoxCollider*> m_physicObjects;
 };
 

@@ -1,5 +1,7 @@
 #include "uiBoxCollider.h"
 
+#include "uiPhysics.h"
+
 void BoxCollider::PropagateTransform(const Transform2D& newTransform)
 {
   Vector2f newPosition = newTransform.position + m_offset->position;
@@ -14,6 +16,29 @@ void BoxCollider::PropagateTransform(const Transform2D& newTransform)
 void BoxCollider::Update(const float& delta)
 {
 
+}
+
+void BoxCollider::Initialize()
+{
+  m_collisions.clear();
+  m_onCollisionEnterCallbackList.clear();
+  m_onCollisionStayCallbackList.clear();
+  m_onCollisionExitCallbackList.clear();
+  m_offset->Reset();
+  setFillColor(sf::Color::Transparent);
+  setOutlineColor(sf::Color::Red);
+  setOutlineThickness(2);
+  Physics::Instance().RegisterPhysicsBody(*this);
+}
+
+void BoxCollider::OnDestroy()
+{
+  // for (auto& c : m_collisions)
+  // {
+  //   c
+  // }
+  Physics::Instance().UnRegisterPhysicsBody(*this);
+  m_collisions.clear();
 }
 
 void BoxCollider::AddCollisionEnterCallback(const CollisionCallback& c)

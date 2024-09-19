@@ -21,15 +21,17 @@ public:
   {
     m_transform = MakeUniqueObject<Transform2D>();
     m_components.clear();
-    // m_children.clear();
+    m_children.clear();
+    m_isActive = true;
   }
 
   Entity(const String& newName)
   {
     m_transform = MakeUniqueObject<Transform2D>();
     m_components.clear();
-    // m_children.clear();
+    m_children.clear();
     m_name = newName;
+    m_isActive = true;
   }
 
   Entity(Entity&) = default;
@@ -73,6 +75,7 @@ public:
     {
       m_components.insert(Utils::MakePair(T::GetType(), MakeSharedObject<T>(args ...)));
       m_components.at(T::GetType())->Initialize();
+      // m_components.at(T::GetType())->m_parent = m_components.at(T::GetType())).get();
       return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
     }
     return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
@@ -81,11 +84,13 @@ public:
 
   virtual void OnInitialize() {}
 
-  virtual void OnCreate() {}
-
   virtual void OnDestroy() 
   {
-    
+    m_children.clear();
+    for (auto& [key, component] : m_components)
+    {
+      component->OnDestroy();
+    }
   }
 
   virtual void Initialize()
@@ -95,11 +100,24 @@ public:
     SetScale(sf::Vector2f(1.0f, 1.0f));
   }
 
+  void SetActive(bool isActive)
+  {
+    m_isActive = isActive;
+  }
+
+  const bool& IsActive()
+  {
+    return m_isActive;
+  }
+
   virtual void Update(const float& delta)
   {
-    for (auto& [key, component] : m_components)
+    if (m_isActive)
     {
-      component->Update(delta);
+      for (auto& [key, component] : m_components)
+      {
+        component->Update(delta);
+      }
     }
   }
 
@@ -108,17 +126,18 @@ public:
     return *m_transform;
   }
 
-  // Vector<UniquePtr<Entity>>& Children()
-  // {
-  //   return m_children;
-  // }
-  
   const String& GetName()
   {
     return m_name;
   }
 
-  void Destroy();
+  void AttachChildren(Entity* newChild);
+
+  void RemoveChildren(const String& name);
+
+  Entity& GetChild(const String& name);
+
+  Vector<Entity*>& GetChildren();
 
   void Move(const sf::Vector2f& delta);
 
@@ -146,5 +165,8 @@ private:
 
   Map<String, SharedPtr<Component>> m_components;
 
-  // Vector<SharedPtr<Entity>> m_children;
+  Vector<Entity*> m_children;
+
+  bool m_isActive = true;
+
 };

@@ -9,6 +9,7 @@ enum eRESOURCETYPE : uint32
   NONE = 0,
   TEXTURE,
   SOUND,
+  MUSIC,
   ANIMATION,
   ATLAS,
 };

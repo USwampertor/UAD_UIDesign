@@ -32,6 +32,12 @@ public:
 
   virtual void Initialize() override 
   {
+
+  }
+
+  virtual void OnDestroy() override
+  {
+
   }
   
   virtual void PropagateTransform(const Transform2D& newTransform) override;

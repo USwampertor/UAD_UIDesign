@@ -13,17 +13,8 @@ public:
             typename = std::enable_if_t<std::is_base_of<Entity, T>::value>>
             void DestroyObject(T* toDelete)
   {
-    int i = 0;
-    for (SharedPtr<Entity>& e : m_activeScene->m_entities)
-    {
-      if (e.get() == toDelete)
-      {
-        e.reset();
-        m_activeScene->m_entities.erase(m_activeScene->m_entities.begin() + i);
-        break;
-      }
-      ++i;
-    }
+    m_activeScene->m_toRemove.push_back(toDelete);
+    
   }
 
   template <typename T,
@@ -58,6 +49,26 @@ public:
 
   void Update(const float& delta)
   {
+    // Delete Entities that are marked for delete
+    for (Entity* toDelete : m_activeScene->m_toRemove)
+    {
+      int i = 0;
+
+      for (SharedPtr<Entity>& e : m_activeScene->m_entities)
+      {
+        if (e.get() == toDelete)
+        {
+          //
+          e->OnDestroy();
+          e.reset();
+          m_activeScene->m_entities.erase(m_activeScene->m_entities.begin() + i);
+          break;
+        }
+        ++i;
+      }
+      m_activeScene->m_toRemove.clear();
+    }
+
     for (const SharedPtr<Entity>& e : m_activeScene->m_entities)
     {
       e->Update(delta);

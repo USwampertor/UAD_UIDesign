@@ -49,30 +49,43 @@ int main() {
   animation1->SetLoop(true);
   animation2->SetLoop(true);
 
+  String audioPath = Utils::Format("%s/../resources/pingas.mp3", FileSystem::CurrentPath().string().c_str());
+  
+
   SceneManager::Instance().CreateScene("TestScene");
   SceneManager::Instance().ChangeScene("TestScene");
 
   // SharedPtr<BulletEntity> e = MakeSharedObject<BulletEntity>();
 
   BulletEntity* e = SceneManager::Instance().CreateObject<BulletEntity>();
-
+  e->GetComponent<AudioSource>()->SetClip(ResourceManager::Instance().LoadResource<AudioClip>(audioPath));
   // e->Initialize();
   // e->CreateComponent<Animator>();
   e->GetComponent<Animator>()->Initialize();
   e->GetComponent<Animator>()->AddAnimation(animation2, String("idle"));
   e->GetComponent<Animator>()->SetAnimation("idle");
   e->m_map = MakeSharedObject<InputMapping>();
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&BulletEntity::Down, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeA, std::bind(&BulletEntity::Left, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeD, std::bind(&BulletEntity::Right, e, std::placeholders::_1));
   e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&BulletEntity::Up, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeA, std::bind(&BulletEntity::Left, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&BulletEntity::Down, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeD, std::bind(&BulletEntity::Right, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeEnter, std::bind(&BulletEntity::PlaySound, e, std::placeholders::_1));
   InputManager::Instance().RegisterInputMapping(e->m_map);
   e->m_map->m_enabled = true;
   e->GetComponent<BoxCollider>()->setStatic(true);
   e->GetComponent<BoxCollider>()->setSize(Vector2f(e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
                                                    e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
   e->GetComponent<BoxCollider>()->setCenter(e->GetTransform().position);
-  Physics::Instance().RegisterPhysicsBody(*e->GetComponent<BoxCollider>());
+
+  Entity* attachCollider = SceneManager::Instance().CreateObject<Entity>("AttackCollider");
+  attachCollider->CreateComponent<BoxCollider>();
+  attachCollider->GetComponent<BoxCollider>()->setStatic(true);
+  attachCollider->GetComponent<BoxCollider>()->setSize(Vector2f(50, 50));
+  attachCollider->GetComponent<BoxCollider>()->setCenter(attachCollider->GetTransform().position);
+  attachCollider->Move(Vector2f(100, 0));
+  e->AttachChildren(attachCollider);
+
+  // Physics::Instance().RegisterPhysicsBody(*e->GetComponent<BoxCollider>());
   // w.AddPhysicsBody(*e->GetComponent<BoxCollider>());
   // SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   // scene->Initialize();
@@ -93,7 +106,7 @@ int main() {
     newE->GetComponent<BoxCollider>()->setSize(Vector2f(newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
                                                         newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
     newE->GetComponent<BoxCollider>()->setCenter(newE->GetTransform().position);
-    Physics::Instance().RegisterPhysicsBody(*newE->GetComponent<BoxCollider>());
+    // Physics::Instance().RegisterPhysicsBody(*newE->GetComponent<BoxCollider>());
     // w.AddPhysicsBody(*newE->GetComponent<BoxCollider>());
     newE->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
   }
@@ -114,7 +127,6 @@ int main() {
 
     ImGui::SFML::Update(window, dt);
 
-    SceneManager::Instance().Update(delta);
     // for (int i = 0; i < scene->m_root->m_children.size(); ++i)
     // {
     // }
@@ -132,10 +144,14 @@ int main() {
     ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeA][0]->GetState()._to_string());
     ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeS][0]->GetState()._to_string());
     ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeD][0]->GetState()._to_string());
+    ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeEnter][0]->GetState()._to_string());
     ImGui::Text(Utils::ToString(fps).c_str());
     ImGui::End();
     // w.UpdatePhysics(10);
+    
     Physics::Instance().Update(10);
+    SceneManager::Instance().Update(delta);
+
     window.clear();
 
     SceneManager::Instance().UpdateRender(window);

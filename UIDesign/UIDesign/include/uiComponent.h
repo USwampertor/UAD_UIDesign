@@ -59,6 +59,8 @@ public:
 
   virtual void Initialize() = 0;
 
+  virtual void OnDestroy() = 0;
+
   virtual void PropagateTransform(const Transform2D& newTransform) = 0;
   
   virtual void Update(const float& delta) = 0;
@@ -71,10 +73,13 @@ public:
   void SetOffset(const Transform2D& offset)
   {
     m_offset->SetTransform(offset);
+    OnSetOffset();
   }
 
-protected:
+  virtual void OnSetOffset() {}
+
   SharedPtr<Entity> m_parent;
+protected:
 
   UniquePtr<Transform2D> m_offset;
 };
