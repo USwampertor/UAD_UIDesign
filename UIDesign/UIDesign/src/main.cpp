@@ -102,7 +102,7 @@ int main() {
     newE->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
     newE->GetComponent<Animator>()->Play();
     newE->CreateComponent<BoxCollider>();
-    newE->GetComponent<BoxCollider>()->setStatic(true);
+    // newE->GetComponent<BoxCollider>()->setStatic(true);
     newE->GetComponent<BoxCollider>()->setSize(Vector2f(newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
                                                         newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
     newE->GetComponent<BoxCollider>()->setCenter(newE->GetTransform().position);
@@ -154,8 +154,8 @@ int main() {
 
     window.clear();
 
-    SceneManager::Instance().UpdateRender(window);
     // Here start drawing
+    SceneManager::Instance().UpdateRender(window);
     // for (int i = 0; i < SceneManager::Instance().GetActiveScene()->m_entities.size(); ++i)
     // {
     //   if (debugDraw)

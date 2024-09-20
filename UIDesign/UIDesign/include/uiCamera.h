@@ -7,17 +7,26 @@
 
 class Camera : public Component, sf::View
 {
+public:
+
+  static String GetType() { return "Camera"; }
+
   Camera() = default;
+
+  ~Camera() = default;
 
   Camera(const Vector2f& pos, const Vector2f& s)
   {
     sf::View(pos, s);
   }
 
-  virtual void Initialize() override
-  {
+  virtual void Initialize() override;
 
-  }
+  virtual void OnDestroy() override;
+
+  virtual void PropagateTransform(const Transform2D& newTransform) override;
+
+  virtual void Update(const float& delta) override;
 
 };
 

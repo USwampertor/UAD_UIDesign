@@ -193,6 +193,7 @@
     <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\uiAudioListener.cpp" />
+    <ClCompile Include="src\uiCameraFollower.cpp" />
     <ClCompile Include="src\uiCreature.cpp" />
     <ClCompile Include="src\uiParticleEmitter.cpp" />
     <ClCompile Include="src\uiAnimation.cpp" />
@@ -218,6 +219,8 @@
     <ClCompile Include="src\uiSceneManager.cpp" />
     <ClCompile Include="src\uiSceneSettings.cpp" />
     <ClCompile Include="src\uiSpawner.cpp" />
+    <ClCompile Include="src\uiUI.cpp" />
+    <ClCompile Include="src\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\uiAudioClip.h" />
@@ -236,6 +239,7 @@
     <ClInclude Include="include\imstb_truetype.h" />
     <ClInclude Include="include\uiBullet.h" />
     <ClInclude Include="include\uiCamera.h" />
+    <ClInclude Include="include\uiCameraFollower.h" />
     <ClInclude Include="include\uiController.h" />
     <ClInclude Include="include\uiCreature.h" />
     <ClInclude Include="include\uiEnemy.h" />
@@ -250,6 +254,7 @@
     <ClInclude Include="include\uiBoxCollider.h" />
     <ClInclude Include="include\uiComponent.h" />
     <ClInclude Include="include\uiEntity.h" />
+    <ClInclude Include="include\uiMath.h" />
     <ClInclude Include="include\uiMemoryAllocator.h" />
     <ClInclude Include="include\uiModule.h" />
     <ClInclude Include="include\uiMusicClip.h" />
@@ -269,7 +274,9 @@
     <ClInclude Include="include\uiSpawner.h" />
     <ClInclude Include="include\uiSprite.h" />
     <ClInclude Include="include\uiTexture.h" />
+    <ClInclude Include="include\uiUI.h" />
     <ClInclude Include="include\uiUtilities.h" />
+    <ClInclude Include="include\uiWindowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
