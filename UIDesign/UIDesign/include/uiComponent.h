@@ -45,6 +45,19 @@ public:
   float rotation;
 };
 
+BETTER_ENUM(
+  eCOMPONENTTYPE,
+  uint32,
+  NONE            = 0,
+  ANIMATOR        = 1 << 0,
+  AUDIOLISTENER   = 1 << 1,
+  AUDIOSOURCE     = 1 << 2,
+  CAMERA          = 1 << 3,
+  COLLIDER        = 1 << 4,
+  PARTICLEEMITTER = 1 << 5,
+  SPRITE          = 1 << 6
+)
+
 
 class Component
 {
@@ -55,7 +68,7 @@ public:
     m_offset = MakeUniqueObject<Transform2D>();
   }
 
-  static String GetType() { assert(true && "IMPLEMENT THIS"); return "Component"; }
+  static eCOMPONENTTYPE GetType() { assert(true && "IMPLEMENT THIS"); return eCOMPONENTTYPE::NONE; }
 
   virtual void Initialize() = 0;
 
@@ -78,7 +91,7 @@ public:
 
   virtual void OnSetOffset() {}
 
-  SharedPtr<Entity> m_parent;
+  Entity* m_parent;
 protected:
 
   UniquePtr<Transform2D> m_offset;

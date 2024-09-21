@@ -2,20 +2,64 @@
 
 #include "uiPhysics.h"
 
+#include "uiEntity.h"
+
+void BoxCollider::collisionCallback(PhysicsCollisionResult& collision)
+{
+
+  bool existing = false;
+  // for (const SharedPtr<PhysicsCollisionResult>& obj : m_collisions)
+  for (const PhysicsCollisionResult* obj : m_collisions)
+  {
+    // if (obj->object2 == collision.object2)
+    if (obj->object2 == collision.object2)
+    {
+      existing = true;
+      break;
+    }
+  }
+  if (existing)
+  {
+    OnCollisionStay(collision);
+  }
+  else
+  {
+    // m_collisions.push_back(MakeSharedObject<PhysicsCollisionResult>(collision));
+    m_collisions.push_back(new PhysicsCollisionResult(collision));
+    OnCollisionEnter(collision);
+  }
+}
+
+void BoxCollider::updateCallback(unsigned int deltaMs)
+{
+  if (!this->getStatic())
+  {
+    m_parent->SetPosition(this->getCenter());
+  }
+    int i = 0;
+  // for (const SharedPtr<PhysicsCollisionResult>& obj : m_collisions)
+  for (const PhysicsCollisionResult* obj : m_collisions)
+  {
+    // if (!obj->object1.collideWith(obj->object2).hasCollided)
+    if (!obj->object1.collideWith(obj->object2).hasCollided)
+    {
+      // OnCollisionExit(*obj.get());
+      OnCollisionExit(*obj);
+      m_collisions.erase(m_collisions.begin() + i);
+    }
+    ++i;
+  }
+}
+
 void BoxCollider::PropagateTransform(const Transform2D& newTransform)
 {
   Vector2f newPosition = newTransform.position + m_offset->position;
-  // m_box->setPosition(newTransform->position + m_offset.position);
-  // Vector2f scale = { newTransform->scale.x * m_offset.scale.x ,
-  //                    newTransform->scale.y * m_offset.scale.y };
-  // m_box->setScale(scale);
-  // m_box->setRotation(newTransform->rotation + m_offset.rotation);
   setCenter(newPosition);
 }
 
 void BoxCollider::Update(const float& delta)
 {
-
+  
 }
 
 void BoxCollider::Initialize()

@@ -9,7 +9,7 @@ class Camera : public Component, sf::View
 {
 public:
 
-  static String GetType() { return "Camera"; }
+  static eCOMPONENTTYPE GetType() { return eCOMPONENTTYPE::CAMERA; }
 
   Camera() = default;
 

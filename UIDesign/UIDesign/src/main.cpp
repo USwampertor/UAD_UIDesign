@@ -1,6 +1,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+#include "uiApp.h"
 #include "uiAnimation.h"
 #include "uiAnimator.h"
 #include "uiAtlas.h"
@@ -16,6 +17,8 @@
 #include "uiTexture.h"
 #include "uiUtilities.h"
 
+#include "uiGameSettings.h"
+
 #include <cstdlib>
 #include <ctime>
 
@@ -27,7 +30,25 @@
 #include <iostream>
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(640, 480), "");
+
+  // GameSettings settings;
+  // 
+  // settings.m_displaySize = { 1200, 680 };
+  // settings.m_framerate = 144;
+  // settings.m_gameName = "A silly little game";
+  // settings.m_shouldUseVerticalSync = false;
+  // 
+  // String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
+  // settings.ToFile(settingsPath);
+  // 
+  // return 0;
+
+  App::StartUp();
+  App::Instance().Run();
+
+  return 0;
+
+  sf::RenderWindow window(sf::VideoMode(640, 480), "Small Simple Engine");
   window.setFramerateLimit(144);
   ImGui::SFML::Init(window);
   ResourceManager::StartUp();
@@ -90,7 +111,7 @@ int main() {
   // SharedPtr<Scene> scene = MakeSharedObject<Scene>();
   // scene->Initialize();
   std::srand(std::time(nullptr));
-  for (int i = 0; i < 10; ++i)
+  for (int i = 0; i < 15; ++i)
   {
     Entity* newE = SceneManager::Instance().CreateObject<Entity>();
     // scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());

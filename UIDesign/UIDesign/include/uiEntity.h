@@ -8,8 +8,11 @@
 #include "uiComponent.h"
 #include "uiUtilities.h"
 
+#include "uiSprite.h"
+
 #include <SFML/Main.hpp>
 #include <SFML/Graphics.hpp>
+
 
 class Entity
 {
@@ -73,10 +76,17 @@ public:
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
+
+      // Special case for animator since this has to create a Sprite component
+      if (eCOMPONENTTYPE::ANIMATOR == T::GetType() && 
+          m_components.find(eCOMPONENTTYPE::SPRITE) == m_components.end())
+      {
+        CreateComponent<Sprite>();
+      }
+
       m_components.insert(Utils::MakePair(T::GetType(), MakeSharedObject<T>(args ...)));
+      m_components.at(T::GetType())->m_parent = this;
       m_components.at(T::GetType())->Initialize();
-      // m_components.at(T::GetType())->m_parent = m_components.at(T::GetType())).get();
-      return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
     }
     return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
 
@@ -163,7 +173,7 @@ private:
 
   String m_name;
 
-  Map<String, SharedPtr<Component>> m_components;
+  Map<eCOMPONENTTYPE, SharedPtr<Component>> m_components;
 
   Vector<Entity*> m_children;
 

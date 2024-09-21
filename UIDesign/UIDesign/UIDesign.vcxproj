@@ -219,8 +219,9 @@
     <ClCompile Include="src\uiSceneManager.cpp" />
     <ClCompile Include="src\uiSceneSettings.cpp" />
     <ClCompile Include="src\uiSpawner.cpp" />
+    <ClCompile Include="src\uiSprite.cpp" />
     <ClCompile Include="src\uiUI.cpp" />
-    <ClCompile Include="src\WindowManager.cpp" />
+    <ClCompile Include="src\uiWindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\uiAudioClip.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="include\uiController.h" />
     <ClInclude Include="include\uiCreature.h" />
     <ClInclude Include="include\uiEnemy.h" />
+    <ClInclude Include="include\uiGameSettings.h" />
     <ClInclude Include="include\uiInput.h" />
     <ClInclude Include="include\uiInputAction.h" />
     <ClInclude Include="include\uiInputManager.h" />

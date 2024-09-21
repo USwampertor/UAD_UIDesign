@@ -6,6 +6,7 @@
 
 class App : public Module<App>
 {
+public:
   virtual void OnStartUp() override;
 
   bool StartSystems();

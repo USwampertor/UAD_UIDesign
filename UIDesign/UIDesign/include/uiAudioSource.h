@@ -19,7 +19,7 @@ class AudioSource : public Component
 {
 public:
 
-  static String GetType() { return "AudioSource"; }
+  static eCOMPONENTTYPE GetType() { return eCOMPONENTTYPE::AUDIOSOURCE; }
 
   AudioSource() = default;
 

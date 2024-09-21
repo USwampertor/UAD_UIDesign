@@ -7,33 +7,30 @@
 
 #include <SFML/Graphics.hpp>
 
-
 BETTER_ENUM(
-  eANIMATIONSTATE, 
+  eANIMATIONSTATE,
   uint32,
   STOPPED = 0,
   PLAYING = 1,
   PAUSED = 2
-  )
+)
+
+class Sprite;
 
 class Animator : public Component
 {
 public:
-  static String GetType() { return "Animator"; }
+  static eCOMPONENTTYPE GetType() { return eCOMPONENTTYPE::ANIMATOR; }
 
   Animator()
   {
     m_state = eANIMATIONSTATE::STOPPED;
-    m_sprite = MakeUniqueObject<sf::Sprite>();
-    m_sprite->setOrigin(Vector2f(0.5f, 0.5f));
+    
     m_offset->Reset();
     m_currentTime = 0;
   }
 
-  virtual void Initialize() override 
-  {
-
-  }
+  virtual void Initialize() override;
 
   virtual void OnDestroy() override
   {
@@ -66,7 +63,10 @@ public:
 
   Map<String, SharedPtr<Animation>> m_animations;
 
-  UniquePtr<sf::Sprite> m_sprite;
+  // UniquePtr<sf::Sprite> m_sprite;
+
+  // raw reference to the actual sprite component the object has
+  Sprite* m_sprite;
 
   SharedPtr<Animation> m_currentAnimation;
 

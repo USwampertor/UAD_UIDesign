@@ -2,6 +2,8 @@
 
 #include "uiInputMapping.h"
 
+#include "uiWindowManager.h"
+
 void InputManager::PollEvents(const sf::Event& e)
 {
   if (e.type == sf::Event::MouseWheelScrolled)
@@ -19,6 +21,10 @@ void InputManager::PollEvents(const sf::Event& e)
 
 void InputManager::Update(const float& delta)
 {
+  if (!WindowManager::Instance().m_mainWindow->hasFocus())
+  {
+    return;
+  }
   for (Input::eINPUTCODE i : Input::eINPUTCODE::_values())
   {
     auto tuple = InputCodeToSFML(i);

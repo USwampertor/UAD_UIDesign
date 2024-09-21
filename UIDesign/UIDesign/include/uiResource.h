@@ -4,15 +4,15 @@
 
 #include "uiUtilities.h"
 
-enum eRESOURCETYPE : uint32
-{
-  NONE = 0,
-  TEXTURE,
-  SOUND,
-  MUSIC,
-  ANIMATION,
-  ATLAS,
-};
+BETTER_ENUM(eRESOURCETYPE,
+            uint32,
+            NONE = 0,
+            TEXTURE,
+            SOUND,
+            MUSIC,
+            ANIMATION,
+            ATLAS
+            )
 
 class Resource
 {

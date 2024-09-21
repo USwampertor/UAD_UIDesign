@@ -186,6 +186,41 @@ struct FileSystem
     buffer << f.rdbuf();
     return buffer.str();
   }
+
+  template<typename T>
+  static bool ToFile(const T& data, const String& path)
+  {
+    OFStream file(path, std::ios::binary);
+    if (file.is_open())
+    {
+      file.write(reinterpret_cast<const char*>(&data), sizeof(T));
+      file.close();
+    }
+    else
+    {
+      // Throw error
+      return false;
+    }
+    return true;
+  }
+
+  template<typename T>
+  static T FromFile(const String& path)
+  {
+    T data{};
+    IFStream file(path, std::ios::binary);
+    if (file.is_open())
+    {
+      file.read(reinterpret_cast<char*>(&data), sizeof(T));
+      file.close();
+    }
+    else
+    {
+      // Throw error
+    }
+    return data;
+  }
+
 };
 
 struct Utils

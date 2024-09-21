@@ -1,14 +1,23 @@
 #include "uiAnimator.h"
 
+#include "uiSprite.h"
+#include "uiEntity.h"
+
+void Animator::Initialize()
+{
+  if (m_parent == nullptr)
+  {
+    // Send error
+  }
+  else
+  {
+    m_sprite = m_parent->GetComponent<Sprite>();
+  }
+}
+
 void Animator::PropagateTransform(const Transform2D& newTransform)
 {
   
-  Vector2f cornerOffset(m_sprite->getTexture()->getSize().x / 2, m_sprite->getTexture()->getSize().y / 2);
-  m_sprite->setPosition(newTransform.position + m_offset->position - cornerOffset);
-  Vector2f scale = { newTransform.scale.x * m_offset->scale.x ,
-                     newTransform.scale.y * m_offset->scale.y };
-  m_sprite->setScale(scale);
-  m_sprite->setRotation(newTransform.rotation + m_offset->rotation);
 }
 
 void Animator::Update(const float& delta)
