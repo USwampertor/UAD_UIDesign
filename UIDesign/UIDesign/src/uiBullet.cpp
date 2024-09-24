@@ -1,13 +1,15 @@
 #include "uiBullet.h"
 
+#include "uiPlayer.h"
 #include "uiSceneManager.h"
 
 void BulletEntity::EnterCollision(const PhysicsCollisionResult& c)
 {
   std::cout << "Entered Collision" << std::endl;
-  --m_life;
-  if (m_life <= 0)
+  Entity* player = reinterpret_cast<BoxCollider*>(&c.object2)->m_parent;
+  if (player->GetName() == "Player")
   {
-    SceneManager::Instance().DestroyObject(this);
+    // reinterpret_cast<PlayerEntity*>(player)->GetDamage(1);
+    // SceneManager::Instance().DestroyObject(this);
   }
 }

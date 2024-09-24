@@ -18,8 +18,8 @@ public:
   }
 
   template <typename T,
-    typename = std::enable_if_t<std::is_base_of<Entity, T>::value>,
-    typename... Args>
+            typename = std::enable_if_t<std::is_base_of<Entity, T>::value>,
+            typename... Args>
   T* CreateObject(Args ... args)
   {
     SharedPtr<T> newEntity = MakeSharedObject<T>(std::forward<Args>(args)...);
@@ -69,9 +69,18 @@ public:
       m_activeScene->m_toRemove.clear();
     }
 
-    for (const SharedPtr<Entity>& e : m_activeScene->m_entities)
+    // for (Vector<SharedPtr<Entity>>::iterator it = m_activeScene->m_entities.begin();
+    //   it != m_activeScene->m_entities.end();
+    //   ++it)
+    // {
+    for(int j = 0; j < m_activeScene->m_entities.size(); ++j)
     {
-      e->Update(delta);
+    // for (const SharedPtr<Entity>& e : m_activeScene->m_entities)
+    // {
+      // if (it)
+      // Entity* e = (*it).get();
+      m_activeScene->m_entities[j]->Update(delta);
+
     }
   }
 

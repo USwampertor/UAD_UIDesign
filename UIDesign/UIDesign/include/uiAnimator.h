@@ -63,6 +63,8 @@ public:
 
   Map<String, SharedPtr<Animation>> m_animations;
 
+  String m_animationName = "";
+
   // UniquePtr<sf::Sprite> m_sprite;
 
   // raw reference to the actual sprite component the object has

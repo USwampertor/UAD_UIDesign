@@ -7,6 +7,9 @@ class Pawn : public Entity
 {
 public:
   Pawn() = default;
+
+  Pawn(const String& newName) : Entity(newName) {}
+
   ~Pawn() = default;
 
   void AutoPossess();

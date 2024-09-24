@@ -18,7 +18,7 @@ class Physics : public Module<Physics>
 public:
   virtual void OnStartUp() override
   {
-    m_world = MakeUniqueObject<World>(Vector2f(0, 0.01f));
+    m_world = MakeUniqueObject<World>(Vector2f(0, 0));
   }
 
   void SetGravity(const Vector2f& gravity);

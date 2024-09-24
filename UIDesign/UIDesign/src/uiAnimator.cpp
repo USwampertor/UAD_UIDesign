@@ -46,6 +46,7 @@ void Animator::SetAnimation(const String& animationKey)
 {
   if (m_animations.find(animationKey) != m_animations.end())
   {
+    m_animationName = animationKey;
     m_currentAnimation = m_animations.at(animationKey);
     m_sprite->setTexture(*m_currentAnimation->GetCurrentFrame(m_currentTime));
   }

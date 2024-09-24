@@ -2,8 +2,10 @@
 
 #include "uiAudioSource.h"
 #include "uiBullet.h"
+#include "uiEnemy.h"
 #include "uiInputManager.h"
 #include "uiPhysics.h"
+#include "uiPlayer.h"
 #include "uiResourceManager.h"
 #include "uiSceneManager.h"
 #include "uiUI.h"
@@ -63,16 +65,26 @@ bool App::LoadResources()
   String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
   ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
+  ResourceManager::Instance().GetResource<Animation>("idleEnemy")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite1")->m_atlas, 400.0f);
+  ResourceManager::Instance().GetResource<Animation>("idleEnemy")->SetLoop(true);
   String atlasPath2 = Utils::Format("%s/../resources/sprite2.json", FileSystem::CurrentPath().string().c_str());
   ResourceManager::Instance().LoadResource<Atlas>(atlasPath2);
   ResourceManager::Instance().CreateResource<Animation>("idleBullet");
-  ResourceManager::Instance().GetResource<Animation>("idleBullet")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite1")->m_atlas, 400.0f);
+  ResourceManager::Instance().GetResource<Animation>("idleBullet")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite2")->m_atlas, 400.0f);
   ResourceManager::Instance().GetResource<Animation>("idleBullet")->SetLoop(true);
-  ResourceManager::Instance().GetResource<Animation>("idleEnemy")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite2")->m_atlas, 400.0f);
-  ResourceManager::Instance().GetResource<Animation>("idleEnemy")->SetLoop(true);
+  String playerPath = Utils::Format("%s/../resources/player.json", FileSystem::CurrentPath().string().c_str());
+  ResourceManager::Instance().LoadResource<Atlas>(playerPath);
+  ResourceManager::Instance().CreateResource<Animation>("idlePlayer");
+  ResourceManager::Instance().GetResource<Animation>("idlePlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("player")->m_atlas, 800.0f);
+  ResourceManager::Instance().GetResource<Animation>("idlePlayer")->SetLoop(true);
+  String playerWalkingPath = Utils::Format("%s/../resources/playerwalking.json", FileSystem::CurrentPath().string().c_str());
+  ResourceManager::Instance().LoadResource<Atlas>(playerWalkingPath);
+  ResourceManager::Instance().CreateResource<Animation>("walkingPlayer");
+  ResourceManager::Instance().GetResource<Animation>("walkingPlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("playerwalking")->m_atlas, 400.0f);
+  ResourceManager::Instance().GetResource<Animation>("walkingPlayer")->SetLoop(true);
+
   String audioPath = Utils::Format("%s/../resources/pingas.mp3", FileSystem::CurrentPath().string().c_str());
   ResourceManager::Instance().LoadResource<AudioClip>(audioPath);
-
 
   String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
   GameSettings settings;
@@ -97,18 +109,20 @@ void App::Run()
 void App::Update()
 {
 
-  BulletEntity* e = SceneManager::Instance().CreateObject<BulletEntity>();
+  PlayerEntity* e = SceneManager::Instance().CreateObject<PlayerEntity>("Player");
   e->GetComponent<AudioSource>()->SetClip(ResourceManager::Instance().GetResource<AudioClip>("pingas"));
   // e->GetComponent<Animator>()->Initialize();
-  e->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("idleEnemy"), "idle");
+  e->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("idlePlayer"), "idle");
+  e->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("walkingPlayer"), "walking");
   e->GetComponent<Animator>()->SetAnimation("idle");
+  e->GetComponent<Animator>()->Play();
 
   e->m_map = MakeSharedObject<InputMapping>();
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&BulletEntity::Up, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeA, std::bind(&BulletEntity::Left, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&BulletEntity::Down, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeD, std::bind(&BulletEntity::Right, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeEnter, std::bind(&BulletEntity::PlaySound, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&PlayerEntity::Up, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeA, std::bind(&PlayerEntity::Left, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&PlayerEntity::Down, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeD, std::bind(&PlayerEntity::Right, e, std::placeholders::_1));
+  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeEnter, std::bind(&PlayerEntity::PlaySound, e, std::placeholders::_1));
   InputManager::Instance().RegisterInputMapping(e->m_map);
   e->m_map->m_enabled = true;
   e->GetComponent<BoxCollider>()->setStatic(true);
@@ -120,18 +134,18 @@ void App::Update()
   std::srand(std::time(nullptr));
   for (int i = 0; i < 10; ++i)
   {
-    Entity* newE = SceneManager::Instance().CreateObject<Entity>();
+    EnemyEntity* newE = SceneManager::Instance().CreateObject<EnemyEntity>(Utils::Format("Enemy_%d", i));
     // scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());
     // newE->Initialize();
     newE->CreateComponent<Animator>();
     // newE->GetComponent<Animator>()->Initialize();
-    newE->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("idleBullet"), String("idle"));
+    newE->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("idleEnemy"), String("idle"));
     newE->GetComponent<Animator>()->SetAnimation("idle");
     newE->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
     newE->GetComponent<Animator>()->Play();
     newE->CreateComponent<BoxCollider>();
-    newE->GetComponent<BoxCollider>()->setStatic(std::rand() % 2 == 0 ? true : false);
-    newE->GetComponent<BoxCollider>()->setMass(std::rand() % 2 == 0 ? std::rand() % 10 : 1);
+    newE->GetComponent<BoxCollider>()->setStatic(false);
+    newE->GetComponent<BoxCollider>()->setMass(5);
     newE->GetComponent<BoxCollider>()->setSize(Vector2f(newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
       newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
     newE->GetComponent<BoxCollider>()->setCenter(newE->GetTransform().position);

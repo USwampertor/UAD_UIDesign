@@ -36,19 +36,45 @@ void BoxCollider::updateCallback(unsigned int deltaMs)
   {
     m_parent->SetPosition(this->getCenter());
   }
-    int i = 0;
-  // for (const SharedPtr<PhysicsCollisionResult>& obj : m_collisions)
-  for (const PhysicsCollisionResult* obj : m_collisions)
+  int i = 0;
+  // for (Vector<PhysicsCollisionResult*>::iterator it = m_collisions.begin(); 
+  //      it != m_collisions.end(); 
+  //      ++it)
+  // {
+  //   if (!*it.object1.collideWith(*it.object2).hasCollided)
+  //   {
+  //     OnCollisionExit(*it);
+  //     m_collisions.erase(it);
+  //   }
+  // }
+  for (Vector<PhysicsCollisionResult*>::iterator it = m_collisions.begin();
+       it != m_collisions.end(); 
+       ++it)
   {
-    // if (!obj->object1.collideWith(obj->object2).hasCollided)
-    if (!obj->object1.collideWith(obj->object2).hasCollided)
+    PhysicsCollisionResult* i = *it;
+    if (!i->object1.collideWith(i->object2).hasCollided)
     {
-      // OnCollisionExit(*obj.get());
-      OnCollisionExit(*obj);
-      m_collisions.erase(m_collisions.begin() + i);
+      OnCollisionExit(*i);
+      it = m_collisions.erase(it);
+      if (it == m_collisions.end())
+      {
+        break;
+      }
     }
-    ++i;
   }
+  
+
+  // for (const PhysicsCollisionResult* obj : m_collisions)
+  // {
+  //   // if (!obj->object1.collideWith(obj->object2).hasCollided)
+  //   if (!obj->object1.collideWith(obj->object2).hasCollided)
+  //   {
+  //     // OnCollisionExit(*obj.get());
+  //     OnCollisionExit(*obj);
+  //     m_collisions.erase(m_collisions.begin() + i);
+  //   }
+  //   ++i;
+  // }
 }
 
 void BoxCollider::PropagateTransform(const Transform2D& newTransform)

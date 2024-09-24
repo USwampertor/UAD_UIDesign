@@ -1,24 +1,33 @@
 #pragma once
 #include "uiCreature.h"
+#include "uiUtilities.h"
 
-class Enemy : public Creature
+class EnemyEntity : public Creature
 {
-  Enemy() = default;
+public:
 
-  ~Enemy() = default;
+  EnemyEntity() = default;
 
-  Enemy(const float& newMaxLife, const float& newDamage)
+  // EnemyEntity(const String& newName) : Creature(newName) {}
+
+  ~EnemyEntity() = default;
+
+  EnemyEntity(const String& newName) : Creature(newName)
   {
-    m_maxHp = newMaxLife;
+    // m_maxHp = newMaxLife;
     m_hp = m_maxHp;
 
-    m_attack = newDamage;
+    // m_attack = newDamage;
 
-    m_onHPZero = std::bind(&Enemy::OnEnemyDeath, this);
+    m_onHPZero = std::bind(&EnemyEntity::OnEnemyDeath, this);
+    m_timeBeforeSpawn = std::rand() % 10 + 5;
   }
+
+
+  virtual void Update(const float& delta) override;
 
   void OnEnemyDeath();
 
-
+  float m_timeBeforeSpawn;
 };
 
