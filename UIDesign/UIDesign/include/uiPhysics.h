@@ -6,6 +6,13 @@
 
 #include <SFPhysics/SFPhysics.h>
 
+BETTER_ENUM(ePHYSICLAYERS, 
+            uint32, 
+            DEFAULT       = 0,
+            PROJECTILES   = 1
+            // ADD MORE AS NEEDED
+            )
+
 using PhysicsBody = sfp::PhysicsBody;
 using World = sfp::World;
 using PhysicsCollisionResult = sfp::PhysicsBodyCollisionResult;

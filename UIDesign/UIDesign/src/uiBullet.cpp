@@ -6,10 +6,10 @@
 void BulletEntity::EnterCollision(const PhysicsCollisionResult& c)
 {
   std::cout << "Entered Collision" << std::endl;
-  Entity* player = reinterpret_cast<BoxCollider*>(&c.object2)->m_parent;
-  if (player->GetName() == "Player")
+  BoxCollider* collider = static_cast<BoxCollider*>(&c.object2);
+  if (collider->m_parent->GetName() == "Player")
   {
-    // reinterpret_cast<PlayerEntity*>(player)->GetDamage(1);
-    // SceneManager::Instance().DestroyObject(this);
+    static_cast<PlayerEntity*>(collider->m_parent)->GetDamage(1);
+    SceneManager::Instance().DestroyObject(this);
   }
 }

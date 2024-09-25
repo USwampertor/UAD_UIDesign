@@ -25,8 +25,10 @@ void EnemyEntity::Update(const float& delta)
     BulletEntity* bullet = SceneManager::Instance().CreateObject<BulletEntity>("bullet");
     bullet->SetPosition(this->GetTransform().position);
     bullet->GetComponent<BoxCollider>()->setStatic(false);
-    // bullet->GetComponent<BoxCollider>()->setVelocity(Vec2Math<float>::Times(direction, 5));
-    bullet->m_direction = Vec2Math<float>::Times(direction, 5);
+    bullet->GetComponent<BoxCollider>()->setLayer(1, 1);
+    bullet->GetComponent<BoxCollider>()->setLayer(0, 0);
+    bullet->GetComponent<BoxCollider>()->setVelocity(Vec2Math<float>::Times(direction, 5));
+    // bullet->m_direction = Vec2Math<float>::Times(direction, 5);
     m_timeBeforeSpawn = std::rand() % 10 + 5;
   }
   // this->Move();

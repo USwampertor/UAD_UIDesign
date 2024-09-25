@@ -46,6 +46,7 @@ public:
   {
     if (m_components.find(T::GetType()) == m_components.end())
     {
+      newComponent->m_parent = this;
       m_components.insert(Utils::MakePair(T::GetType(), newComponent));
     }
   }
@@ -65,6 +66,7 @@ public:
   {
     if (m_components.find(T::GetType()) != m_components.end())
     {
+      m_components.at(T::GetType())->m_parent = nullptr;
       m_components.erase(T::GetType());
     }
   }

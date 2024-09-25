@@ -91,7 +91,7 @@ public:
 
   virtual void OnSetOffset() {}
 
-  Entity* m_parent;
+  Entity* m_parent = nullptr;
 protected:
 
   UniquePtr<Transform2D> m_offset;

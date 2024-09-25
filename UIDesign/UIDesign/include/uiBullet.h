@@ -39,7 +39,7 @@ public:
     m_animator->Play();
     SetScale(Vector2f(0.5, 0.5));
     // m_animator->SetLoop("idle", true);
-    // m_collider->AddCollisionEnterCallback(std::bind(&BulletEntity::EnterCollision, this, std::placeholders::_1));
+    m_collider->AddCollisionEnterCallback(std::bind(&BulletEntity::EnterCollision, this, std::placeholders::_1));
     // m_collider->AddCollisionStayCallback(std::bind(&BulletEntity::StayCollision, this, std::placeholders::_1));
     // m_collider->AddCollisionExitCallback(std::bind(&BulletEntity::ExitCollision, this, std::placeholders::_1));
   }
@@ -53,7 +53,7 @@ public:
   void Update(const float& delta) override
   {
     Entity::Update(delta);
-    Move(m_direction);
+    // Move(m_direction);
     // Move(m_direction * delta * m_speed * 0.01f);
     // if ((m_direction.x != 0 || m_direction.y != 0) && m_animator->m_animationName.compare("walking") != 0)
     // {

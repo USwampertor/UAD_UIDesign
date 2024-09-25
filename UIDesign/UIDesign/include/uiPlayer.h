@@ -34,6 +34,11 @@ public:
     m_animator = CreateComponent<Animator>();
     m_source = CreateComponent<AudioSource>();
     m_collider->setSize(Vector2f(1, 1));
+    m_collider->setLayer(1, 1);
+    m_collider->setLayer(0, 1);
+    m_collider->m_parent = this;
+    m_maxHp = 10;
+    m_hp = m_maxHp;
     // m_collider->AddCollisionEnterCallback(std::bind(&BulletEntity::EnterCollision, this, std::placeholders::_1));
     // m_collider->AddCollisionStayCallback(std::bind(&BulletEntity::StayCollision, this, std::placeholders::_1));
     // m_collider->AddCollisionExitCallback(std::bind(&BulletEntity::ExitCollision, this, std::placeholders::_1));
