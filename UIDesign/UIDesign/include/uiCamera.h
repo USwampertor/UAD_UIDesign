@@ -5,7 +5,11 @@
 
 #include <SFML/Graphics/View.hpp>
 
-class Camera : public Component, sf::View
+using FloatRect = sf::FloatRect;
+
+using View = sf::View;
+
+class Camera : public Component, View
 {
 public:
 
@@ -15,9 +19,14 @@ public:
 
   ~Camera() = default;
 
-  Camera(const Vector2f& pos, const Vector2f& s)
+  Camera(const Vector2f& pos, const Vector2f& s) : View(pos, s)
   {
-    sf::View(pos, s);
+    
+  }
+
+  Camera(const FloatRect& rect) : View(rect)
+  {
+
   }
 
   virtual void Initialize() override;

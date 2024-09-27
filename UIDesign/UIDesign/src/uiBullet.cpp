@@ -5,7 +5,6 @@
 
 void BulletEntity::EnterCollision(const PhysicsCollisionResult& c)
 {
-  std::cout << "Entered Collision" << std::endl;
   BoxCollider* collider = static_cast<BoxCollider*>(&c.object2);
   if (collider->m_parent->GetName() == "Player")
   {

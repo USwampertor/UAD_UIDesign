@@ -55,7 +55,10 @@ struct Vec2Math
     return sf::Vector2<T>(newX, newY);
   }
 };
+namespace sf
+{
 
+}
 
 // namespace sf
 // {

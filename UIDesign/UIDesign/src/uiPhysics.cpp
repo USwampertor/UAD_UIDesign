@@ -27,15 +27,22 @@ void Physics::UnRegisterPhysicsBody(PhysicsBody& toRegister)
 
   for (PhysicsCollisionResult* c : toDelete->m_collisions)
   {
-    int i = 0;
-    BoxCollider* toRemove = static_cast<BoxCollider*>(&c->object2);
-    for (PhysicsCollisionResult* c1 : toRemove->m_collisions)
+    BoxCollider* other = static_cast<BoxCollider*>(&c->object2);
+    for (Vector<PhysicsCollisionResult*>::iterator it = other->m_collisions.begin();
+      it != other->m_collisions.end();
+      ++it)
     {
-      if (c1->object2 == *toDelete)
+      PhysicsCollisionResult* i = *it;
+      if (i->object2 == toRegister)
       {
-        toRemove->m_collisions.erase(toRemove->m_collisions.begin() + i);
+        toDelete->OnCollisionExit(*c);
+
+        it = other->m_collisions.erase(it);
+        if (it == other->m_collisions.end())
+        {
+          break;
+        }
       }
-      ++i;
     }
   }
 

@@ -1,5 +1,17 @@
 #include "uiAudioSource.h"
 
+#include "uiEntity.h"
+
+void AudioSource::Initialize()
+{
+  m_offset->Reset();
+  m_sound = MakeSharedObject<Sound>();
+  m_music = MakeSharedObject<MusicClip>();
+  m_sound->setPosition(m_parent->GetTransform().position.x + m_offset->position.x, 
+                       m_parent->GetTransform().position.y + m_offset->position.y,
+                       0);
+}
+
 void AudioSource::SetClip(SharedPtr<AudioClip> clip)
 {
   if (eRESOURCETYPE::SOUND == m_type)
@@ -118,12 +130,33 @@ const float& AudioSource::GetVolume()
 void AudioSource::PropagateTransform(const Transform2D& newTransform)
 {
   Vector3f newPosition(newTransform.position.x + m_offset->position.x,
-                       0.0f,
-                       newTransform.position.y + m_offset->position.y);
+                       newTransform.position.y + m_offset->position.y,
+                       0);
   m_music->setPosition(newPosition);
   m_sound->setPosition(newPosition);
 }
 
 
+void AudioSource::SetMinDistance(const float& minDistance)
+{
+  if (eRESOURCETYPE::SOUND == m_type)
+  {
+    m_sound->setMinDistance(minDistance > 0 ? minDistance : 0.01f);
+  }
+}
 
+void AudioSource::SetAttenuation(const float& attenuation)
+{
+  if (eRESOURCETYPE::SOUND == m_type)
+  {
+    m_sound->setAttenuation(attenuation);
+  }
+}
 
+void AudioSource::SetRelativeToListener(const bool& shouldBe)
+{
+  if (eRESOURCETYPE::SOUND == m_type)
+  {
+    m_sound->setRelativeToListener(shouldBe);
+  }
+}

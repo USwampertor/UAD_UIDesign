@@ -11,8 +11,6 @@
 #include "uiInputMapping.h"
 #include "uiUtilities.h"
 
-#include <iostream>
-
 class PlayerEntity : public Creature
 {
 public:
@@ -101,6 +99,10 @@ public:
       value->GetState() == Input::eINPUTSTATE::HELD)
     {
       m_direction.x = -1;
+      if (m_animator->GetSprite().m_flippedX)
+      {
+        m_animator->GetSprite().Flip();
+      }
     }
     else if (value->GetState() == Input::eINPUTSTATE::RELEASED)
       // else
@@ -115,6 +117,11 @@ public:
       value->GetState() == Input::eINPUTSTATE::HELD)
     {
       m_direction.x = 1;
+      
+      if (!m_animator->GetSprite().m_flippedX)
+      {
+        m_animator->GetSprite().Flip();
+      }
     }
     else if (value->GetState() == Input::eINPUTSTATE::RELEASED)
     {
@@ -135,11 +142,9 @@ public:
 
   void StayCollision(const PhysicsCollisionResult& c)
   {
-    std::cout << "Stayed Collision" << std::endl;
   }
   void ExitCollision(const PhysicsCollisionResult& c)
   {
-    std::cout << "Exited Collision" << std::endl;
   }
 
   float m_speed = 15;

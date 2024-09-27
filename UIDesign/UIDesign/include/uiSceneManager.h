@@ -13,6 +13,7 @@ public:
             typename = std::enable_if_t<std::is_base_of<Entity, T>::value>>
             void DestroyObject(T* toDelete)
   {
+    toDelete->m_markedToDestroy = true;
     m_activeScene->m_toRemove.push_back(toDelete);
     
   }

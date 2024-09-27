@@ -66,6 +66,7 @@ public:
   Component()
   {
     m_offset = MakeUniqueObject<Transform2D>();
+    m_offset->Reset();
   }
 
   static eCOMPONENTTYPE GetType() { assert(true && "IMPLEMENT THIS"); return eCOMPONENTTYPE::NONE; }

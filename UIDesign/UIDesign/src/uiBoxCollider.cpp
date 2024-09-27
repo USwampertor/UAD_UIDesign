@@ -47,11 +47,18 @@ void BoxCollider::updateCallback(unsigned int deltaMs)
     PhysicsCollisionResult* i = *it;
     if (!i->object1.collideWith(i->object2).hasCollided)
     {
-      OnCollisionExit(*i);
-      it = m_collisions.erase(it);
-      if (it == m_collisions.end())
+      if (static_cast<BoxCollider*>(&i->object2)->m_parent->GetName() == "Player" && m_parent->GetName() == "bullet")
       {
-        break;
+        int dummy = 0;
+      }
+      if (!m_parent->m_markedToDestroy)
+      {
+        OnCollisionExit(*i);
+        it = m_collisions.erase(it);
+        if (it == m_collisions.end())
+        {
+          break;
+        }
       }
     }
   }
@@ -87,24 +94,24 @@ void BoxCollider::OnDestroy()
   // {
   //   c
   // }
-  for (int j = 0; j < m_collisions.size(); ++j)
-  {
-    BoxCollider* other = static_cast<BoxCollider*>(&m_collisions[j]->object2);
-    for (Vector<PhysicsCollisionResult*>::iterator it = other->m_collisions.begin();
-      it != other->m_collisions.end();
-      ++it)
-    {
-      PhysicsCollisionResult* i = *it;
-      if (i->object2 == *(static_cast<PhysicsBody*>(this)) )
-      {
-        it = m_collisions.erase(it);
-        if (it == m_collisions.end())
-        {
-          break;
-        }
-      }
-    }
-  }
+  // for (int j = 0; j < m_collisions.size(); ++j)
+  // {
+  //   BoxCollider* other = static_cast<BoxCollider*>(&m_collisions[j]->object2);
+  //   for (Vector<PhysicsCollisionResult*>::iterator it = other->m_collisions.begin();
+  //     it != other->m_collisions.end();
+  //     ++it)
+  //   {
+  //     PhysicsCollisionResult* i = *it;
+  //     if (i->object2 == *(static_cast<PhysicsBody*>(this)) )
+  //     {
+  //       it = m_collisions.erase(it);
+  //       if (it == m_collisions.end())
+  //       {
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
   Physics::Instance().UnRegisterPhysicsBody(*this);
   m_collisions.clear();
 }

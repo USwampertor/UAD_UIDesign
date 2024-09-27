@@ -163,6 +163,9 @@ public:
 
   void SetRotation(const float& newRotation);
 
+
+  bool m_markedToDestroy = false;
+
 private:
 
   void PropagateTransform();

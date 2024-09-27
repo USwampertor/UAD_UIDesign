@@ -1,6 +1,5 @@
 #include "uiAnimator.h"
 
-#include "uiSprite.h"
 #include "uiEntity.h"
 
 void Animator::Initialize()
@@ -92,7 +91,6 @@ void Animator::Stop()
 
 void Animator::Flip()
 {
-  m_offset->scale.x = -m_offset->scale.x;
 }
 
 const eANIMATIONSTATE& Animator::GetState()
@@ -100,7 +98,7 @@ const eANIMATIONSTATE& Animator::GetState()
   return m_state;
 }
 
-sf::Sprite& Animator::GetSprite()
+Sprite& Animator::GetSprite()
 {
   return *m_sprite;
 }

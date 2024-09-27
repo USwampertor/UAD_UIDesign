@@ -27,6 +27,7 @@ public:
 
   AudioSource(SharedPtr<AudioClip> clip)
   {
+    m_offset->Reset();
     m_sound->setBuffer(*clip);
     m_type = eRESOURCETYPE::SOUND;
   }
@@ -37,12 +38,10 @@ public:
     m_type = eRESOURCETYPE::MUSIC;
   }
 
-  virtual void Initialize() override 
-  {
-    m_sound = MakeSharedObject<Sound>();
-    m_music = MakeSharedObject<MusicClip>();
-  }
+  virtual void Initialize() override;
+
   virtual void OnDestroy() override {}
+
   virtual void Update(const float& delta) override {}
 
   void SetClip(SharedPtr<AudioClip> clip);
@@ -61,27 +60,23 @@ public:
 
   void SetVolume(const float& newVolume);
 
+  void SetMinDistance(const float& minDistance);
+
+  void SetAttenuation(const float& attenuation);
+
+  void SetRelativeToListener(const bool& shouldBe);
+
   const float& GetVolume();
 
   virtual void PropagateTransform(const Transform2D& newTransform) override;
 
-  virtual void OnSetOffset() override
-  {
-    // if (eRESOURCETYPE::SOUND == m_type)
-    // {
-    //   m_sound->setPosition(Vector3f(m_offset.position.x, 0.0f, m_offset.position.y));
-    // }
-    // else if (eRESOURCETYPE::MUSIC == m_type)
-    // {
-    //   m_music->setPosition(Vector3f(m_offset.position.x, 0.0f, m_offset.position.y));
-    // }
-  }
-
-private:
+  virtual void OnSetOffset() override { }
   
   eRESOURCETYPE m_type = eRESOURCETYPE::NONE;
 
   SharedPtr<MusicClip> m_music;
   SharedPtr<Sound> m_sound;
+
+private:
 };
 

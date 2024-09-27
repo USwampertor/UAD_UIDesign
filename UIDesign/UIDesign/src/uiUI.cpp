@@ -19,7 +19,7 @@ void UI::Update( RenderWindow& window,  Time& dt)
 
 void UI::RenderUI()
 {
-  ImGui::Begin("Coordinates");
+  ImGui::Begin("Inputs");
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeW][0]->GetState()._to_string());
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeA][0]->GetState()._to_string());
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeS][0]->GetState()._to_string());

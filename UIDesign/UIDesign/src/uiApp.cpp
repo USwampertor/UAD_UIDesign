@@ -1,7 +1,9 @@
 #include "uiApp.h"
 
 #include "uiAudioSource.h"
+#include "uiAudioListener.h"
 #include "uiBullet.h"
+#include "uiCameraFollower.h"
 #include "uiEnemy.h"
 #include "uiInputManager.h"
 #include "uiPhysics.h"
@@ -85,6 +87,10 @@ bool App::LoadResources()
 
   String audioPath = Utils::Format("%s/../resources/pingas.mp3", FileSystem::CurrentPath().string().c_str());
   ResourceManager::Instance().LoadResource<AudioClip>(audioPath);
+  String audioPath2 = Utils::Format("%s/../resources/ping.mp3", FileSystem::CurrentPath().string().c_str());
+  ResourceManager::Instance().LoadResource<AudioClip>(audioPath2);
+
+
 
   String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
   GameSettings settings;
@@ -130,6 +136,10 @@ void App::Update()
                                                    e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
   e->GetComponent<BoxCollider>()->setCenter(e->GetTransform().position);
 
+  e->CreateComponent<AudioListener>();
+  // e->CreateComponent<AudioListener>()->SetVolume(100);
+
+  SceneManager::Instance().CreateObject<CameraFollower>();
 
   std::srand(std::time(nullptr));
   for (int i = 0; i < 10; ++i)
@@ -152,6 +162,12 @@ void App::Update()
     newE->GetComponent<BoxCollider>()->setCenter(newE->GetTransform().position);
     // Physics::Instance().RegisterPhysicsBody(*newE->GetComponent<BoxCollider>());
     // w.AddPhysicsBody(*newE->GetComponent<BoxCollider>());
+    newE->CreateComponent<AudioSource>();
+    newE->GetComponent<AudioSource>()->SetClip(ResourceManager::Instance().GetResource<AudioClip>("ping"));
+    newE->GetComponent<AudioSource>()->SetMinDistance(150);
+    newE->GetComponent<AudioSource>()->SetAttenuation(5);
+    newE->GetComponent<AudioSource>()->SetLoop(false);
+
     newE->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
   }
 
@@ -178,6 +194,12 @@ void App::Update()
     }
 
     UI::Instance().RenderUI();
+
+    ImGui::Begin("Coordinates");
+    ImGui::Text(Utils::Format("%f , %f", e->GetTransform().position.x, e->GetTransform().position.y).c_str());
+    ImGui::Text(Utils::Format("%f , %f", Listener::getPosition().x, Listener::getPosition().y).c_str());
+
+    ImGui::End();
 
     Physics::Instance().Update(10);
     SceneManager::Instance().Update(delta);

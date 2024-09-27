@@ -9,10 +9,6 @@
 #include "uiResourceManager.h"
 #include "uiUtilities.h"
 
-#include <iostream>
-
-
-
 class BulletEntity : public Entity
 {
 public:

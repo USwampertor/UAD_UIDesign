@@ -9,8 +9,11 @@
 
 class Sprite : public Component, public sf::Sprite 
 {
+public:
   virtual void Initialize() override;
   virtual void OnDestroy() override;
   virtual void PropagateTransform(const Transform2D& newTransform) override;
   virtual void Update(const float& delta) override;
+  void Flip();
+  bool m_flippedX = false;
 };

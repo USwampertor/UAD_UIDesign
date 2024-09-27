@@ -3,6 +3,7 @@
 #include "uiPrerequisites.h"
 #include "uiAnimation.h"
 #include "uiComponent.h"
+#include "uiSprite.h"
 #include "uiUtilities.h"
 
 #include <SFML/Graphics.hpp>
@@ -14,8 +15,6 @@ BETTER_ENUM(
   PLAYING = 1,
   PAUSED = 2
 )
-
-class Sprite;
 
 class Animator : public Component
 {
@@ -59,7 +58,7 @@ public:
 
   const eANIMATIONSTATE& GetState();
 
-  sf::Sprite& GetSprite();
+  Sprite& GetSprite();
 
   Map<String, SharedPtr<Animation>> m_animations;
 
