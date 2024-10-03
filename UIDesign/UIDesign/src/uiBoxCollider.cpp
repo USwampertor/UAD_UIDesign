@@ -67,7 +67,11 @@ void BoxCollider::updateCallback(unsigned int deltaMs)
 void BoxCollider::PropagateTransform(const Transform2D& newTransform)
 {
   Vector2f newPosition = newTransform.position + m_offset->position;
+  Vector2f newScale(newTransform.scale.x * m_offset->scale.x, newTransform.scale.y * m_offset->scale.y);
+  float newRotation = newTransform.rotation + m_offset->rotation;
   setCenter(newPosition);
+  setSize(Vector2f(m_ColliderSize.x * newScale.x, m_ColliderSize.y * newScale.y));
+  setRotation(newRotation);
 }
 
 void BoxCollider::Update(const float& delta)
@@ -75,13 +79,21 @@ void BoxCollider::Update(const float& delta)
   
 }
 
+void BoxCollider::SetSize(const Vector2f& newSize)
+{
+  m_ColliderSize = newSize;
+  setSize(m_ColliderSize);
+}
+
 void BoxCollider::Initialize()
 {
+  m_ColliderSize = { 50, 50 };
   m_collisions.clear();
   m_onCollisionEnterCallbackList.clear();
   m_onCollisionStayCallbackList.clear();
   m_onCollisionExitCallbackList.clear();
   m_offset->Reset();
+  setSize(m_ColliderSize);
   setFillColor(sf::Color::Transparent);
   setOutlineColor(sf::Color::Red);
   setOutlineThickness(2);
@@ -90,28 +102,6 @@ void BoxCollider::Initialize()
 
 void BoxCollider::OnDestroy()
 {
-  // for (auto& c : m_collisions)
-  // {
-  //   c
-  // }
-  // for (int j = 0; j < m_collisions.size(); ++j)
-  // {
-  //   BoxCollider* other = static_cast<BoxCollider*>(&m_collisions[j]->object2);
-  //   for (Vector<PhysicsCollisionResult*>::iterator it = other->m_collisions.begin();
-  //     it != other->m_collisions.end();
-  //     ++it)
-  //   {
-  //     PhysicsCollisionResult* i = *it;
-  //     if (i->object2 == *(static_cast<PhysicsBody*>(this)) )
-  //     {
-  //       it = m_collisions.erase(it);
-  //       if (it == m_collisions.end())
-  //       {
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }
   Physics::Instance().UnRegisterPhysicsBody(*this);
   m_collisions.clear();
 }

@@ -20,6 +20,7 @@ void App::OnStartUp()
   if (!StartSystems())
   {
     // Send systems error
+    exit(403);
   }
   if (!LoadResources())
   {
@@ -33,6 +34,12 @@ bool App::StartSystems()
   if (!ResourceManager::IsStarted())
   {
     // Error loading Resource Manager
+    std::cout << "Error starting up resource manager" << std::endl;
+    return false;
+  }
+  else
+  {
+    std::cout << "Resource Manager working correctly" << std::endl;
   }
   InputManager::StartUp();
   if (!InputManager::IsStarted())
@@ -64,6 +71,7 @@ bool App::StartSystems()
 
 bool App::LoadResources()
 {
+  ResourceManager::Instance().LoadResource<Texture>(Utils::Format("%s/../resources/gizmo.png", FileSystem::CurrentPath().string().c_str()));
   String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
   ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
@@ -89,7 +97,7 @@ bool App::LoadResources()
   ResourceManager::Instance().LoadResource<AudioClip>(audioPath);
   String audioPath2 = Utils::Format("%s/../resources/ping.mp3", FileSystem::CurrentPath().string().c_str());
   ResourceManager::Instance().LoadResource<AudioClip>(audioPath2);
-
+  ResourceManager::Instance().LoadResource<AudioClip>(Utils::Format("%s/../resources/fart.mp3", FileSystem::CurrentPath().string().c_str()));
 
 
   String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
@@ -115,60 +123,14 @@ void App::Run()
 void App::Update()
 {
 
-  PlayerEntity* e = SceneManager::Instance().CreateObject<PlayerEntity>("Player");
-  e->GetComponent<AudioSource>()->SetClip(ResourceManager::Instance().GetResource<AudioClip>("pingas"));
-  // e->GetComponent<Animator>()->Initialize();
-  e->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("idlePlayer"), "idle");
-  e->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("walkingPlayer"), "walking");
-  e->GetComponent<Animator>()->SetAnimation("idle");
-  e->GetComponent<Animator>()->Play();
-
-  e->m_map = MakeSharedObject<InputMapping>();
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeW, std::bind(&PlayerEntity::Up, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeA, std::bind(&PlayerEntity::Left, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeS, std::bind(&PlayerEntity::Down, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeD, std::bind(&PlayerEntity::Right, e, std::placeholders::_1));
-  e->m_map->BindAction(Input::eINPUTCODE::KeyCodeEnter, std::bind(&PlayerEntity::PlaySound, e, std::placeholders::_1));
-  InputManager::Instance().RegisterInputMapping(e->m_map);
-  e->m_map->m_enabled = true;
-  e->GetComponent<BoxCollider>()->setStatic(true);
-  e->GetComponent<BoxCollider>()->setSize(Vector2f(e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
-                                                   e->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
-  e->GetComponent<BoxCollider>()->setCenter(e->GetTransform().position);
-
-  e->CreateComponent<AudioListener>();
-  // e->CreateComponent<AudioListener>()->SetVolume(100);
-
-  SceneManager::Instance().CreateObject<CameraFollower>();
+  // TODO: Remove this and make it so it is loaded via a scene
+  SceneManager::Instance().CreateObject<PlayerEntity>("Player");
+  SceneManager::Instance().CreateObject<CameraFollower>("Follower");
 
   std::srand(std::time(nullptr));
   for (int i = 0; i < 10; ++i)
   {
-    EnemyEntity* newE = SceneManager::Instance().CreateObject<EnemyEntity>(Utils::Format("Enemy_%d", i));
-    // scene->m_root->m_children.push_back(MakeUniqueObject<Entity>());
-    // newE->Initialize();
-    newE->CreateComponent<Animator>();
-    // newE->GetComponent<Animator>()->Initialize();
-    newE->GetComponent<Animator>()->AddAnimation(ResourceManager::Instance().GetResource<Animation>("idleEnemy"), String("idle"));
-    newE->GetComponent<Animator>()->SetAnimation("idle");
-    newE->GetComponent<Animator>()->SetCurrentTime(std::rand() % 1000);
-    newE->GetComponent<Animator>()->Play();
-    newE->CreateComponent<BoxCollider>();
-    newE->GetComponent<BoxCollider>()->setStatic(false);
-    newE->GetComponent<BoxCollider>()->setMass(5);
-    newE->GetComponent<BoxCollider>()->setLayer(ePHYSICLAYERS::DEFAULT, 1);
-    newE->GetComponent<BoxCollider>()->setSize(Vector2f(newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().x,
-      newE->GetComponent<Animator>()->GetSprite().getTexture()->getSize().y));
-    newE->GetComponent<BoxCollider>()->setCenter(newE->GetTransform().position);
-    // Physics::Instance().RegisterPhysicsBody(*newE->GetComponent<BoxCollider>());
-    // w.AddPhysicsBody(*newE->GetComponent<BoxCollider>());
-    newE->CreateComponent<AudioSource>();
-    newE->GetComponent<AudioSource>()->SetClip(ResourceManager::Instance().GetResource<AudioClip>("ping"));
-    newE->GetComponent<AudioSource>()->SetMinDistance(150);
-    newE->GetComponent<AudioSource>()->SetAttenuation(5);
-    newE->GetComponent<AudioSource>()->SetLoop(false);
-
-    newE->Move(Vector2f((std::rand() % 800) - 100, (std::rand() % 800) - 200));
+    SceneManager::Instance().CreateObject<EnemyEntity>(Utils::Format("Enemy_%d", i));
   }
 
   Clock deltaClock;
@@ -188,18 +150,13 @@ void App::Update()
     }
     UI::Instance().Update(*WindowManager::Instance().m_mainWindow.get(), dt);
 
+    // TODO: Add this to a debugtools manager or something like that
     if (InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeL][0]->GetState() == Input::eINPUTSTATE::PRESSED)
     {
       SceneManager::Instance().m_isDebug = !SceneManager::Instance().m_isDebug;
     }
 
     UI::Instance().RenderUI();
-
-    ImGui::Begin("Coordinates");
-    ImGui::Text(Utils::Format("%f , %f", e->GetTransform().position.x, e->GetTransform().position.y).c_str());
-    ImGui::Text(Utils::Format("%f , %f", Listener::getPosition().x, Listener::getPosition().y).c_str());
-
-    ImGui::End();
 
     Physics::Instance().Update(10);
     SceneManager::Instance().Update(delta);

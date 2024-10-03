@@ -21,6 +21,12 @@ struct Math
   {
     return std::sqrt(a);
   }
+
+  template<typename T>
+  static T Lerp(const T& a, const T& b, const T& t)
+  {
+    return a + t * (b - a);
+  }
 };
 
 template<typename T>

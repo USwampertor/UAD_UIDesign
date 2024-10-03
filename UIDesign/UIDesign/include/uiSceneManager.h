@@ -36,12 +36,13 @@ public:
     int i = 0;
     for (const SharedPtr<Entity>& e : m_activeScene->m_entities)
     {
-      if (e->GetName() == toFind)
+      if (e->GetName() == toFind && !e->m_markedToDestroy)
       {
-        return e.get();
+        return static_cast<T*>(e.get());
       }
       ++i;
     }
+    return nullptr;
   }
 
   Scene* CreateScene(const String& newSceneName);

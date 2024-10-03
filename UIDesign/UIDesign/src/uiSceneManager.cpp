@@ -39,13 +39,14 @@ void SceneManager::UpdateRender(sf::RenderWindow& w)
   for (int i = 0; i < SceneManager::Instance().GetActiveScene()->m_entities.size(); ++i)
   {
     
+    if (m_activeScene->m_entities[i]->GetComponent<Sprite>())
+    {
+      w.draw(*m_activeScene->m_entities[i]->GetComponent<Sprite>());
+    }
     if (m_activeScene->m_entities[i]->GetComponent<BoxCollider>() && m_isDebug)
     {
       w.draw(*m_activeScene->m_entities[i]->GetComponent<BoxCollider>());
-    }
-    if (m_activeScene->m_entities[i]->GetComponent<Animator>())
-    {
-      w.draw(m_activeScene->m_entities[i]->GetComponent<Animator>()->GetSprite());
+      w.draw(*m_activeScene->m_entities[i]->m_gizmoSprite);
     }
   }
 }

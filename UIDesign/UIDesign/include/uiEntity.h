@@ -105,12 +105,7 @@ public:
     }
   }
 
-  virtual void Initialize()
-  {
-    SetPosition(sf::Vector2f(0.0f, 0.0f));
-    SetRotation(0.0f);
-    SetScale(sf::Vector2f(1.0f, 1.0f));
-  }
+  virtual void Initialize();
 
   void SetActive(bool isActive)
   {
@@ -166,6 +161,8 @@ public:
 
   bool m_markedToDestroy = false;
 
+  Sprite* m_gizmoSprite;
+
 private:
 
   void PropagateTransform();
@@ -183,6 +180,5 @@ private:
   Vector<Entity*> m_children;
 
   bool m_isActive = true;
-
 
 };

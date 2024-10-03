@@ -1,7 +1,22 @@
 #include "uiEntity.h"
 
+#include "uiResourceManager.h"
+#include "uiTexture.h"
+
+void Entity::Initialize()
+{
+  m_gizmoSprite = new Sprite();
+  m_gizmoSprite->setTexture(*ResourceManager::Instance().GetResource<Texture>("gizmo"));
+  m_gizmoSprite->setOrigin(m_gizmoSprite->getLocalBounds().width / 2, m_gizmoSprite->getLocalBounds().height / 2);
+  m_gizmoSprite->setColor(sf::Color(255, 255, 255, 128));
+  SetPosition(sf::Vector2f(0.0f, 0.0f));
+  SetRotation(0.0f);
+  SetScale(sf::Vector2f(1.0f, 1.0f));
+}
+
 void Entity::PropagateTransform()
 {
+  m_gizmoSprite->setPosition(GetTransform().position);
   for (auto& [key, component] : m_components)
   {
     component->PropagateTransform(GetTransform());

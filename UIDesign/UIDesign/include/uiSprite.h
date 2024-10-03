@@ -15,5 +15,8 @@ public:
   virtual void PropagateTransform(const Transform2D& newTransform) override;
   virtual void Update(const float& delta) override;
   void Flip();
+  void FlipX(const bool& toFlip);
+  void FlipY(const bool& toFlip);
   bool m_flippedX = false;
+  bool m_flippedY = false;
 };

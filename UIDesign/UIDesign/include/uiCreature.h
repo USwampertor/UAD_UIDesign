@@ -29,7 +29,7 @@ public:
 
   ~Creature() = default;
 
-  void GetDamage(const float& damage);
+  virtual void GetDamage(const float& damage);
 
   float m_attack;
   float m_hp;

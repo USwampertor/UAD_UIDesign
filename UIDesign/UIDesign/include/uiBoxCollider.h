@@ -31,6 +31,8 @@ public:
 
   virtual void Update(const float& delta) override;
 
+  void SetSize(const Vector2f& newSize);
+
   void AddCollisionEnterCallback(const CollisionCallback& c);
 
   void AddCollisionStayCallback(const CollisionCallback& c);
@@ -54,6 +56,8 @@ public:
   Vector<CollisionCallback> m_onCollisionEnterCallbackList;
   Vector<CollisionCallback> m_onCollisionStayCallbackList;
   Vector<CollisionCallback> m_onCollisionExitCallbackList;
+
+  Vector2f m_ColliderSize;
   // sfp::AABB* m_box;
 };
 

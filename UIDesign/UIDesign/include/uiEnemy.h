@@ -2,6 +2,10 @@
 #include "uiCreature.h"
 #include "uiUtilities.h"
 
+class Animator;
+class AudioSource;
+class BoxCollider;
+
 class EnemyEntity : public Creature
 {
 public:
@@ -12,22 +16,18 @@ public:
 
   ~EnemyEntity() = default;
 
-  EnemyEntity(const String& newName) : Creature(newName)
-  {
-    // m_maxHp = newMaxLife;
-    m_hp = m_maxHp;
+  EnemyEntity(const String& newName) : Creature(newName) {}
 
-    // m_attack = newDamage;
-
-    m_onHPZero = std::bind(&EnemyEntity::OnEnemyDeath, this);
-    m_timeBeforeSpawn = std::rand() % 10 + 5;
-  }
-
+  virtual void Initialize();
 
   virtual void Update(const float& delta) override;
 
   void OnEnemyDeath();
 
   float m_timeBeforeSpawn;
+
+  Animator* m_animator = nullptr;
+  AudioSource* m_source = nullptr;
+  BoxCollider* m_collider = nullptr;
 };
 

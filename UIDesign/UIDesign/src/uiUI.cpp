@@ -25,6 +25,10 @@ void UI::RenderUI()
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeS][0]->GetState()._to_string());
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeD][0]->GetState()._to_string());
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeEnter][0]->GetState()._to_string());
+  if (ImGui::Button("My new Button"))
+  {
+    ImGui::Text("Pressed");
+  }
   ImGui::End();
 }
 
