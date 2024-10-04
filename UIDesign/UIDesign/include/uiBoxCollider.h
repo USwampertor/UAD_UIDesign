@@ -2,24 +2,13 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiUtilities.h"
 #include "uiComponent.h"
-
-#include <SFPhysics/SFPhysics.h>
-
-#include <iostream>
-
-using PhysicsCollisionResult =  sfp::PhysicsBodyCollisionResult;
-using CollisionCallback = Callback<void, const PhysicsCollisionResult&>;
-using PhysicsRectangle = sfp::PhysicsRectangle;
-using PhysicsBody = sfp::PhysicsBody;
-
-
+#include "uiCollision.h"
+#include "uiVector2.h"
 
 class BoxCollider : public Component, public PhysicsRectangle
 {
 public:
-
 
   static eCOMPONENTTYPE GetType() { return eCOMPONENTTYPE::COLLIDER; }
 

@@ -1,12 +1,11 @@
 #pragma once
 
 #include "uiPrerequisites.h"
+
 #include "uiAnimation.h"
 #include "uiComponent.h"
 #include "uiSprite.h"
 #include "uiUtilities.h"
-
-#include <SFML/Graphics.hpp>
 
 BETTER_ENUM(
   eANIMATIONSTATE,

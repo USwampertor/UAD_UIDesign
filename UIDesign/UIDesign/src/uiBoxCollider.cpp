@@ -23,11 +23,6 @@ void BoxCollider::collisionCallback(PhysicsCollisionResult& collision)
   }
   else
   {
-    // m_collisions.push_back(MakeSharedObject<PhysicsCollisionResult>(collision));
-    if (static_cast<BoxCollider*>(&collision.object2)->m_parent->GetName() == "Player" && m_parent->GetName() == "bullet")
-    {
-      int dummy = 0;
-    }
     m_collisions.push_back(new PhysicsCollisionResult(collision));
     OnCollisionEnter(collision);
   }
@@ -87,7 +82,7 @@ void BoxCollider::SetSize(const Vector2f& newSize)
 
 void BoxCollider::Initialize()
 {
-  m_ColliderSize = { 50, 50 };
+  m_ColliderSize = { 100 , 100 };
   m_collisions.clear();
   m_onCollisionEnterCallbackList.clear();
   m_onCollisionStayCallbackList.clear();

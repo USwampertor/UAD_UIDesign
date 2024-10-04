@@ -3,7 +3,6 @@
 #include "uiPrerequisites.h"
 
 #include "uiInput.h"
-#include "uiUtilities.h"
 
 // template<typename ReturnType, typename... Args>
 using InputCallback = Callback<void, SharedPtr<InputValue>>;

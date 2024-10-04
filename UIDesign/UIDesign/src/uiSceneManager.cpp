@@ -2,6 +2,7 @@
 
 #include "uiAnimator.h"
 #include "uiBoxCollider.h"
+#include "uiSprite.h"
 
 Scene* SceneManager::GetActiveScene()
 {

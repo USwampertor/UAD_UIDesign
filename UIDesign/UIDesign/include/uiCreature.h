@@ -2,16 +2,11 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiUtilities.h"
-
 #include "uiPawn.h"
 
-
 class Animator;
-
-class BoxCollider;
-
 class AudioSource;
+class BoxCollider;
 
 class Creature : public Pawn
 {
@@ -19,7 +14,10 @@ public:
 
   Creature() = default;
 
-  Creature(const String& newName, const float& newMaxHP = 1, const float& newDamage = 1, const float& newDroppableXP = 1) : Pawn(newName)
+  Creature(const String& newName, 
+           const float& newMaxHP = 1, 
+           const float& newDamage = 1, 
+           const float& newDroppableXP = 1) : Pawn(newName)
   {
     m_attack = newDamage;
     m_maxHp = newMaxHP;

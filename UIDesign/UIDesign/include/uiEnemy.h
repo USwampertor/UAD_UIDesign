@@ -1,6 +1,8 @@
 #pragma once
+
+#include "uiPrerequisites.h"
+
 #include "uiCreature.h"
-#include "uiUtilities.h"
 
 class Animator;
 class AudioSource;
@@ -12,8 +14,6 @@ public:
 
   EnemyEntity() = default;
 
-  // EnemyEntity(const String& newName) : Creature(newName) {}
-
   ~EnemyEntity() = default;
 
   EnemyEntity(const String& newName) : Creature(newName) {}
@@ -24,7 +24,7 @@ public:
 
   void OnEnemyDeath();
 
-  float m_timeBeforeSpawn;
+  float m_timeBeforeSpawn = 0;
 
   Animator* m_animator = nullptr;
   AudioSource* m_source = nullptr;

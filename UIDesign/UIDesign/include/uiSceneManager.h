@@ -4,7 +4,8 @@
 #include "uiModule.h"
 #include "uiScene.h"
 
-#include <SFML/Window.hpp>
+// TODO: Change this to another location
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class SceneManager : public Module<SceneManager>
 {

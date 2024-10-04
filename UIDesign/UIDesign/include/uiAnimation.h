@@ -6,14 +6,6 @@
 #include "uiTexture.h"
 #include "uiUtilities.h"
 
-#include <SFML/Graphics.hpp>
-
-struct Frame
-{
-  sf::Sprite sprite;
-  float interval;
-};
-
 class Animation : public Resource
 {
 public:
@@ -25,11 +17,7 @@ public:
 
   void Initialize(Vector<SharedPtr<Texture>> newTextures, const float& duration);
 
-  // void Update(const float& delta);
-
   void AddFrame(SharedPtr<Texture> newFrame);
-
-  // void SetCurrentTime(const float& newValue);
 
   void SetLoop(const bool& ifLoop);
 

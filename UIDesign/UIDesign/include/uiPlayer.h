@@ -2,16 +2,17 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiBoxCollider.h"
 #include "uiCreature.h"
-#include "uiInput.h"
-#include "uiInputAction.h"
 #include "uiInputMapping.h"
+#include "uiCollision.h"
 #include "uiUtilities.h"
+#include "uiVector2.h"
 
 class Animator;
+class InputValue;
 class AudioSource;
 class AudioListener;
+class BoxCollider;
 
 class PlayerEntity : public Creature
 {
@@ -66,7 +67,7 @@ public:
 
   SharedPtr<InputMapping> m_map;
 
-  Entity* m_sword;
+  Entity* m_sword = nullptr;
 
 };
 

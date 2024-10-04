@@ -224,6 +224,7 @@
     <ClCompile Include="src\uiWindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\uiAudioBuffer.h" />
     <ClInclude Include="include\uiAudioClip.h" />
     <ClInclude Include="include\uiApp.h" />
     <ClInclude Include="include\uiAudioListener.h" />
@@ -241,6 +242,7 @@
     <ClInclude Include="include\uiBullet.h" />
     <ClInclude Include="include\uiCamera.h" />
     <ClInclude Include="include\uiCameraFollower.h" />
+    <ClInclude Include="include\uiCollision.h" />
     <ClInclude Include="include\uiController.h" />
     <ClInclude Include="include\uiCreature.h" />
     <ClInclude Include="include\uiEnemy.h" />
@@ -275,9 +277,12 @@
     <ClInclude Include="include\uiSceneSettings.h" />
     <ClInclude Include="include\uiSpawner.h" />
     <ClInclude Include="include\uiSprite.h" />
+    <ClInclude Include="include\uiStdHeaders.h" />
     <ClInclude Include="include\uiTexture.h" />
     <ClInclude Include="include\uiUI.h" />
     <ClInclude Include="include\uiUtilities.h" />
+    <ClInclude Include="include\uiVector2.h" />
+    <ClInclude Include="include\uiVector3.h" />
     <ClInclude Include="include\uiWindowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

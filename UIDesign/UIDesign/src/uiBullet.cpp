@@ -1,5 +1,8 @@
 #include "uiBullet.h"
 
+#include "uiAnimator.h"
+#include "uiAudioSource.h"
+#include "uiBoxCollider.h"
 #include "uiPlayer.h"
 #include "uiSceneManager.h"
 

@@ -3,6 +3,7 @@
 #include "uiPrerequisites.h"
 
 #include "uiEntity.h"
+
 class Pawn : public Entity
 {
 public:

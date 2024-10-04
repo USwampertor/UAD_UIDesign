@@ -1,7 +1,9 @@
 #pragma once
+
 #include "uiPrerequisites.h"
-#include "uiUtilities.h"
+
 #include "uiInput.h"
+#include "uiVector2.h"
 
 class InputManager : public Module<InputManager>
 {

@@ -3,14 +3,11 @@
 #include "uiPrerequisites.h"
 
 #include "uiResource.h"
+#include "uiAudioBuffer.h"
 
-#include <SFML/Audio/SoundBuffer.hpp>
-
-
-class AudioClip : public Resource, public sf::SoundBuffer 
+class AudioClip : public Resource, public AudioBuffer 
 {
 public:
   static eRESOURCETYPE GetType() { return eRESOURCETYPE::SOUND; }
-
 };
 

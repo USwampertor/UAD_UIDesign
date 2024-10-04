@@ -3,9 +3,7 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiUtilities.h"
 #include "uiEntity.h"
-
 #include "uiSceneSettings.h"
 
 class Scene

@@ -2,7 +2,6 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiUtilities.h"
 #include "uiInput.h"
 #include "uiInputAction.h"
 

@@ -3,16 +3,13 @@
  */
 #pragma once
 
-#include "uiAnimation.h"
-#include "uiAnimator.h"
+#include "uiPrerequisites.h"
+
 #include "uiComponent.h"
 #include "uiUtilities.h"
+#include "uiVector2.h"
 
 #include "uiSprite.h"
-
-#include <SFML/Main.hpp>
-#include <SFML/Graphics.hpp>
-
 
 class Entity
 {
@@ -146,18 +143,17 @@ public:
 
   Vector<Entity*>& GetChildren();
 
-  void Move(const sf::Vector2f& delta);
+  void Move(const Vector2f& delta);
 
-  void Scale(const sf::Vector2f& delta);
+  void Scale(const Vector2f& delta);
 
   void Rotate(const float& delta);
 
-  void SetPosition(const sf::Vector2f& newPosition);
+  void SetPosition(const Vector2f& newPosition);
 
-  void SetScale(const sf::Vector2f& newScale);
+  void SetScale(const Vector2f& newScale);
 
   void SetRotation(const float& newRotation);
-
 
   bool m_markedToDestroy = false;
 

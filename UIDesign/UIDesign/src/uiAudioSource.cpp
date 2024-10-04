@@ -1,6 +1,7 @@
 #include "uiAudioSource.h"
 
 #include "uiEntity.h"
+#include "uiVector3.h"
 
 void AudioSource::Initialize()
 {

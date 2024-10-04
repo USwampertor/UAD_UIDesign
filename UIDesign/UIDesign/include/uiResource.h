@@ -2,8 +2,6 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiUtilities.h"
-
 BETTER_ENUM(eRESOURCETYPE,
             uint32,
             NONE = 0,

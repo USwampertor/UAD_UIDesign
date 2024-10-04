@@ -3,9 +3,8 @@
 #include "uiPrerequisites.h"
 
 #include "uiComponent.h"
-#include "uiUtilities.h"
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 class Sprite : public Component, public sf::Sprite 
 {

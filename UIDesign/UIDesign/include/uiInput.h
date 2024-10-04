@@ -15,7 +15,8 @@ namespace Input
   using Keyboard    = sf::Keyboard;
   using Mouse       = sf::Mouse;
   using DeviceData  = sf::Joystick::Identification;
-  
+
+#pragma region InputState
   BETTER_ENUM(
     eINPUTSTATE,
     uint32,
@@ -24,7 +25,9 @@ namespace Input
     RELEASED,
     INACTIVE
   )
+#pragma endregion InputState
 
+#pragma region DeviceHexValue
   BETTER_ENUM(
     eDEVICEHEXVALUE,
     uint32,
@@ -35,7 +38,9 @@ namespace Input
     KEYBOARD,
     KEYSCAN
   )
+#pragma endregion DeviceHexValue
 
+#pragma region InputCode
   BETTER_ENUM(
     eINPUTCODE, 
     int32,
@@ -193,59 +198,10 @@ namespace Input
     KeyCodeF14                      = 0x00000625,          
     KeyCodeF15                      = 0x00000635,          
     KeyCodePause                    = 0x00000645        
-    )/*                                 
-    KeyCodeComma                    = 0x000313,
-    KeyCodePeriod                   = 0x000323,
-    KeyCodeApostrophe               = 0x000343,
-    KeyCodeSlash                    = 0x000353,
-    KeyCodeBackslash                = 0x000363,
-    KeyCodeGrave                    = 0x000373,
-    KeyCodeEqual                    = 0x000383,
-    KeyCodeHyphen                   = 0x000393,
-    KeyCodeSpace                    = 0x0003A3,
-    KeyCodeEnter                    = 0x0003B3,
-    KeyCodeBackspace                = 0x0003C3,
-    KeyCodeTab                      = 0x0003D3,
-    KeyCodePageUp                   = 0x0003E3,
-    KeyCodePageDown                 = 0x0003F3,
-    KeyCodeEnd                      = 0x000403,
-    KeyCodeHome                     = 0x000413,
-    KeyCodeInsert                   = 0x000423,
-    KeyCodeDelete                   = 0x000433,
-    KeyCodeAdd                      = 0x000443,
-    KeyCodeSubtract                 = 0x000453,
-    KeyCodeMultiply                 = 0x000463,
-    KeyCodeDivide                   = 0x000473,
-    KeyCodeLeft                     = 0x000483,
-    KeyCodeRight                    = 0x000493,
-    KeyCodeUp                       = 0x0004A3,
-    KeyCodeDown                     = 0x0004B3,
-    KeyCodeNumpad0                  = 0x0004C3,
-    KeyCodeNumpad1                  = 0x0004D3,
-    KeyCodeNumpad2                  = 0x0004E3,
-    KeyCodeNumpad3                  = 0x0004F3,
-    KeyCodeNumpad4                  = 0x000503,
-    KeyCodeNumpad5                  = 0x000513,
-    KeyCodeNumpad6                  = 0x000523,
-    KeyCodeNumpad7                  = 0x000533,
-    KeyCodeNumpad8                  = 0x000543,
-    KeyCodeNumpad9                  = 0x000553,
-    KeyCodeF1                       = 0x000563,
-    KeyCodeF2                       = 0x000573,
-    KeyCodeF3                       = 0x000583,
-    KeyCodeF4                       = 0x000593,
-    KeyCodeF5                       = 0x0005A3,
-    KeyCodeF6                       = 0x0005B3,
-    KeyCodeF7                       = 0x0005C3,
-    KeyCodeF8                       = 0x0005D3,
-    KeyCodeF9                       = 0x0005E3,
-    KeyCodeF10                      = 0x0005F3,
-    KeyCodeF11                      = 0x000603,
-    KeyCodeF12                      = 0x000613,
-    KeyCodeF13                      = 0x000623,
-    KeyCodeF14                      = 0x000633,
-    KeyCodeF15                      = 0x000643,
-    KeyCodePause                    = 0x000653,
+    )
+#pragma endregion InputCode
+
+    /*                                 
     KeyScanUnknown                  = 0x000F04,
     KeyScanA                        = 0x000004,
     KeyScanB                        = 0x000014,
@@ -396,9 +352,6 @@ namespace Input
 
 
    */
-// using eINPUTSTATE     = uint32;
-// using eINPUTCODE      = uint32;
-// using eDEVICEHEXVALUE = uint32;
 
 }
 

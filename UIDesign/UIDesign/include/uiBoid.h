@@ -1,6 +1,7 @@
 #pragma once
 #include "uiPrerequisites.h"
-#include "uiMath.h"
+
+#include "uiVector2.h"
 
 struct Boid
 {

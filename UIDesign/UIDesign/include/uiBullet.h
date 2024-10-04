@@ -2,12 +2,14 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiAnimator.h"
-#include "uiAudioSource.h"
-#include "uiBoxCollider.h"
+#include "uiCollision.h"
 #include "uiEntity.h"
 #include "uiResourceManager.h"
-#include "uiUtilities.h"
+#include "uiVector2.h"
+
+class Animator;
+class AudioSource;
+class BoxCollider;
 
 class BulletEntity : public Entity
 {

@@ -4,8 +4,6 @@
 
 #include "uiEntity.h"
 
-#include "uiPawn.h"
-
 class Pawn;
 
 class Controller : public Entity

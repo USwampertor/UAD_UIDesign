@@ -3,8 +3,8 @@
 #include "uiPrerequisites.h"
 
 #include "uiModule.h"
-
-#include <SFPhysics/SFPhysics.h>
+#include "uiCollision.h"
+#include "uiVector2.h"
 
 BETTER_ENUM(ePHYSICLAYERS, 
             uint32, 
@@ -12,10 +12,6 @@ BETTER_ENUM(ePHYSICLAYERS,
             PROJECTILES   = 1
             // ADD MORE AS NEEDED
             )
-
-using PhysicsBody = sfp::PhysicsBody;
-using World = sfp::World;
-using PhysicsCollisionResult = sfp::PhysicsBodyCollisionResult;
 
 
 class BoxCollider;
@@ -38,6 +34,6 @@ public:
 
   UniquePtr<World> m_world;
 
-  Vector<BoxCollider*> m_physicObjects;
+  // Vector<BoxCollider*> m_physicObjects;
 };
 

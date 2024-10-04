@@ -1,7 +1,7 @@
 #pragma once
 
 #include "uiPrerequisites.h"
-#include "uiUtilities.h"
+
 #include "uiResource.h"
 #include "uiTexture.h"
 

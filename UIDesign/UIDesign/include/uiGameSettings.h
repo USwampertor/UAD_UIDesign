@@ -2,10 +2,9 @@
 
 #include "uiPrerequisites.h"
 
-#include "uiUtilities.h"
-
 #include "uiJSON.h"
 
+// TODO: Change location of this
 #include <SFML/Window/VideoMode.hpp>
 
 using VideoMode = sf::VideoMode;

@@ -1,5 +1,9 @@
 #pragma once
+
+#include "uiPrerequisites.h"
+
 #include "uiUtilities.h"
+#include "uiVector2.h"
 
 class Entity;
 

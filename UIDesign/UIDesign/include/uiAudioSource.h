@@ -2,17 +2,13 @@
 
 #include "uiPrerequisites.h"
 
-
 #include "uiAudioClip.h"
 #include "uiComponent.h"
 #include "uiMusicClip.h"
-
 #include "uiResource.h"
-#include "uiUtilities.h"
 
 #include <SFML/Audio/Sound.hpp>
 
-using Vector3f = sf::Vector3f;
 using Sound = sf::Sound;
 
 class AudioSource : public Component

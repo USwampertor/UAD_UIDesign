@@ -7,9 +7,11 @@
  */
 #define BETTER_ENUMS_MACRO_FILE <better-enums/enum_macros.h>
 #define BETTER_ENUMS_STRICT_CONVERSION
+
 #include <better-enums/enum.h>
 
+#include "uiMemoryAllocator.h"
 #include "uiPlatformDefines.h"
 #include "uiPlatformTypes.h"
-#include "uiMemoryAllocator.h"
+#include "uiStdHeaders.h"
 
