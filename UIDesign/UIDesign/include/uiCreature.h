@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uiPrerequisites.h"
+#include "uiClassRegisters.h"
 
 #include "uiPawn.h"
 
@@ -8,16 +9,16 @@ class Animator;
 class AudioSource;
 class BoxCollider;
 
-class Creature : public Pawn
+class CreatureEntity : public PawnEntity
 {
 public:
 
-  Creature() = default;
+  CreatureEntity() = default;
 
-  Creature(const String& newName, 
+  CreatureEntity(const String& newName, 
            const float& newMaxHP = 1, 
            const float& newDamage = 1, 
-           const float& newDroppableXP = 1) : Pawn(newName)
+           const float& newDroppableXP = 1) : PawnEntity(newName)
   {
     m_attack = newDamage;
     m_maxHp = newMaxHP;
@@ -25,7 +26,7 @@ public:
     m_droppableXP = newDroppableXP;
   }
 
-  ~Creature() = default;
+  ~CreatureEntity() = default;
 
   virtual void GetDamage(const float& damage);
 
@@ -38,4 +39,6 @@ public:
   Callback<void> m_onHPZero;
 
 };
+
+REGISTER_CLASS(CreatureEntity)
 

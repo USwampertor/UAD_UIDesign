@@ -4,6 +4,8 @@
 #include "uiBoxCollider.h"
 #include "uiSprite.h"
 
+#include "uiClassRegisters.h"
+
 Scene* SceneManager::GetActiveScene()
 {
   return m_activeScene.get();
@@ -35,6 +37,47 @@ bool SceneManager::ChangeScene(const String& sceneToLoad)
   return false;
 }
 
+Scene* SceneManager::LoadScene(const String& newSceneName)
+{
+  Scene* s = nullptr;
+
+  return s;
+}
+
+void SceneManager::SaveScene()
+{
+
+}
+
+void SceneManager::Update(const float& delta)
+{
+  // Delete Entities that are marked for delete
+  for (Entity* toDelete : m_activeScene->m_toRemove)
+  {
+    int i = 0;
+
+    for (SharedPtr<Entity>& e : m_activeScene->m_entities)
+    {
+      if (e.get() == toDelete)
+      {
+        //
+        e->OnDestroy();
+        e.reset();
+        m_activeScene->m_entities.erase(m_activeScene->m_entities.begin() + i);
+        break;
+      }
+      ++i;
+    }
+    m_activeScene->m_toRemove.clear();
+  }
+
+  for (int j = 0; j < m_activeScene->m_entities.size(); ++j)
+  {
+    m_activeScene->m_entities[j]->Update(delta);
+
+  }
+}
+
 void SceneManager::UpdateRender(sf::RenderWindow& w)
 {
   for (int i = 0; i < SceneManager::Instance().GetActiveScene()->m_entities.size(); ++i)
@@ -51,3 +94,4 @@ void SceneManager::UpdateRender(sf::RenderWindow& w)
     }
   }
 }
+

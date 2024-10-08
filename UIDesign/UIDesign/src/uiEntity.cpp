@@ -3,6 +3,30 @@
 #include "uiResourceManager.h"
 #include "uiTexture.h"
 
+
+JSONDocument Entity::Serialize()
+{
+  JSONDocument d;
+  d.SetObject();
+  JSONDocument::AllocatorType& allocator = d.GetAllocator();
+  d.AddMember("name", m_name, allocator);
+  d.AddMember("active", m_isActive, allocator);
+  
+  JSONValue transform(rapidjson::kObjectType);
+  
+  JSONValue position(rapidjson::kArrayType);
+  position.PushBack(m_transform->position.x, allocator).PushBack(m_transform->position.y, allocator);
+  transform.AddMember("position", position, allocator);
+  JSONValue scale(rapidjson::kArrayType);
+  scale.PushBack(m_transform->scale.x, allocator).PushBack(m_transform->scale.y, allocator);
+  transform.AddMember("scale", scale, allocator);
+  transform.AddMember("rotation", scale, allocator);
+
+  d.AddMember("transform", transform, allocator);
+
+  return d;
+}
+
 void Entity::Initialize()
 {
   m_gizmoSprite = new Sprite();

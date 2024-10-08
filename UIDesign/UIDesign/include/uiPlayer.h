@@ -1,8 +1,10 @@
 #pragma once
 
 #include "uiPrerequisites.h"
+#include "uiClassRegisters.h"
 
 #include "uiCreature.h"
+#include "uiJSON.h"
 #include "uiInputMapping.h"
 #include "uiCollision.h"
 #include "uiUtilities.h"
@@ -14,20 +16,26 @@ class AudioSource;
 class AudioListener;
 class BoxCollider;
 
-class PlayerEntity : public Creature
+class PlayerEntity : public CreatureEntity
 {
 public:
-  PlayerEntity() = default;
 
-  PlayerEntity(const String& name) : Creature(name) {}
+  static String GetType() { return "PlayerEntity"; }
+
+  PlayerEntity() = default;
 
   ~PlayerEntity() = default;
 
+  PlayerEntity(const String& name) : CreatureEntity(name) {}
+
+
+  virtual void Initialize() override;
+
+  virtual void Update(const float& delta) override;
+
+  virtual JSONDocument Serialize() override;
+
   void PlayerDeath();
-
-  virtual void Initialize();
-
-  void Update(const float& delta) override;
 
   void Up(SharedPtr<InputValue> value);
 
@@ -71,3 +79,4 @@ public:
 
 };
 
+REGISTER_CLASS(PlayerEntity)

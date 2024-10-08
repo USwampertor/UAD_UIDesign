@@ -48,11 +48,6 @@ void EnemyEntity::Initialize()
   Move(Vector2f((std::rand() % 10000) - 5000, (std::rand() % 10000) - 5000));
 }
 
-void EnemyEntity::OnEnemyDeath()
-{
-  // SceneManager::Instance().DestroyObject(this);
-}
-
 void EnemyEntity::Update(const float& delta)
 {
   Entity::Update(delta);
@@ -71,11 +66,26 @@ void EnemyEntity::Update(const float& delta)
       bullet->GetComponent<BoxCollider>()->setStatic(false);
       bullet->GetComponent<BoxCollider>()->setLayer(1, 1);
       bullet->GetComponent<BoxCollider>()->setLayer(0, 0);
-      bullet->GetComponent<BoxCollider>()->setVelocity(Vec2Math<float>::Times(direction, 3));
+      bullet->GetComponent<BoxCollider>()->setVelocity(Vec2::Times(direction, 3));
       // bullet->m_direction = Vec2Math<float>::Times(direction, 5);
       m_timeBeforeSpawn = std::rand() % 10 + 5;
+
     }
     // this->Move();
     this->GetComponent<BoxCollider>()->setVelocity(direction);
   }
 }
+
+JSONDocument EnemyEntity::Serialize()
+{
+  JSONDocument d = Entity::Serialize();
+
+  return d;
+}
+
+void EnemyEntity::OnEnemyDeath()
+{
+  // SceneManager::Instance().DestroyObject(this);
+}
+
+

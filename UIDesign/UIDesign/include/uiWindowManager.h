@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include "uiGameSettings.h"
+#include "uiAppSettings.h"
 
 using RenderWindow = sf::RenderWindow;
 
@@ -23,7 +23,7 @@ public:
 
   void Display();
 
-  void Initialize(const GameSettings& gameSettings);
+  void Initialize(const AppSettings& gameSettings);
 
 
   SharedPtr<RenderWindow> m_mainWindow;

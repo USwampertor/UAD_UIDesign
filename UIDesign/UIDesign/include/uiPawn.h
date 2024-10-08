@@ -1,17 +1,19 @@
 #pragma once
 
 #include "uiPrerequisites.h"
-
+#include "uiClassRegisters.h"
 #include "uiEntity.h"
 
-class Pawn : public Entity
+class PawnEntity : public Entity
 {
 public:
-  Pawn() = default;
+  PawnEntity() = default;
 
-  Pawn(const String& newName) : Entity(newName) {}
+  PawnEntity(const String& newName) : Entity(newName) {}
 
-  ~Pawn() = default;
+  ~PawnEntity() = default;
 
   void AutoPossess();
 };
+
+REGISTER_CLASS(PawnEntity)

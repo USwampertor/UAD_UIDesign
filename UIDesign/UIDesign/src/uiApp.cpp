@@ -5,6 +5,7 @@
 #include "uiBullet.h"
 #include "uiCameraFollower.h"
 #include "uiEnemy.h"
+#include "uiFileSystem.h"
 #include "uiInputManager.h"
 #include "uiPhysics.h"
 #include "uiPlayer.h"
@@ -101,7 +102,7 @@ bool App::LoadResources()
 
 
   String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
-  GameSettings settings;
+  AppSettings settings;
   settings.FromFile(settingsPath);
   WindowManager::Instance().Initialize(settings);
   UI::Instance().Initialize(*WindowManager::Instance().m_mainWindow.get());
@@ -125,7 +126,7 @@ void App::Update()
 
   // TODO: Remove this and make it so it is loaded via a scene
   SceneManager::Instance().CreateObject<PlayerEntity>("Player");
-  SceneManager::Instance().CreateObject<CameraFollower>("Follower");
+  SceneManager::Instance().CreateObject<CameraFollowerEntity>("Follower");
 
   std::srand(std::time(nullptr));
   for (int i = 0; i < 10; ++i)

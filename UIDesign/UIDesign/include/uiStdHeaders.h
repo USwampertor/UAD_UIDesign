@@ -23,6 +23,7 @@
 #include <tuple>
 #include <type_traits>
 #include <utility> 
+#include <unordered_map>
 #include <vector>
 
 
@@ -120,6 +121,13 @@ using UniqueLock = std::unique_lock<Mutex>;
 
 template<typename T>
 using UniquePtr = std::unique_ptr<T>;
+
+// template<typename KEY,
+//          typename T,
+//          typename H = std::hash<Key>,
+//          typename K = std::equal_to<Key>,
+//          typename A = std::allocator<std::pair<const Key, T>>>
+// using UnorderedMap = std::unordered_map<Key, T, H, K, A>
 
 template<typename T, typename A = std::allocator<T>>
 using Vector = std::vector<T, A>;

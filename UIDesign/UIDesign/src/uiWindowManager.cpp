@@ -1,7 +1,7 @@
 #include "uiWindowManager.h"
 
 
-void WindowManager::Initialize(const GameSettings& gameSettings)
+void WindowManager::Initialize(const AppSettings& gameSettings)
 {
   m_mainWindow = MakeSharedObject<RenderWindow>(gameSettings.m_displaySize, gameSettings.m_gameName);
   m_mainWindow->setVerticalSyncEnabled(gameSettings.m_shouldUseVerticalSync);

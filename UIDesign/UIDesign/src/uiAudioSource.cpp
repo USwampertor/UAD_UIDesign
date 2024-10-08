@@ -66,6 +66,31 @@ void AudioSource::Play()
   }
 }
 
+
+void AudioSource::PlayOnce(SharedPtr<MusicClip> clip)
+{
+  if (m_sound->getBuffer())
+  {
+    m_sound->stop();
+  }
+  
+  auto tmpClip = m_music;
+
+  m_music = clip;
+
+  m_music->setLoop(false);
+  m_music->play();
+
+  m_music = tmpClip;
+}
+
+void AudioSource::PlayOnce(SharedPtr<AudioClip> clip)
+{
+  m_sound->setBuffer(*clip);
+  m_sound->setLoop(false);
+  m_sound->play();
+}
+
 void AudioSource::PlayOnce()
 {
   if (eRESOURCETYPE::SOUND == m_type)

@@ -3,14 +3,15 @@
 #include "uiPrerequisites.h"
 
 #include "uiAnimation.h"
+#include "uiAudioClip.h"
 #include "uiAtlas.h"
+#include "uiFileSystem.h"
 #include "uiJSON.h"
 #include "uiModule.h"
+#include "uiMusicClip.h"
 #include "uiResource.h"
 #include "uiScene.h"
 #include "uiTexture.h"
-#include "uiMusicClip.h"
-#include "uiAudioClip.h"
 #include "uiUtilities.h"
 
 #include <iostream>
@@ -75,7 +76,7 @@ public:
       // std::cout << d.HasMember("texture") << std::endl;
       String texPath = Utils::Format("%s/%s",p.parent_path().string().c_str(), d["texture"].GetString());
       const JSONValue& positions = d["positions"];
-      for (int i = 0; i < positions.Size(); ++i)
+      for (uint32 i = 0; i < positions.Size(); ++i)
       {
         // String resourceNewName = Utils::Format("%s_atlas_%d", p.filename(), i);
         String newTextureName = Utils::Format("%s_%d", p.stem().string().c_str(), i);

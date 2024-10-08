@@ -54,16 +54,25 @@ void PlayerEntity::Initialize()
   InputManager::Instance().RegisterInputMapping(m_map);
 }
 
+JSONDocument PlayerEntity::Serialize()
+{
+  JSONDocument d = Entity::Serialize();
+  JSONDocument::AllocatorType& allocator = d.GetAllocator();
+  d.AddMember("hp", m_hp, allocator);
+  d.AddMember("type", GetType(), allocator);
+  return d;
+}
+
 void PlayerEntity::GetDamage(const float& damage)
 {
-  Creature::GetDamage(damage);
+  CreatureEntity::GetDamage(damage);
   m_animator->GetSprite().setColor(sf::Color(255, 128, 128, 128));
   m_damageTimer = 1;
 }
 
 void PlayerEntity::OnPlayerDeath()
 {
-  SceneManager::Instance().FindObject<CameraFollower>("Follower")->m_source->PlayOnce();
+  SceneManager::Instance().FindObject<CameraFollowerEntity>("Follower")->m_source->PlayOnce();
   SceneManager::Instance().DestroyObject(this);
 }
 
@@ -74,7 +83,7 @@ void PlayerEntity::Update(const float& delta)
   if (m_damageTimer > 0)
 
   {
-    m_damageTimer -= (delta * 0.001);
+    m_damageTimer -= (delta * 0.001f);
     if (m_damageTimer < 0.01f) { m_damageTimer = 0.0f; }
     float ratio = (1 - m_damageTimer) / 1;
     float colorValue = Math::Lerp(128.0f, 255.0f, ratio);

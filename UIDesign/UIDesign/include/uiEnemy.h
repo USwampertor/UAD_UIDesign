@@ -1,14 +1,16 @@
 #pragma once
 
 #include "uiPrerequisites.h"
+#include "uiClassRegisters.h"
 
 #include "uiCreature.h"
+
 
 class Animator;
 class AudioSource;
 class BoxCollider;
 
-class EnemyEntity : public Creature
+class EnemyEntity : public CreatureEntity
 {
 public:
 
@@ -16,11 +18,13 @@ public:
 
   ~EnemyEntity() = default;
 
-  EnemyEntity(const String& newName) : Creature(newName) {}
+  EnemyEntity(const String& newName) : CreatureEntity(newName) {}
 
-  virtual void Initialize();
+  virtual void Initialize() override;
 
   virtual void Update(const float& delta) override;
+
+  virtual JSONDocument Serialize() override;
 
   void OnEnemyDeath();
 
@@ -31,3 +35,4 @@ public:
   BoxCollider* m_collider = nullptr;
 };
 
+REGISTER_CLASS(EnemyEntity)

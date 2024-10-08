@@ -14,35 +14,45 @@ template <typename T>
 using Vector2 = sf::Vector2<T>;
 
 
-template<typename T>
-struct Vec2Math
+struct Vec2
 {
-  static sf::Vector2<T> Normal(const sf::Vector2<T>& a)
+  template<typename T>
+  static Vector2<T> Normal(const Vector2<T>& a)
   {
-    const double length = Length(a);
-    const double newX = a.x / length;
-    const double newY = a.y / length;
+    const T length = Length(a);
+    const T newX = a.x / length;
+    const T newY = a.y / length;
 
     return sf::Vector2<T>(newX, newY);
   }
 
-  static T Length(const sf::Vector2<T>& a)
+  template<typename T>
+  static T Length(const Vector2<T>& a)
   {
     return Math::Sqrt(Math::Sqr(a.x) + Math::Sqr(a.y));
 
   }
 
-  static sf::Vector2<T> Inverted(const sf::Vector2<T>& a)
-
+  template<typename T>
+  static T SqrLength(const Vector2<T>& a)
   {
-    return sf::Vector2<T>(-a.x, -a.y);
+    return Math::Sqr(a.x) + Math::Sqr(a.y);
+
   }
 
-  static sf::Vector2<T> Times(const sf::Vector2<T>& a, const float& times)
+  template<typename T>
+  static Vector2<T> Inverted(const Vector2<T>& a)
+
+  {
+    return Vector2<T>(-a.x, -a.y);
+  }
+
+  template<typename T>
+  static Vector2<T> Times(const Vector2<T>& a, const float& times)
   {
     const auto newX = a.x * times;
     const auto newY = a.y * times;
 
-    return sf::Vector2<T>(newX, newY);
+    return Vector2<T>(newX, newY);
   }
 };

@@ -6,10 +6,12 @@
 #include "uiPrerequisites.h"
 
 #include "uiComponent.h"
+#include "uiJSON.h"
 #include "uiUtilities.h"
 #include "uiVector2.h"
 
 #include "uiSprite.h"
+
 
 class Entity
 {
@@ -90,6 +92,10 @@ public:
     return REINTERPRETPOINTER(T, m_components.at(T::GetType())).get();
 
   }
+
+  virtual void Deserialize(const JSONDocument& doc) {}
+
+  virtual JSONDocument Serialize();
 
   virtual void OnInitialize() {}
 

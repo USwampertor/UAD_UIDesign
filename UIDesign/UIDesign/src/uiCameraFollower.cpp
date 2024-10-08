@@ -7,7 +7,7 @@
 #include "uiSceneManager.h"
 #include "uiWindowManager.h"
 
-void CameraFollower::Initialize()
+void CameraFollowerEntity::Initialize()
 {
   Entity::Initialize();
   Vector2f s(WindowManager::Instance().m_mainWindow->getSize().x, WindowManager::Instance().m_mainWindow->getSize().y);
@@ -16,7 +16,7 @@ void CameraFollower::Initialize()
   m_source->SetClip(ResourceManager::Instance().GetResource<AudioClip>("fart"));
 }
 
-void CameraFollower::Update(const float& delta)
+void CameraFollowerEntity::Update(const float& delta)
 {
   Entity::Update(delta);
   Entity* player = SceneManager::Instance().FindObject<Entity>("Player");

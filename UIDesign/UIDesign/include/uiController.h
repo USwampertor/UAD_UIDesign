@@ -1,17 +1,22 @@
 #pragma once
 
 #include "uiPrerequisites.h"
+#include "uiClassRegisters.h"
 
 #include "uiEntity.h"
 
-class Pawn;
+class PawnEntity;
 
-class Controller : public Entity
+class ControllerEntity : public Entity
 {
-  void PossesPawn(SharedPtr<Pawn> newPawm);
+public:
+  void PossesPawn(SharedPtr<PawnEntity> newPawm);
 
   void UnPossesPawn();
 
-  SharedPtr<Pawn> m_pawn;
+  void AutoPossess();
+
+  SharedPtr<PawnEntity> m_pawn;
 };
 
+REGISTER_CLASS(ControllerEntity)

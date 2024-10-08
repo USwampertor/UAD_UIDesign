@@ -3,6 +3,7 @@
 #include "uiPrerequisites.h"
 
 #include <cmath>
+#include <cstdlib>
 
 
 struct Math

@@ -1,7 +1,7 @@
 #include "uiCreature.h"
 
 
-void Creature::GetDamage(const float& damage)
+void CreatureEntity::GetDamage(const float& damage)
 {
   m_hp -= damage;
   if (m_hp <= 0)

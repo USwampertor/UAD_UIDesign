@@ -195,6 +195,7 @@
     <ClCompile Include="src\uiAudioListener.cpp" />
     <ClCompile Include="src\uiCameraFollower.cpp" />
     <ClCompile Include="src\uiCreature.cpp" />
+    <ClCompile Include="src\uiLogger.cpp" />
     <ClCompile Include="src\uiParticleEmitter.cpp" />
     <ClCompile Include="src\uiAnimation.cpp" />
     <ClCompile Include="src\uiAnimator.cpp" />
@@ -242,10 +243,13 @@
     <ClInclude Include="include\uiBullet.h" />
     <ClInclude Include="include\uiCamera.h" />
     <ClInclude Include="include\uiCameraFollower.h" />
+    <ClInclude Include="include\uiClassRegisters.h" />
     <ClInclude Include="include\uiCollision.h" />
     <ClInclude Include="include\uiController.h" />
     <ClInclude Include="include\uiCreature.h" />
     <ClInclude Include="include\uiEnemy.h" />
+    <ClInclude Include="include\uiFileSystem.h" />
+    <ClInclude Include="include\uiAppSettings.h" />
     <ClInclude Include="include\uiGameSettings.h" />
     <ClInclude Include="include\uiInput.h" />
     <ClInclude Include="include\uiInputAction.h" />
@@ -258,6 +262,7 @@
     <ClInclude Include="include\uiBoxCollider.h" />
     <ClInclude Include="include\uiComponent.h" />
     <ClInclude Include="include\uiEntity.h" />
+    <ClInclude Include="include\uiLogger.h" />
     <ClInclude Include="include\uiMath.h" />
     <ClInclude Include="include\uiMemoryAllocator.h" />
     <ClInclude Include="include\uiModule.h" />

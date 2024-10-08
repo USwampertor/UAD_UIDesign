@@ -48,6 +48,10 @@ public:
 
   void PlayOnce();
 
+  void PlayOnce(SharedPtr<AudioClip> clip);
+
+  void PlayOnce(SharedPtr<MusicClip> clip);
+
   void SetLoop(const bool& shouldLoop);
 
   void Pause();

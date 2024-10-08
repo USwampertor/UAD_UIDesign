@@ -3,7 +3,7 @@
 #include "uiController.h"
 #include "uiSceneManager.h"
 
-void Pawn::AutoPossess()
+void PawnEntity::AutoPossess()
 {
 
 }
