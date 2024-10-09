@@ -129,6 +129,15 @@
     <ClCompile Include="src\uiLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Remotery.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\uiProjectBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\uiArgumentParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\imconfig.h">
@@ -318,6 +327,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\uiLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uiGameSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Remotery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uiProjectBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uiArgumentParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,6 +15,8 @@
 #include "uiTexture.h"
 #include "uiWindowManager.h"
 
+#include "Remotery.h"
+
 
 void App::OnStartUp()
 {
@@ -31,6 +33,19 @@ void App::OnStartUp()
 
 bool App::StartSystems()
 {
+  Remotery* rmt;
+  rmtError error = rmt_CreateGlobalInstance(&rmt);
+  
+  if (RMT_ERROR_NONE != error)
+  {
+    std::cout << "Error starting up Remotery" << std::endl;
+    return false;
+  }
+
+  rmt_BindOpenGL();
+
+  rmt_ScopedCPUSample(StartSystems, 0);
+
   ResourceManager::StartUp();
   if (!ResourceManager::IsStarted())
   {
@@ -128,7 +143,7 @@ void App::Update()
   SceneManager::Instance().CreateObject<PlayerEntity>("Player");
   SceneManager::Instance().CreateObject<CameraFollowerEntity>("Follower");
 
-  std::srand(std::time(nullptr));
+  std::srand(static_cast<uint32>(std::time(nullptr)));
   for (int i = 0; i < 10; ++i)
   {
     SceneManager::Instance().CreateObject<EnemyEntity>(Utils::Format("Enemy_%d", i));
@@ -176,4 +191,5 @@ void App::Update()
 void App::Exit()
 {
   UI::Instance().Finish();
+  rmt_UnbindOpenGL();
 }

@@ -6,3 +6,8 @@
 #else
 # define UI_DEBUG_MODE 0
 #endif
+
+
+#if UI_DEBUG_MODE == 1
+#define UI_EDITOR_MODE 1
+#endif

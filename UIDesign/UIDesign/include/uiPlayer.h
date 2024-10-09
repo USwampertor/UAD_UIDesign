@@ -11,7 +11,7 @@
 #include "uiVector2.h"
 
 class Animator;
-class InputValue;
+struct InputValue;
 class AudioSource;
 class AudioListener;
 class BoxCollider;
@@ -60,8 +60,6 @@ public:
   float m_speed = 15;
 
   float m_damageTimer = 0;
-
-  // float m_life = 10;
 
   Vector2f m_direction;
 

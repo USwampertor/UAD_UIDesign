@@ -2,6 +2,8 @@
 
 #include "uiInputManager.h"
 
+#include "Remotery.h"
+
 void UI::Initialize(RenderWindow& window)
 {
   ImGui::SFML::Init(window);
@@ -19,6 +21,7 @@ void UI::Update( RenderWindow& window,  Time& dt)
 
 void UI::RenderUI()
 {
+  rmt_ScopedCPUSample(RenderUI, 0);
   ImGui::Begin("Inputs");
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeW][0]->GetState()._to_string());
   ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeA][0]->GetState()._to_string());
@@ -34,6 +37,7 @@ void UI::RenderUI()
 
 void UI::Render(RenderWindow& window)
 {
+  rmt_ScopedCPUSample(Render, 0);
   ImGui::SFML::Render(window);
 }
 

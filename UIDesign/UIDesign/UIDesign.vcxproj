@@ -192,6 +192,8 @@
     <ClCompile Include="src\imgui_tables.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Remotery.c" />
+    <ClCompile Include="src\uiArgumentParser.cpp" />
     <ClCompile Include="src\uiAudioListener.cpp" />
     <ClCompile Include="src\uiCameraFollower.cpp" />
     <ClCompile Include="src\uiCreature.cpp" />
@@ -215,6 +217,7 @@
     <ClCompile Include="src\uiPhysics.cpp" />
     <ClCompile Include="src\uiPlayer.cpp" />
     <ClCompile Include="src\uiPlayerController.cpp" />
+    <ClCompile Include="src\uiProjectBuilder.cpp" />
     <ClCompile Include="src\uiResourceManager.cpp" />
     <ClCompile Include="src\uiScene.cpp" />
     <ClCompile Include="src\uiSceneManager.cpp" />
@@ -225,6 +228,8 @@
     <ClCompile Include="src\uiWindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Remotery.h" />
+    <ClInclude Include="include\uiArgumentParser.h" />
     <ClInclude Include="include\uiAudioBuffer.h" />
     <ClInclude Include="include\uiAudioClip.h" />
     <ClInclude Include="include\uiApp.h" />
@@ -275,6 +280,7 @@
     <ClInclude Include="include\uiPlayer.h" />
     <ClInclude Include="include\uiPlayerController.h" />
     <ClInclude Include="include\uiPrerequisites.h" />
+    <ClInclude Include="include\uiProjectBuilder.h" />
     <ClInclude Include="include\uiResource.h" />
     <ClInclude Include="include\uiResourceManager.h" />
     <ClInclude Include="include\uiScene.h" />
@@ -289,6 +295,7 @@
     <ClInclude Include="include\uiVector2.h" />
     <ClInclude Include="include\uiVector3.h" />
     <ClInclude Include="include\uiWindowManager.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

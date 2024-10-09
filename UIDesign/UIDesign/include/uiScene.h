@@ -5,6 +5,7 @@
 
 #include "uiEntity.h"
 #include "uiSceneSettings.h"
+#include "uiJSON.h"
 
 class Scene
 {
@@ -35,6 +36,10 @@ public:
   {
 
   }
+
+  JSONDocument Serialize();
+
+  void Deserialize();
 
   UniquePtr<SceneSettings>& GetSettings();
 

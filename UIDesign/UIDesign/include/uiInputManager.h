@@ -16,7 +16,7 @@ public:
       String hexName = i._to_string();
       auto tuple = InputCodeToSFML(i);
       Input::eDEVICEHEXVALUE value = Input::eDEVICEHEXVALUE::_from_integral(std::get<0>(tuple));
-      int32 enumValue = std::get<1>(tuple);
+      // int32 enumValue = std::get<1>(tuple);
       m_values.insert(std::make_pair(i, Vector<SharedPtr<InputValue>>()));
       if (value == Input::eDEVICEHEXVALUE::JOYSTICK || value == Input::eDEVICEHEXVALUE::JOYSTICKAXIS)
       {
