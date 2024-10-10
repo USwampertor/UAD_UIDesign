@@ -88,19 +88,10 @@ public:
         REINTERPRETPOINTER(Atlas, newResource)->m_atlas.push_back(t);
       }
     }
-
-    // if (newResource)
-    // {
-    //   m_resources.insert(Utils::MakePair(Hash<String>()(path), newResource));
-    // }
-
-    // if (newResource != nullptr)
-    // {
-    //   // m_resources.insert(Utils::MakePair(1, newResource));
-    // }
-
     return newResource;
   }
+
+
 
   template<typename T, typename = std::enable_if_t<std::is_base_of<Resource, T>::value>>
   SharedPtr<T> GetResource(const String& path)
@@ -114,5 +105,8 @@ public:
   }
 
   Map<std::size_t, SharedPtr<Resource>> m_resources;
+
+  Vector<Callback<void, bool, String>> m_resourceLoadedCallbacks;
+
 };
 

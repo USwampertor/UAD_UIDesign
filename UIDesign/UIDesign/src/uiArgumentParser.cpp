@@ -9,12 +9,23 @@ void ArgumentParser::Parse(const String& params)
 }
 
 
-void ArgumentParser::AddArgument(const String& newArg)
+void ArgumentParser::AddFlag(const String& param)
 {
-
+  if (m_argumentMap.find(param) == m_argumentMap.end())
+  {
+    m_argumentMap.insert(Utils::MakePair(param, ""));
+  }
 }
 
-const String& ArgumentParser::GetParameter(const String& param)
+void ArgumentParser::SetFlag(const String& param, const String& newValue)
+{
+  if (m_argumentMap.find(param) != m_argumentMap.end())
+  {
+    m_argumentMap[param] = newValue;
+  }
+}
+
+const String& ArgumentParser::GetFlag(const String& param)
 {
   if (m_argumentMap.find(param) != m_argumentMap.end())
   {

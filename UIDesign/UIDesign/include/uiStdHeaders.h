@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cmath>
 #include <exception>
-#include <filesystem>
 #include <functional>
 #include <fstream>
 #include <iostream>
@@ -47,8 +46,6 @@ using Array = std::array<T, _Size>;
 template<typename ReturnType, typename... Args>
 using Callback = std::function<ReturnType(Args...)>;
 
-using DirectoryEntry = std::filesystem::directory_entry;
-
 /**
  * @brief Wrapping of c++ std::exception
  */
@@ -79,8 +76,6 @@ using Queue = std::queue<T, A>;
 
 template<typename T, typename A>
 using Pair = std::pair<T, A>;
-
-using Path = std::filesystem::path;
 
 /**
  * @brief Wrapping of c++ std::recursive_mutex

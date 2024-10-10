@@ -197,6 +197,9 @@
     <ClCompile Include="src\uiAudioListener.cpp" />
     <ClCompile Include="src\uiCameraFollower.cpp" />
     <ClCompile Include="src\uiCreature.cpp" />
+    <ClCompile Include="src\uiEditorUI.cpp" />
+    <ClCompile Include="src\uiFileSystem.cpp" />
+    <ClCompile Include="src\uiFont.cpp" />
     <ClCompile Include="src\uiLogger.cpp" />
     <ClCompile Include="src\uiParticleEmitter.cpp" />
     <ClCompile Include="src\uiAnimation.cpp" />
@@ -223,9 +226,14 @@
     <ClCompile Include="src\uiSceneManager.cpp" />
     <ClCompile Include="src\uiSceneSettings.cpp" />
     <ClCompile Include="src\uiSpawner.cpp" />
+    <ClCompile Include="src\uiSplashScreen.cpp" />
     <ClCompile Include="src\uiSprite.cpp" />
+    <ClCompile Include="src\uiText.cpp" />
+    <ClCompile Include="src\uiThread.cpp" />
     <ClCompile Include="src\uiUI.cpp" />
+    <ClCompile Include="src\uiWindow.cpp" />
     <ClCompile Include="src\uiWindowManager.cpp" />
+    <ClCompile Include="uiEditorController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Remotery.h" />
@@ -252,10 +260,13 @@
     <ClInclude Include="include\uiCollision.h" />
     <ClInclude Include="include\uiController.h" />
     <ClInclude Include="include\uiCreature.h" />
+    <ClInclude Include="include\uiEditorUI.h" />
     <ClInclude Include="include\uiEnemy.h" />
     <ClInclude Include="include\uiFileSystem.h" />
     <ClInclude Include="include\uiAppSettings.h" />
+    <ClInclude Include="include\uiFont.h" />
     <ClInclude Include="include\uiGameSettings.h" />
+    <ClInclude Include="include\uiIcon.h" />
     <ClInclude Include="include\uiInput.h" />
     <ClInclude Include="include\uiInputAction.h" />
     <ClInclude Include="include\uiInputManager.h" />
@@ -287,15 +298,21 @@
     <ClInclude Include="include\uiSceneManager.h" />
     <ClInclude Include="include\uiSceneSettings.h" />
     <ClInclude Include="include\uiSpawner.h" />
+    <ClInclude Include="include\uiSplashScreen.h" />
     <ClInclude Include="include\uiSprite.h" />
     <ClInclude Include="include\uiStdHeaders.h" />
+    <ClInclude Include="include\uiText.h" />
     <ClInclude Include="include\uiTexture.h" />
+    <ClInclude Include="include\uiThread.h" />
     <ClInclude Include="include\uiUI.h" />
     <ClInclude Include="include\uiUtilities.h" />
     <ClInclude Include="include\uiVector2.h" />
     <ClInclude Include="include\uiVector3.h" />
+    <ClInclude Include="include\uiWindow.h" />
     <ClInclude Include="include\uiWindowManager.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="uiEditorController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

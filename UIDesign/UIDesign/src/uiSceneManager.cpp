@@ -1,6 +1,7 @@
 #include "uiSceneManager.h"
 
 #include "uiAnimator.h"
+#include "uiApp.h"
 #include "uiBoxCollider.h"
 #include "uiSprite.h"
 
@@ -76,7 +77,11 @@ void SceneManager::Update(const float& delta)
 
   for (int j = 0; j < m_activeScene->m_entities.size(); ++j)
   {
-    m_activeScene->m_entities[j]->Update(delta);
+    // TODO: Check a better way of doing this
+    if (App::Instance().m_parser.GetFlag("editor") != "true")
+    {
+      m_activeScene->m_entities[j]->Update(delta);
+    }
 
   }
 }

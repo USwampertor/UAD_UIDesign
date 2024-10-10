@@ -3,6 +3,7 @@
 #include "uiPrerequisites.h"
 
 #include "uiModule.h"
+#include "uiEditorUI.h"
 
 #include "imgui.h"
 #include "imgui-SFML.h"
@@ -32,11 +33,12 @@ public:
 
   void Update( RenderWindow& window,  Time& dt);
 
-  void RenderUI();
+  void GenerateIMGUI();
 
   void Render(RenderWindow& window);
 
   void Finish();
 
+  EditorUI m_editorUI;
 };
 

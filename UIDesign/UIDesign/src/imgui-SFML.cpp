@@ -235,6 +235,7 @@ bool Init(sf::Window& window, const sf::Vector2f& displaySize, bool loadDefaultF
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
     io.BackendPlatformName = "imgui_impl_sfml";
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     s_currWindowCtx->joystickId = getConnectedJoystickId();
 

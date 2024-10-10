@@ -4,10 +4,7 @@
 
 #include "uiJSON.h"
 
-// TODO: Change location of this
-#include <SFML/Window/VideoMode.hpp>
-
-using VideoMode = sf::VideoMode;
+#include "uiWindow.h"
 
 struct AppSettings
 {

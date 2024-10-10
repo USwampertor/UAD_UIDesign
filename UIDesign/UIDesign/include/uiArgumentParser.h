@@ -9,16 +9,18 @@ public:
 
   ArgumentParser()
   {
-    m_argumentMap.insert(Utils::MakePair("NONE", ""));
+    m_argumentMap.insert(Utils::MakePair("NONE", "NONE"));
   }
 
   ~ArgumentParser() = default;
 
   void Parse(const String& params);
 
-  void AddArgument(const String& newArg);
+  void AddFlag(const String& param);
 
-  const String& GetParameter(const String& param);
+  void SetFlag(const String& param, const String& newValue);
+
+  const String& GetFlag(const String& param);
 
   Map<String, String> m_argumentMap;
 };

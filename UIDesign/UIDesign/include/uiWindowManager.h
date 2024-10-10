@@ -1,15 +1,11 @@
 #pragma once
 
 #include "uiPrerequisites.h"
-#include "uiUtilities.h"
-
-#include "uiModule.h"
-
-#include <SFML/Graphics/RenderWindow.hpp>
 
 #include "uiAppSettings.h"
-
-using RenderWindow = sf::RenderWindow;
+#include "uiModule.h"
+#include "uiUtilities.h"
+#include "uiWindow.h"
 
 class WindowManager : public Module<WindowManager>
 {

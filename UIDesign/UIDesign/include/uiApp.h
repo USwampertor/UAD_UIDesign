@@ -3,6 +3,8 @@
 #include "uiPrerequisites.h"
 
 #include "uiModule.h"
+#include "uiArgumentParser.h"
+#include "uiSplashScreen.h"
 
 class App : public Module<App>
 {
@@ -19,5 +21,7 @@ public:
 
   void Update();
 
+  SplashScreen m_splashScreen;
+  ArgumentParser m_parser;
 };
 

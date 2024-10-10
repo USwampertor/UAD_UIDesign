@@ -9,7 +9,8 @@ BETTER_ENUM(eRESOURCETYPE,
             SOUND,
             MUSIC,
             ANIMATION,
-            ATLAS
+            ATLAS,
+            FONT
             )
 
 class Resource

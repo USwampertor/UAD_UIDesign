@@ -23,7 +23,6 @@ public:
     }
   }
 
-private:
 
   static std::unordered_map<String, FactoryFunc>& GetRegistry()
   {

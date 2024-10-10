@@ -1,12 +1,14 @@
 #include "uiUI.h"
 
-#include "uiInputManager.h"
 
 #include "Remotery.h"
+
+#include "uiApp.h"
 
 void UI::Initialize(RenderWindow& window)
 {
   ImGui::SFML::Init(window);
+  m_editorUI.Initialize();
 }
 
 void UI::ProcessEvent(const RenderWindow& window, const HEvent& event)
@@ -14,25 +16,19 @@ void UI::ProcessEvent(const RenderWindow& window, const HEvent& event)
   ImGui::SFML::ProcessEvent(window, event);
 }
 
-void UI::Update( RenderWindow& window,  Time& dt)
+void UI::Update( RenderWindow& window, Time& dt)
 {
   ImGui::SFML::Update(window, dt);
 }
 
-void UI::RenderUI()
+void UI::GenerateIMGUI()
 {
-  rmt_ScopedCPUSample(RenderUI, 0);
-  ImGui::Begin("Inputs");
-  ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeW][0]->GetState()._to_string());
-  ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeA][0]->GetState()._to_string());
-  ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeS][0]->GetState()._to_string());
-  ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeD][0]->GetState()._to_string());
-  ImGui::Text(InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeEnter][0]->GetState()._to_string());
-  if (ImGui::Button("My new Button"))
+  rmt_ScopedCPUSample(GenerateIMGUI, 0);
+
+  if (App::Instance().m_parser.GetFlag("editor") == "true")
   {
-    ImGui::Text("Pressed");
+    m_editorUI.DrawUI();
   }
-  ImGui::End();
 }
 
 void UI::Render(RenderWindow& window)
