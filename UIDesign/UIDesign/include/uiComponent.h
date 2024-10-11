@@ -7,6 +7,23 @@
 
 class Entity;
 
+
+BETTER_ENUM(
+  eCOMPONENTTYPE,
+  uint32,
+  NONE            = 0,
+  ANIMATOR        = 1 << 0,
+  AUDIOLISTENER   = 1 << 1,
+  AUDIOSOURCE     = 1 << 2,
+  CAMERA          = 1 << 3,
+  COLLIDER        = 1 << 4,
+  PARTICLEEMITTER = 1 << 5,
+  SPRITE          = 1 << 6,
+  SHADER          = 1 << 7
+)
+
+
+
 struct Transform2D
 {
 public:
@@ -48,20 +65,6 @@ public:
   
   float rotation;
 };
-
-BETTER_ENUM(
-  eCOMPONENTTYPE,
-  uint32,
-  NONE            = 0,
-  ANIMATOR        = 1 << 0,
-  AUDIOLISTENER   = 1 << 1,
-  AUDIOSOURCE     = 1 << 2,
-  CAMERA          = 1 << 3,
-  COLLIDER        = 1 << 4,
-  PARTICLEEMITTER = 1 << 5,
-  SPRITE          = 1 << 6
-)
-
 
 class Component
 {

@@ -1,9 +1,11 @@
 #include "uiUI.h"
 
+#include "uiApp.h"
 
+#include "imgui.h"
+#include "imgui-SFML.h"
 #include "Remotery.h"
 
-#include "uiApp.h"
 
 void UI::Initialize(RenderWindow& window)
 {

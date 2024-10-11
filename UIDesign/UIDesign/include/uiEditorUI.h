@@ -1,9 +1,6 @@
 #pragma once
 #include "uiPrerequisites.h"
 
-#include "imgui.h"
-#include "imgui-SFML.h"
-
 class EditorUI
 {
 public:

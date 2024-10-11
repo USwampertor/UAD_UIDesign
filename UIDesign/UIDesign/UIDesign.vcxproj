@@ -189,6 +189,7 @@
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
+    <ClCompile Include="src\imgui_stdlib.cpp" />
     <ClCompile Include="src\imgui_tables.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="src\uiScene.cpp" />
     <ClCompile Include="src\uiSceneManager.cpp" />
     <ClCompile Include="src\uiSceneSettings.cpp" />
+    <ClCompile Include="src\uiShader.cpp" />
     <ClCompile Include="src\uiSpawner.cpp" />
     <ClCompile Include="src\uiSplashScreen.cpp" />
     <ClCompile Include="src\uiSprite.cpp" />
@@ -236,6 +238,7 @@
     <ClCompile Include="uiEditorController.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\imgui_stdlib.h" />
     <ClInclude Include="include\Remotery.h" />
     <ClInclude Include="include\uiArgumentParser.h" />
     <ClInclude Include="include\uiAudioBuffer.h" />
@@ -297,6 +300,7 @@
     <ClInclude Include="include\uiScene.h" />
     <ClInclude Include="include\uiSceneManager.h" />
     <ClInclude Include="include\uiSceneSettings.h" />
+    <ClInclude Include="include\uiShader.h" />
     <ClInclude Include="include\uiSpawner.h" />
     <ClInclude Include="include\uiSplashScreen.h" />
     <ClInclude Include="include\uiSprite.h" />

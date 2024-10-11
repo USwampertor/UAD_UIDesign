@@ -5,10 +5,6 @@
 #include "uiModule.h"
 #include "uiEditorUI.h"
 
-#include "imgui.h"
-#include "imgui-SFML.h"
-
-
 // TODO: Change all this
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>

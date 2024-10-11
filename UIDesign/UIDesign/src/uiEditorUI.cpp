@@ -1,7 +1,16 @@
 #include "uiEditorUI.h"
 #include "uiInputManager.h"
 #include "uiClassRegisters.h"
+#include "uiProjectBuilder.h"
+#include "uiResourceManager.h"
 #include "uiSceneManager.h"
+#include "uiTexture.h"
+#include "uiVector2.h"
+
+
+#include "imgui.h"
+#include "imgui-SFML.h"
+#include "imgui_stdlib.h"
 
 void EditorUI::Initialize()
 {
@@ -42,26 +51,27 @@ void EditorUI::DrawUI()
         ImGui::EndMenu();
       }
       // 
-      // if (ImGui::BeginMenu("View"))
-      // {
-      //   ImGui::MenuItem("Logger", "", &m_windowVisibilities["Logger"]);
-      //   ImGui::MenuItem("Scene Graph", "", &m_windowVisibilities["SceneGraph"]);
-      //   ImGui::MenuItem("Entity Inspector", "", &m_windowVisibilities["EntityInspector"]);
-      // }
-      // ImGui::EndMenu();
+      if (ImGui::BeginMenu("View"))
+      {
+        ImGui::MenuItem("Logger", "", &m_windowVisibilities["Logger"]);
+        ImGui::MenuItem("Scene Graph", "", &m_windowVisibilities["SceneGraph"]);
+        ImGui::MenuItem("Entity Inspector", "", &m_windowVisibilities["EntityInspector"]);
+        ImGui::MenuItem("Resource Explorer", "", &m_windowVisibilities["Resources"]);
+        ImGui::EndMenu();
+      }
       // 
-      // if (ImGui::BeginMenu("Create"))
-      // {
-      //   if (ImGui::BeginMenu("Entities", ""))
-      //   {
-      //     for (auto it = ClassRegisters::GetRegistry().begin(); it != ClassRegisters::GetRegistry().end(); ++it)
-      //     {
-      //       ImGui::MenuItem(it->first.c_str());
-      //     }
-      //   }
-      //   ImGui::EndMenu();
-      // }
-      // ImGui::EndMenu();
+      if (ImGui::BeginMenu("Create"))
+      {
+        if (ImGui::BeginMenu("Entities", ""))
+        {
+          for (auto it = ClassRegisters::GetRegistry().begin(); it != ClassRegisters::GetRegistry().end(); ++it)
+          {
+            ImGui::MenuItem(it->first.c_str());
+          }
+          ImGui::EndMenu();
+        }
+        ImGui::EndMenu();
+      }
     }
     ImGui::EndMainMenuBar();
 
@@ -71,12 +81,18 @@ void EditorUI::DrawUI()
     /************************************************************************/
     /*                                                                      */
     /************************************************************************/
-
     if (m_windowVisibilities["ProjectSettings"])
     {
       if (ImGui::Begin("Project Settings"))
       {
         ImGui::Text("Project Settings");
+        ImGui::Text("Name");
+        ImGui::InputText("##ProjectName", &ProjectBuilder::Instance().m_settings.m_projectName, ImGuiInputTextFlags_AlwaysOverwrite);
+        ImGui::Text("Icon:");
+        ImGui::SameLine();
+        ImGui::ImageButton("IconImage##1", 
+          *ResourceManager::Instance().GetResource<Texture>("idleBullet_0").get(),
+          Vector2f(32.0f, 32.0f));
       }
       ImGui::End();
     }
@@ -85,7 +101,7 @@ void EditorUI::DrawUI()
     {
       if (ImGui::Begin("Entity Inspector"))
       {
-        // ImGui::Text("Properties");
+
       }
       ImGui::End();
     }
@@ -94,34 +110,35 @@ void EditorUI::DrawUI()
     {
       if (ImGui::Begin("Logger"))
       {
-//         if (ImGui::BeginTabBar("Logs"))
-//         {
-//           if (ImGui::BeginTabItem("Debug"))
-//           {
-//             ImGui::Button("ClearLogs");
-//           }
-//           ImGui::EndTabItem();
-//           if (ImGui::BeginTabItem("Release"))
-//           {
-//             ImGui::Button("ClearLogs");
-//           }
-//           ImGui::EndTabItem();
-// 
-// 
-//           ImGui::EndTabBar();
-//         }
+        
       }
       ImGui::End();
     }
 
+    if (m_windowVisibilities["Resources"])
+    {
+      if (ImGui::Begin("Resource Explorer"))
+      {
+        ImGui::Columns(2, "ResourcesColums");
+        ImGui::BeginChild("Explorer", ImVec2(0, 0));
+        ImGui::Text("Explorer");
+        ImGui::EndChild();
+        ImGui::NextColumn();
+        ImGui::BeginChild("Items", ImVec2(0, 0));
+        ImGui::Text("Items");
+        ImGui::EndChild();
+        ImGui::Columns(1);
+      }
+      ImGui::End();
+    }
 
     if (m_windowVisibilities["SceneGraph"])
     {
       if (ImGui::Begin("Scene Graph"))
       {
         
-        ImGui::End();
       }
+      ImGui::End();
     }
 
     /************************************************************************/

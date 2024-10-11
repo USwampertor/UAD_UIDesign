@@ -9,13 +9,19 @@
 #include "uiInputManager.h"
 #include "uiPhysics.h"
 #include "uiPlayer.h"
+#include "uiProjectBuilder.h"
 #include "uiResourceManager.h"
 #include "uiSceneManager.h"
 #include "uiUI.h"
 #include "uiTexture.h"
 #include "uiWindowManager.h"
 
+
+#include "imgui.h"
+#include "imgui-SFML.h"
+#include "imgui_stdlib.h"
 #include "Remotery.h"
+
 
 
 void App::OnStartUp()
@@ -61,13 +67,11 @@ bool App::StartSystems()
   }
 
   m_splashScreen.SetTaskString("Binding up Remotery for OpenGL");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   rmt_BindOpenGL();
 
   rmt_ScopedCPUSample(StartSystems, 0);
 
   m_splashScreen.SetTaskString("Setting up Resource Manager");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   ResourceManager::StartUp();
   if (!ResourceManager::IsStarted())
   {
@@ -78,78 +82,83 @@ bool App::StartSystems()
   else
   {
     m_splashScreen.SetTaskString("Resource Manager working correctly");
-    std::this_thread::sleep_for(std::chrono::milliseconds(150));
     std::cout << "Resource Manager working correctly" << std::endl;
   }
   m_splashScreen.SetTaskString("Setting up Input Manager");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   InputManager::StartUp();
   if (!InputManager::IsStarted())
   {
     // Error loading Input Manager
+    return false;
   }
   m_splashScreen.SetTaskString("Setting up Scene Manager");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   SceneManager::StartUp();
   if (!SceneManager::IsStarted())
   {
     // Error loading Scene Manager
+    return false;
   }
   m_splashScreen.SetTaskString("Setting up Physics Manager");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   Physics::StartUp();
   if (!Physics::IsStarted())
   {
     // Error loading Physics
+    return false;
   }
   m_splashScreen.SetTaskString("Setting up Window Manager Manager");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   WindowManager::StartUp();
   if (!WindowManager::IsStarted())
   {
     // Error loading Window Manager
+    return false;
   }
   m_splashScreen.SetTaskString("Setting up UI Manager");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   UI::StartUp();
   if (!UI::IsStarted())
   {
     // Error loading UI
+    return false;
   }
+
+  if (m_parser.GetFlag("editor") == "true")
+  {
+    ProjectBuilder::StartUp();
+    if (!ProjectBuilder::IsStarted())
+    {
+      return false;
+    }
+  }
+  m_splashScreen.SetTaskString("Setting up ProjectBuilder");
+
+  /************************************************************************/
   m_splashScreen.SetTaskString("Everything finished correctly");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   return true;
 }
 
 bool App::LoadResources()
 {
   m_splashScreen.SetTaskString("Loading Resources");
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   ResourceManager::Instance().LoadResource<Texture>(Utils::Format("%s/../resources/gizmo.png", FileSystem::CurrentPath().string().c_str()));
   String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
   m_splashScreen.SetTaskString(Utils::Format("Loading %s", atlasPath1.c_str()));
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
   ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
   ResourceManager::Instance().GetResource<Animation>("idleEnemy")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite1")->m_atlas, 400.0f);
   ResourceManager::Instance().GetResource<Animation>("idleEnemy")->SetLoop(true);
   String atlasPath2 = Utils::Format("%s/../resources/sprite2.json", FileSystem::CurrentPath().string().c_str());
   m_splashScreen.SetTaskString(Utils::Format("Loading %s", atlasPath2.c_str()));
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   ResourceManager::Instance().LoadResource<Atlas>(atlasPath2);
   ResourceManager::Instance().CreateResource<Animation>("idleBullet");
   ResourceManager::Instance().GetResource<Animation>("idleBullet")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite2")->m_atlas, 400.0f);
   ResourceManager::Instance().GetResource<Animation>("idleBullet")->SetLoop(true);
   String playerPath = Utils::Format("%s/../resources/player.json", FileSystem::CurrentPath().string().c_str());
   m_splashScreen.SetTaskString(Utils::Format("Loading %s", playerPath.c_str()));
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   ResourceManager::Instance().LoadResource<Atlas>(playerPath);
   ResourceManager::Instance().CreateResource<Animation>("idlePlayer");
   ResourceManager::Instance().GetResource<Animation>("idlePlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("player")->m_atlas, 800.0f);
   ResourceManager::Instance().GetResource<Animation>("idlePlayer")->SetLoop(true);
   String playerWalkingPath = Utils::Format("%s/../resources/playerwalking.json", FileSystem::CurrentPath().string().c_str());
   m_splashScreen.SetTaskString(Utils::Format("Loading %s", playerWalkingPath.c_str()));
-  std::this_thread::sleep_for(std::chrono::milliseconds(150));
   ResourceManager::Instance().LoadResource<Atlas>(playerWalkingPath);
   ResourceManager::Instance().CreateResource<Animation>("walkingPlayer");
   ResourceManager::Instance().GetResource<Animation>("walkingPlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("playerwalking")->m_atlas, 400.0f);
