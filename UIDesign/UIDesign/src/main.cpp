@@ -6,7 +6,6 @@ String FileSystem::m_exePath;
 int main(int argc, char* argv[]) {
   // TODO: Check if there is a better way of doing this
   FileSystem::m_exePath = argv[0];
-  std::cout << FileSystem::m_exePath << std::endl;
   App::StartUp();
   App::Instance().Run();
 

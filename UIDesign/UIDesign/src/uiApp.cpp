@@ -28,6 +28,9 @@ void App::OnStartUp()
 {
   m_splashScreen.Initialize();
   // Thread t(&SplashScreen::Show, &m_splashScreen);
+
+
+  // TODO: Move this
   m_parser.AddFlag("editor");
   m_parser.SetFlag("editor", "true");
 
@@ -122,13 +125,9 @@ bool App::StartSystems()
 
   if (m_parser.GetFlag("editor") == "true")
   {
-    ProjectBuilder::StartUp();
-    if (!ProjectBuilder::IsStarted())
-    {
-      return false;
-    }
+    m_splashScreen.SetTaskString("Setting up ProjectBuilder");
+    m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
   }
-  m_splashScreen.SetTaskString("Setting up ProjectBuilder");
 
   /************************************************************************/
   m_splashScreen.SetTaskString("Everything finished correctly");
@@ -171,6 +170,7 @@ bool App::LoadResources()
   ResourceManager::Instance().LoadResource<AudioClip>(Utils::Format("%s/../resources/fart.mp3", FileSystem::CurrentPath().string().c_str()));
 
 
+  // TODO: Change location of this section
   String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
   AppSettings settings;
   settings.FromFile(settingsPath);
@@ -179,6 +179,9 @@ bool App::LoadResources()
 
 
   SceneManager::Instance().CreateScene("TestScene");
+  SceneManager::Instance().CreateScene("TestScene2");
+  SceneManager::Instance().CreateScene("TestScene3");
+  SceneManager::Instance().CreateScene("TestScene4");
   SceneManager::Instance().ChangeScene("TestScene");
 
   return true;

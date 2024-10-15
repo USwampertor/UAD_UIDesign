@@ -4,7 +4,9 @@
 
 #include "uiModule.h"
 #include "uiArgumentParser.h"
+#include "uiProjectBuilder.h"
 #include "uiSplashScreen.h"
+
 
 class App : public Module<App>
 {
@@ -23,5 +25,11 @@ public:
 
   SplashScreen m_splashScreen;
   ArgumentParser m_parser;
+
+#if UI_EDITOR_MODE
+  UniquePtr<ProjectBuilder> m_projectBuilder;
+#endif
+
+
 };
 

@@ -10,6 +10,8 @@ using Vector2f = sf::Vector2f;
 
 using Vector2i = sf::Vector2i;
 
+using Vector2u = sf::Vector2u;
+
 template <typename T>
 using Vector2 = sf::Vector2<T>;
 

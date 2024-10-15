@@ -11,3 +11,8 @@
 #if UI_DEBUG_MODE == 1
 #define UI_EDITOR_MODE 1
 #endif
+
+#ifndef USE_STD_FILESYSTEM
+#define USE_STD_FILESYSTEM
+#endif
+

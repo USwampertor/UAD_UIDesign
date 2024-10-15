@@ -27,6 +27,20 @@ struct FileSystem
   static bool CreateDirectory(const String& p) { return std::filesystem::create_directory(Path(p)); }
   static bool CreateDirectories(const Path& p) { return std::filesystem::create_directories(p); }
   static bool CreateDirectories(const String& p) { return std::filesystem::create_directories(Path(p)); }
+  static void Copy(const String& from, 
+                   const String& to) { return std::filesystem::copy(Path(from), Path(to)); }
+  static void Copy(const Path& from, 
+                   const Path& to) { return std::filesystem::copy(from, to); }
+  static void Rename(const String& oldName, 
+                     const String& newName) { return std::filesystem::rename(Path(oldName), Path(newName)); }
+  static void Rename(const Path& oldName, 
+                     const Path& newName) { return std::filesystem::rename(oldName, newName); }
+  static bool IsEmpty(const Path& p) { return std::filesystem::is_empty(p); }
+  static bool IsEmpty(const String& p) { return std::filesystem::is_empty(Path(p)); }
+  static bool Erase(const Path& p) { return std::filesystem::remove(p); }
+  static bool Erase(const String& p) { return std::filesystem::remove(Path(p)); }
+  static bool EraseAll(const Path& p) { return std::filesystem::remove_all(p); }
+  static bool EraseAll(const String& p) { return std::filesystem::remove_all(Path(p)); }
   static String GetAllStringFromFile(const Path& p)
   {
     IFStream f;

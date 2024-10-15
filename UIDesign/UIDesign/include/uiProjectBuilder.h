@@ -11,14 +11,16 @@ struct ProjectSettings
 {
   Map<uint32, Scene*> m_cookableScenes;
   Vector<VideoMode*> m_resolutions;
+  String m_projectDir;
   String m_projectName;
   Texture* m_icon;
   void Serialize();
 };
 
-class ProjectBuilder : public Module<ProjectBuilder>
+class ProjectBuilder
 {
 public:
+  void Initialize();
   void BuildProject();
   ProjectSettings m_settings;
 };

@@ -1,16 +1,20 @@
 #include "uiEditorUI.h"
+
+#include "uiApp.h"
 #include "uiInputManager.h"
 #include "uiClassRegisters.h"
 #include "uiProjectBuilder.h"
 #include "uiResourceManager.h"
 #include "uiSceneManager.h"
 #include "uiTexture.h"
+#include "uiUtilities.h"
 #include "uiVector2.h"
 
 
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "imgui_stdlib.h"
+#include "ImGuiFileDialog.h"
 
 void EditorUI::Initialize()
 {
@@ -20,6 +24,8 @@ void EditorUI::Initialize()
 
 void EditorUI::DrawUI()
 {
+#if UI_EDITOR_MODE
+
   ImGui::SetNextWindowPos(ImVec2(0, 0));
   ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y));
   ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
@@ -59,6 +65,12 @@ void EditorUI::DrawUI()
         ImGui::MenuItem("Resource Explorer", "", &m_windowVisibilities["Resources"]);
         ImGui::EndMenu();
       }
+      //
+      if (ImGui::BeginMenu("Editor"))
+      {
+        m_windowVisibilities["ViewportOptions"] = ImGui::MenuItem("Viewport Options", "");
+        ImGui::EndMenu();
+      }
       // 
       if (ImGui::BeginMenu("Create"))
       {
@@ -87,13 +99,83 @@ void EditorUI::DrawUI()
       {
         ImGui::Text("Project Settings");
         ImGui::Text("Name");
-        ImGui::InputText("##ProjectName", &ProjectBuilder::Instance().m_settings.m_projectName, ImGuiInputTextFlags_AlwaysOverwrite);
+        ImGui::SameLine();
+        ImGui::InputText("##ProjectName", &App::Instance().m_projectBuilder->m_settings.m_projectName, ImGuiInputTextFlags_AlwaysOverwrite);
         ImGui::Text("Icon:");
         ImGui::SameLine();
-        ImGui::ImageButton("IconImage##1", 
-          *ResourceManager::Instance().GetResource<Texture>("idleBullet_0").get(),
-          Vector2f(32.0f, 32.0f));
+        if (ImGui::ImageButton("IconImage##1",
+          *ResourceManager::Instance().GetResource<Texture>("sprite2_0").get(),
+          Vector2f(32.0f, 32.0f)))
+        {
+          
+
+        }
       }
+      ImGui::Separator();
+      ImGui::Text("Cookable Scenes");
+
+
+
+      for (int32 i = 0; i < SceneManager::Instance().m_scenes.size(); ++i)
+      {
+        ImGui::PushID(i);
+        SharedPtr<Scene> item = SceneManager::Instance().m_scenes[i];
+        ImGui::Checkbox(Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str()).c_str(),
+                        &m_windowVisibilities[Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str())]);
+        ImGui::SameLine();
+        ImGui::Button(item->m_sceneName.c_str(), ImVec2(ImGui::GetWindowWidth() - ImGui::CalcItemWidth() / 2, ImGui::GetFrameHeight()));
+
+        // Our buttons are both drag sources and drag targets here!
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+        {
+          // Set payload to carry the index of our item (could be anything)
+          ImGui::SetDragDropPayload("PROJECTSCENES", &i, sizeof(int));
+
+          // Display preview (could be anything, e.g. when dragging an image we could decide to display
+          // the filename and a small preview of the image, etc.)
+          ImGui::Text("Reorder %s", item->m_sceneName.c_str());
+          ImGui::EndDragDropSource();
+        }
+        if (ImGui::BeginDragDropTarget())
+        {
+          if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECTSCENES"))
+          {
+            IM_ASSERT(payload->DataSize == sizeof(int));
+            int payload_n = *(const int*)payload->Data;
+            
+            std::swap(SceneManager::Instance().m_scenes[payload_n], SceneManager::Instance().m_scenes[i]);
+
+          }
+          ImGui::EndDragDropTarget();
+        }
+        ImGui::PopID();
+
+        // ImGui::Selectable(item->m_sceneName.c_str());
+        // if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
+        // {
+        //   int n_next = i + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
+        //   if (n_next >= 0 && n_next < SceneManager::Instance().m_scenes.size())
+        //   {
+        //     std::swap(SceneManager::Instance().m_scenes[n_next], SceneManager::Instance().m_scenes[i]);
+        //     ImGui::ResetMouseDragDelta();
+        //   }
+        // }
+      }
+
+      ImGui::Separator();
+
+      ImGui::Separator();
+
+
+      // Hit that motherfucking button
+      if (ImGui::Button("Build Project"))
+      {
+        IGFD::FileDialogConfig config;
+        config.path = ".";
+        ImGuiFileDialog::Instance()->OpenDialog("ChooseDirDlgKey", "Choose a Directory", nullptr, config);
+      }
+
+
       ImGui::End();
     }
 
@@ -136,16 +218,53 @@ void EditorUI::DrawUI()
     {
       if (ImGui::Begin("Scene Graph"))
       {
-        
+        ImGui::Text(SceneManager::Instance().m_activeScene->m_sceneName.c_str());
+        ImGui::Separator();
       }
       ImGui::End();
+    }
+
+    if (m_windowVisibilities["ViewportOptions"])
+    {
+      ImGui::OpenPopup("popup_viewport");
+      m_windowVisibilities["ViewportOptions"] = false;
+    }
+    if (ImGui::BeginPopup("popup_viewport"))
+    {
+      ImGui::Text("Viewport options");
+      if (ImGui::Button("Close"))
+      {
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::EndPopup();
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("ChooseDirDlgKey")) {
+      if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
+        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        App::Instance().m_projectBuilder->m_settings.m_projectDir = filePath;
+        // action
+        App::Instance().m_projectBuilder->BuildProject();
+      }
+
+      // close
+      ImGuiFileDialog::Instance()->Close();
     }
 
     /************************************************************************/
     /*                                                                      */
     /************************************************************************/
 
+    ImGui::SetNextWindowSize(ImVec2(300, 150));
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2) );
+
+
   }
+
+
   ImGui::End();
 
+
+#endif
 }

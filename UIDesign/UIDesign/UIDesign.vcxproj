@@ -187,6 +187,7 @@
   <ItemGroup>
     <ClCompile Include="src\imgui-SFML.cpp" />
     <ClCompile Include="src\imgui.cpp" />
+    <ClCompile Include="src\ImGuiFileDialog.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
     <ClCompile Include="src\imgui_stdlib.cpp" />
@@ -238,6 +239,8 @@
     <ClCompile Include="uiEditorController.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\ImGuiFileDialog.h" />
+    <ClInclude Include="include\ImGuiFileDialogConfig.h" />
     <ClInclude Include="include\imgui_stdlib.h" />
     <ClInclude Include="include\Remotery.h" />
     <ClInclude Include="include\uiArgumentParser.h" />
