@@ -13,8 +13,11 @@ BETTER_ENUM(eRESOURCETYPE,
             FONT
             )
 
+
 class Resource
 {
+public:
   static eRESOURCETYPE GetType() { assert(true && "IMPLEMENT THIS"); return (eRESOURCETYPE::NONE); }
+  // virtual JSONDocument Serialize() = 0;
 };
 

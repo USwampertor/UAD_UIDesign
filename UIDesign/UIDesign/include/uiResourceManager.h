@@ -104,6 +104,45 @@ public:
     return {};
   }
 
+  JSONDocument Serialize()
+  {
+    JSONDocument document;
+    document.SetArray();
+    JSONDocument::AllocatorType& allocator = document.GetAllocator();
+
+    for (auto& resource : m_resources)
+    {
+      JSONValue obj(rapidjson::kObjectType);
+      JSONValue data;
+
+      obj.AddMember("id", resource.first, allocator);
+      eRESOURCETYPE type = resource.second->GetType();
+      // String typeStr = type._to_string();
+      obj.AddMember("type",type._to_integral(), allocator);
+      
+      if (eRESOURCETYPE::ATLAS == type)
+      {
+        data.SetArray();
+        for (int i = 0; i < REINTERPRETPOINTER(Atlas, resource.second)->m_atlas.size(); ++i)
+        {
+          for (auto& findingTexture : m_resources)
+          {
+            if (findingTexture.second == REINTERPRETPOINTER(Atlas, resource.second)->m_atlas[i])
+            {
+              data.PushBack(findingTexture.first, allocator);
+              break;
+            }
+          }
+        }
+      }
+
+      obj.AddMember("data", data, allocator);
+
+      document.PushBack(obj, allocator);
+    }
+    return document;
+  }
+
   Map<std::size_t, SharedPtr<Resource>> m_resources;
 
   Vector<Callback<void, bool, String>> m_resourceLoadedCallbacks;

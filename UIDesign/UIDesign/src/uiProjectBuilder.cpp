@@ -2,6 +2,8 @@
 
 #include "uiScene.h"
 #include "uiFileSystem.h"
+#include "uiSceneManager.h"
+#include "uiResourceManager.h"
 #include "uiJSON.h"
 #include "uiUtilities.h"
 #include "uiVector2.h"
@@ -54,12 +56,22 @@ void ProjectBuilder::BuildProject()
 
   gameDocument.AddMember("settings", settingsData, allocator);
 
-  JSONDocument sceneData(rapidjson::kObjectType);
+  JSONValue sceneData(rapidjson::kArrayType);
 
+  for (int i = 0; i < m_settings.m_cookableScenes.size(); ++i)
+  {
+    JSONDocument scene = m_settings.m_cookableScenes[i]->Serialize();
+    sceneData.PushBack(std::move(scene), allocator);
+  }
 
   gameDocument.AddMember("scenes", sceneData, allocator);
 
-  JSONDocument resourcesData(rapidjson::kObjectType);
+
+  // Resources being used
+
+  gameDocument.AddMember("resources", std::move(ResourceManager::Instance().Serialize()), allocator);
+
+
 
   //////////////////////////////////////////////////////////////////////////
   // ICON STUFF

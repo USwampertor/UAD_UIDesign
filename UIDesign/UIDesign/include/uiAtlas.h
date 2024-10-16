@@ -14,6 +14,5 @@ public:
 
   static eRESOURCETYPE GetType() { return eRESOURCETYPE::ATLAS; }
 
-
   Vector<SharedPtr<Texture>> m_atlas;
 };
