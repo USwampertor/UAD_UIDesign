@@ -13,6 +13,8 @@ class CreatureEntity : public PawnEntity
 {
 public:
 
+  static String GetType() { return "CreatureEntity"; }
+
   CreatureEntity() = default;
 
   CreatureEntity(const String& newName, 
@@ -27,6 +29,8 @@ public:
   }
 
   ~CreatureEntity() = default;
+
+  virtual JSONDocument Serialize() override;
 
   virtual void GetDamage(const float& damage);
 

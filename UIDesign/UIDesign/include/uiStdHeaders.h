@@ -137,3 +137,5 @@ using FStream = std::fstream;
 using IFStream = std::ifstream;
 
 using OFStream = std::ofstream;
+
+using StreamSize = std::streamsize;

@@ -17,7 +17,11 @@ BETTER_ENUM(eRESOURCETYPE,
 class Resource
 {
 public:
-  static eRESOURCETYPE GetType() { assert(true && "IMPLEMENT THIS"); return (eRESOURCETYPE::NONE); }
-  // virtual JSONDocument Serialize() = 0;
+  Resource(const eRESOURCETYPE& type) : m_type(type) {}
+  static eRESOURCETYPE StaticType() { assert(true && "IMPLEMENT THIS"); return (eRESOURCETYPE::NONE); }
+  const eRESOURCETYPE& GetType() { return m_type; }
+  String m_resName = "";
+private:
+  eRESOURCETYPE m_type = eRESOURCETYPE::NONE;
 };
 

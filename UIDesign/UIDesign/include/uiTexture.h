@@ -10,5 +10,7 @@
 class Texture : public Resource, public sf::Texture 
 {
 public:
-  static eRESOURCETYPE GetType() { return eRESOURCETYPE::TEXTURE; }
+
+  Texture() : Resource(Texture::StaticType()) {}
+  static eRESOURCETYPE StaticType() { return eRESOURCETYPE::TEXTURE; }
 };

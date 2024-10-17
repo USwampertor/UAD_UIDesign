@@ -14,6 +14,8 @@ class EnemyEntity : public CreatureEntity
 {
 public:
 
+  static String GetType() { return "EnemyEntity"; }
+
   EnemyEntity() = default;
 
   ~EnemyEntity() = default;

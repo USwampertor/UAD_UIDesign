@@ -6,23 +6,42 @@
 
 JSONDocument Entity::Serialize()
 {
+  
   JSONDocument d;
-  d.SetObject();
   JSONDocument::AllocatorType& allocator = d.GetAllocator();
-  d.AddMember("name", m_name, allocator);
+
+  JSONValue name;
+  name.SetString(GetName().c_str(), allocator);
+
+  d.AddMember("name", name, allocator);
   d.AddMember("active", m_isActive, allocator);
-  
+
   JSONValue transform(rapidjson::kObjectType);
-  
+
   JSONValue position(rapidjson::kArrayType);
-  position.PushBack(m_transform->position.x, allocator).PushBack(m_transform->position.y, allocator);
+  position.PushBack(GetTransform().position.x, allocator);
+  position.PushBack(GetTransform().position.y, allocator);
   transform.AddMember("position", position, allocator);
+
   JSONValue scale(rapidjson::kArrayType);
-  scale.PushBack(m_transform->scale.x, allocator).PushBack(m_transform->scale.y, allocator);
+  scale.PushBack(GetTransform().scale.x, allocator);
+  scale.PushBack(GetTransform().scale.y, allocator);
   transform.AddMember("scale", scale, allocator);
-  transform.AddMember("rotation", scale, allocator);
+
+  transform.AddMember("rotation", GetTransform().rotation, allocator);
+
 
   d.AddMember("transform", transform, allocator);
+
+  JSONValue children(rapidjson::kArrayType);
+  for (int i = 0; i < m_children.size(); ++i)
+  {
+    JSONValue v;
+    v.SetString(m_children[i]->GetName(), allocator);
+    children.PushBack(v, allocator);
+  }
+
+  d.AddMember("children", children, allocator);
 
   return d;
 }

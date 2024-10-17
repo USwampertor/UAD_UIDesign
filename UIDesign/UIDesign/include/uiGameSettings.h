@@ -1,12 +1,21 @@
 #pragma once
 
 #include "uiPrerequisites.h"
+#include "uiClassRegisters.h"
+#include "uiEntity.h"
 
-#include "uiController.h"
-
-struct GameSettings
+class GameSettings : Entity
 {
-  String m_controllerType;
-  String m_playerType;
+  static String GetType() { return "GameSettings"; }
+
+  virtual void OnGameStart() {}
+  
+  virtual void OnGameRestart() {}
+  
+  String m_controllerType = "none";
+
+  String m_playerType = "none";
   
 };
+
+REGISTER_CLASS(GameSettings)

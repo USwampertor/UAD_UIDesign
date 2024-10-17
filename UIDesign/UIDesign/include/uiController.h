@@ -10,6 +10,9 @@ class PawnEntity;
 class ControllerEntity : public Entity
 {
 public:
+
+  static String GetType() { return "ControllerEntity"; }
+
   void PossesPawn(SharedPtr<PawnEntity> newPawm);
 
   void UnPossesPawn();

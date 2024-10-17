@@ -6,11 +6,16 @@
 class SpawnerEntity : public Entity
 {
 public:
+
+  static String GetType() { return "SpawnerEntity"; }
+
   SpawnerEntity() = default;
 
   SpawnerEntity(const String& newName) : Entity(newName) {}
 
   ~SpawnerEntity() = default;
+
+  virtual JSONDocument Serialize() override;
 
   void SpawnEnemy()
   {

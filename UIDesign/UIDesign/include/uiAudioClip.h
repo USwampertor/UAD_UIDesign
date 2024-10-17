@@ -8,6 +8,7 @@
 class AudioClip : public Resource, public AudioBuffer 
 {
 public:
-  static eRESOURCETYPE GetType() { return eRESOURCETYPE::SOUND; }
+  AudioClip() : Resource(AudioClip::StaticType()) {}
+  static eRESOURCETYPE StaticType() { return eRESOURCETYPE::SOUND; }
 };
 

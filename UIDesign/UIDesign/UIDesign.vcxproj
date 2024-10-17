@@ -199,6 +199,7 @@
     <ClCompile Include="src\uiAudioListener.cpp" />
     <ClCompile Include="src\uiCameraFollower.cpp" />
     <ClCompile Include="src\uiCreature.cpp" />
+    <ClCompile Include="src\uiEditorController.cpp" />
     <ClCompile Include="src\uiEditorUI.cpp" />
     <ClCompile Include="src\uiFileSystem.cpp" />
     <ClCompile Include="src\uiFont.cpp" />
@@ -236,7 +237,6 @@
     <ClCompile Include="src\uiUI.cpp" />
     <ClCompile Include="src\uiWindow.cpp" />
     <ClCompile Include="src\uiWindowManager.cpp" />
-    <ClCompile Include="uiEditorController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ImGuiFileDialog.h" />
@@ -266,6 +266,7 @@
     <ClInclude Include="include\uiCollision.h" />
     <ClInclude Include="include\uiController.h" />
     <ClInclude Include="include\uiCreature.h" />
+    <ClInclude Include="include\uiEditorController.h" />
     <ClInclude Include="include\uiEditorUI.h" />
     <ClInclude Include="include\uiEnemy.h" />
     <ClInclude Include="include\uiFileSystem.h" />
@@ -317,9 +318,6 @@
     <ClInclude Include="include\uiVector3.h" />
     <ClInclude Include="include\uiWindow.h" />
     <ClInclude Include="include\uiWindowManager.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
-    <ClInclude Include="uiEditorController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

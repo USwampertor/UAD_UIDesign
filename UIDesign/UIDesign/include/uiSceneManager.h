@@ -52,6 +52,8 @@ public:
 
   Scene* UnloadScene(const String& sceneToUnload);
 
+  Scene* FindScene(const String& sceneToFind);
+
   bool ChangeScene(const String& sceneToLoad);
 
   void SaveScene();

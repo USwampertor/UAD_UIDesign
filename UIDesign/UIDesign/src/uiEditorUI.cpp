@@ -18,8 +18,7 @@
 
 void EditorUI::Initialize()
 {
-  m_windowVisibilities["Logger"] = true;
-  m_windowVisibilities["EntityInspector"] = true;
+
 }
 
 void EditorUI::DrawUI()
@@ -76,7 +75,7 @@ void EditorUI::DrawUI()
       {
         if (ImGui::BeginMenu("Entities", ""))
         {
-          for (auto it = ClassRegisters::GetRegistry().begin(); it != ClassRegisters::GetRegistry().end(); ++it)
+          for (auto it = ClassRegisters::GetEntityRegistry().begin(); it != ClassRegisters::GetEntityRegistry().end(); ++it)
           {
             ImGui::MenuItem(it->first.c_str());
           }
@@ -103,13 +102,11 @@ void EditorUI::DrawUI()
         ImGui::InputText("##ProjectName", &App::Instance().m_projectBuilder->m_settings.m_projectName, ImGuiInputTextFlags_AlwaysOverwrite);
         ImGui::Text("Icon:");
         ImGui::SameLine();
-        if (ImGui::ImageButton("IconImage##1",
-          *ResourceManager::Instance().GetResource<Texture>("sprite2_0").get(),
-          Vector2f(32.0f, 32.0f)))
-        {
-          
 
-        }
+
+        m_windowVisibilities["iconPopup"] = ImGui::ImageButton("IconImage##1",
+            *ResourceManager::Instance().GetResource<Texture>(App::Instance().m_projectBuilder->m_projectIconStr).get(),
+            Vector2f(32.0f, 32.0f));
       }
       ImGui::Separator();
       ImGui::Text("Cookable Scenes");
@@ -120,8 +117,17 @@ void EditorUI::DrawUI()
       {
         ImGui::PushID(i);
         SharedPtr<Scene> item = SceneManager::Instance().m_scenes[i];
-        ImGui::Checkbox(Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str()).c_str(),
-                        &m_windowVisibilities[Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str())]);
+        ImGui::Text(Utils::Format("%d )", i).c_str());
+        ImGui::SameLine();
+        if (ImGui::Checkbox(Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str()).c_str(),
+                            &m_windowVisibilities[Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str())]))
+        {
+          App::Instance().m_projectBuilder->m_settings.m_cookableScenes[i] = SceneManager::Instance().FindScene(item->m_sceneName);
+        }
+        else 
+        {
+          App::Instance().m_projectBuilder->m_settings.m_cookableScenes[i] = nullptr;
+        }
         ImGui::SameLine();
         ImGui::Button(item->m_sceneName.c_str(), ImVec2(ImGui::GetWindowWidth() - ImGui::CalcItemWidth() / 2, ImGui::GetFrameHeight()));
 
@@ -245,11 +251,53 @@ void EditorUI::DrawUI()
         std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
         App::Instance().m_projectBuilder->m_settings.m_projectDir = filePath;
         // action
+        if (App::Instance().m_projectBuilder->m_settings.m_projectName.empty())
+        {
+          App::Instance().m_projectBuilder->m_settings.m_projectName = "UIGame";
+        }
         App::Instance().m_projectBuilder->BuildProject();
       }
 
       // close
       ImGuiFileDialog::Instance()->Close();
+    }
+
+
+    if (m_windowVisibilities["iconPopup"])
+    {
+      ImGui::OpenPopup("icon_options");
+      m_windowVisibilities["iconPopup"] = false;
+    }
+    if (ImGui::BeginPopup("icon_options"))
+    {
+      ImGui::Text("Set Image");
+      ImGui::Separator();
+
+
+      
+
+      Map<SizeT, SharedPtr<Resource>>::iterator res;
+      for (res = ResourceManager::Instance().m_resources.begin(); 
+           res != ResourceManager::Instance().m_resources.end(); 
+           ++res)
+      {
+        if (res->second->GetType() == eRESOURCETYPE::TEXTURE)
+        {
+          if (ImGui::Selectable(res->second->m_resName.c_str()))
+          {
+            App::Instance().m_projectBuilder->m_projectIconStr = res->second->m_resName;
+          }
+        }
+        // if (ResourceManager::Instance().GetResource<Texture>(res->second->m_resName) != nullptr)
+        // {
+        //   if (ImGui::Selectable(res->second->m_resName.c_str()))
+        //   {
+        //     App::Instance().m_projectBuilder->m_projectIconStr = res->second->m_resName;
+        //   }
+        // }
+      }
+
+      ImGui::EndPopup();
     }
 
     /************************************************************************/

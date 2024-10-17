@@ -11,6 +11,7 @@ using Music = sf::Music;
 class MusicClip : public Resource, public Music 
 {
 public:
-  static eRESOURCETYPE GetType() { return eRESOURCETYPE::MUSIC; }
+  MusicClip() : Resource(MusicClip::StaticType()) {}
+  static eRESOURCETYPE StaticType() { return eRESOURCETYPE::MUSIC; }
 };
 

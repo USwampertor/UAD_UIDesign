@@ -5,7 +5,8 @@
 
 class SceneSettings
 {
-
-  Vector2f m_levelGravity;
+public:
+  Vector2f m_levelGravity = { 0, 0 };
+  String m_gameSettings = "none";
 };
 

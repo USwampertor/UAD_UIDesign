@@ -5,6 +5,7 @@
 #include "uiController.h"
 class PlayerControllerEntity : public ControllerEntity
 {
+  static String GetType() { return "PlayerControllerEntity"; }
 
 };
 

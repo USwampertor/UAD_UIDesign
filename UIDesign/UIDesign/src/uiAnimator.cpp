@@ -12,6 +12,7 @@ void Animator::Initialize()
   {
     m_sprite = m_parent->GetComponent<Sprite>();
   }
+  m_currentTime = 0.0f;
 }
 
 void Animator::PropagateTransform(const Transform2D& newTransform)

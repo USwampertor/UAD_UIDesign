@@ -56,10 +56,18 @@ void PlayerEntity::Initialize()
 
 JSONDocument PlayerEntity::Serialize()
 {
-  JSONDocument d = Entity::Serialize();
+  JSONDocument d = CreatureEntity::Serialize();
   JSONDocument::AllocatorType& allocator = d.GetAllocator();
-  d.AddMember("hp", m_hp, allocator);
-  d.AddMember("type", GetType(), allocator);
+  if (d.HasMember("type"))
+  {
+    d["type"].SetString(GetType().c_str(), allocator);
+  }
+  else
+  {
+    JSONValue v;
+    v.SetString(GetType().c_str(), allocator);
+    d.AddMember("type", v, allocator);
+  }
   return d;
 }
 

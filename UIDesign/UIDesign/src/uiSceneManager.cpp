@@ -33,7 +33,7 @@ bool SceneManager::ChangeScene(const String& sceneToLoad)
     if (s->m_sceneName == sceneToLoad)
     {
       m_activeScene = s;
-      m_activeScene->OnSceneLoad();
+      m_activeScene->OnSceneLoaded();
       return true;
     }
   }
@@ -50,6 +50,18 @@ Scene* SceneManager::LoadScene(const String& newSceneName)
 void SceneManager::SaveScene()
 {
 
+}
+
+Scene* SceneManager::FindScene(const String& sceneToFind)
+{
+  for (int i = 0; i < m_scenes.size(); ++i)
+  {
+    if (m_scenes[i]->m_sceneName == sceneToFind)
+    {
+      return m_scenes[i].get();
+    }
+  }
+  return nullptr;
 }
 
 void SceneManager::Update(const float& delta)

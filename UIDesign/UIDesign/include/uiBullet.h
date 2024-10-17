@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uiPrerequisites.h"
+#include "uiClassRegisters.h"
 
 #include "uiCollision.h"
 #include "uiEntity.h"
@@ -15,6 +16,8 @@ class BulletEntity : public Entity
 {
 public:
 
+  static String GetType() { return "Bullet"; }
+
   BulletEntity() = default;
 
   ~BulletEntity() = default;
@@ -28,9 +31,7 @@ public:
     Entity::Update(delta);
   }
 
-
   void EnterCollision(const PhysicsCollisionResult& c);
-
 
   Vector2f m_direction;
 
@@ -40,7 +41,6 @@ public:
 
   AudioSource* m_source = nullptr;
 
-  // String isColliding = "";
-
 };
 
+REGISTER_CLASS(BulletEntity)

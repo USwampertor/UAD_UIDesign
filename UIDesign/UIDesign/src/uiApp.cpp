@@ -37,7 +37,6 @@ void App::OnStartUp()
   // Load Editor instead of game
   if (m_parser.GetFlag("editor") == "true")
   {
-    
   }
 
 
@@ -127,6 +126,7 @@ bool App::StartSystems()
   {
     m_splashScreen.SetTaskString("Setting up ProjectBuilder");
     m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
+    m_projectBuilder->Initialize();
   }
 
   /************************************************************************/

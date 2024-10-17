@@ -20,26 +20,21 @@ public:
     m_sceneName = newName;
   }
 
-  void Initialize()
-  {
-    // m_root = MakeUniqueObject<Entity>();
-    // m_root->Initialize();
-    m_entities.clear();
-  }
+  void Initialize();
 
   void OnSceneUnload()
   {
 
   }
 
-  void OnSceneLoad()
+  void OnSceneLoaded()
   {
 
   }
 
   JSONDocument Serialize();
 
-  void Deserialize();
+  void Deserialize(const JSONDocument& d);
 
   UniquePtr<SceneSettings>& GetSettings();
 

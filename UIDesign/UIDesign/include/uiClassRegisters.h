@@ -7,32 +7,32 @@ struct ClassRegisters
 {
 public:
 
-  using FactoryFunc = std::function<SharedPtr<Entity>()>;
+  using EntityFactoryFunc = std::function<SharedPtr<Entity>()>;
 
-  static void RegisterClass(const String& className, FactoryFunc creator)
+  static void RegisterEntity(const String& entityClassName, EntityFactoryFunc creator)
   {
-    GetRegistry()[className] = creator;
+    GetEntityRegistry()[entityClassName] = creator;
   }
 
   template<class... Args> 
-  static SharedPtr<Entity> CreateEntity(const String& className, Args&& ...args)
+  static SharedPtr<Entity> CreateEntity(const String& entityClassName, Args&& ...args)
   {
-    auto it = GetRegistry().find(className);
-    if (it != GetRegistry().end()) {
+    auto it = GetEntityRegistry().find(entityClassName);
+    if (it != GetEntityRegistry().end()) {
       return it->second(forward<Args>(args)...);
     }
   }
 
 
-  static std::unordered_map<String, FactoryFunc>& GetRegistry()
+  static std::unordered_map<String, EntityFactoryFunc>& GetEntityRegistry()
   {
-    static std::unordered_map<String, FactoryFunc> registry;
-    return registry;
+    static std::unordered_map<String, EntityFactoryFunc> entityRegistry;
+    return entityRegistry;
   }
 
 };
 
-#define REGISTER_CLASS(className) \
+#define REGISTER_CLASS(entityClassName) \
     namespace { \
-        const bool registered_##className = (ClassRegisters::RegisterClass(#className, []() -> SharedPtr<Entity> { return  MakeSharedObject<Entity>(); }), true); \
+        const bool registered_##entityClassName = (ClassRegisters::RegisterEntity(#entityClassName, []() -> SharedPtr<Entity> { return  MakeSharedObject<Entity>(); }), true); \
     }

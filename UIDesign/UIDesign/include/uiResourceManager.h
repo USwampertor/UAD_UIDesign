@@ -23,7 +23,8 @@ public:
   template<typename T, typename = std::enable_if_t<std::is_base_of<Resource, T>::value>>
   SharedPtr<T> CreateResource(const String& assetName)
   {
-    String realName = Utils::Format("%s_%s", T::GetType()._to_string(), assetName.c_str());
+    String realName = Utils::Format("%s_%s", T::StaticType()._to_string(), assetName.c_str());
+
     // String path = Utils::Format("%s/resources/%s", 
     //                             FileSystem::CurrentPath().string().c_str(), 
     //                             realName.c_str());
@@ -31,9 +32,10 @@ public:
     { 
       return  REINTERPRETPOINTER(T, m_resources.at(Hash<String>()(realName)));
     }
-    T::GetType();
-    // eRESOURCETYPE type = T::GetType();
+    T::StaticType();
+    // eRESOURCETYPE type = T::StaticType();
     SharedPtr<T> newResource = MakeSharedObject<T>();
+    newResource->m_resName = assetName;
     // newResource->Initialize();
     m_resources.insert(Utils::MakePair(Hash<String>()(realName), newResource));
     return newResource;
@@ -44,11 +46,11 @@ public:
   {
     Path p = path;
     
-    String realName = Utils::Format("%s_%s", T::GetType()._to_string(), p.stem().string().c_str());
+    String realName = Utils::Format("%s_%s", T::StaticType()._to_string(), p.stem().string().c_str());
 
     
 
-    eRESOURCETYPE type = T::GetType();
+    eRESOURCETYPE type = T::StaticType();
     SharedPtr<T> newResource = CreateResource<T>(p.stem().string().c_str());
     // newResource->Initialize();
     if (eRESOURCETYPE::SOUND == type)
@@ -91,15 +93,23 @@ public:
     return newResource;
   }
 
-
-
   template<typename T, typename = std::enable_if_t<std::is_base_of<Resource, T>::value>>
   SharedPtr<T> GetResource(const String& path)
   {
-    String realName = Utils::Format("%s_%s", T::GetType()._to_string(), path.c_str());
+    String realName = Utils::Format("%s_%s", T::StaticType()._to_string(), path.c_str());
     if (m_resources.find(Hash<String>()(realName)) != m_resources.end())
     {
       return  REINTERPRETPOINTER(T, m_resources.at(Hash<String>()(realName)));
+    }
+    return {};
+  }
+
+  SharedPtr<Resource> GetResourceOf(const String& path, const eRESOURCETYPE& type)
+  {
+    String realName = Utils::Format("%s_%s", type._to_string(), path.c_str());
+    if (m_resources.find(Hash<String>()(realName)) != m_resources.end())
+    {
+      return  m_resources.at(Hash<String>()(realName));
     }
     return {};
   }
@@ -110,40 +120,62 @@ public:
     document.SetArray();
     JSONDocument::AllocatorType& allocator = document.GetAllocator();
 
-    for (auto& resource : m_resources)
+    for (const auto& resource : m_resources)
     {
       JSONValue obj(rapidjson::kObjectType);
-      JSONValue data;
 
       obj.AddMember("id", resource.first, allocator);
+      obj.AddMember("name", resource.second->m_resName, allocator);
+
       eRESOURCETYPE type = resource.second->GetType();
-      // String typeStr = type._to_string();
-      obj.AddMember("type",type._to_integral(), allocator);
+      obj.AddMember("type", type._to_integral(), allocator);
       
-      if (eRESOURCETYPE::ATLAS == type)
+      if (eRESOURCETYPE::TEXTURE == type)
       {
-        data.SetArray();
-        for (int i = 0; i < REINTERPRETPOINTER(Atlas, resource.second)->m_atlas.size(); ++i)
+        // void* data = reinterpret_cast<void*>(REINTERPRETPOINTER(Texture, resource.second)->copyToImage().getPixelsPtr());
+        sf::Image img = REINTERPRETPOINTER(Texture, resource.second)->copyToImage();
+        const uint8* pixelData = img.getPixelsPtr();
+        Vector2u imageSize = img.getSize();
+        SizeT dataSize = imageSize.x * imageSize.y * 4;
+        Vector<uint8> data(pixelData, pixelData + dataSize);
+        obj.AddMember("width", imageSize.x, allocator);
+        obj.AddMember("height", imageSize.y, allocator);
+        JSONValue jsonArray(rapidjson::kArrayType);
+        
+        for (int i = 0; i < data.size(); ++i)
         {
-          for (auto& findingTexture : m_resources)
-          {
-            if (findingTexture.second == REINTERPRETPOINTER(Atlas, resource.second)->m_atlas[i])
-            {
-              data.PushBack(findingTexture.first, allocator);
-              break;
-            }
-          }
+          jsonArray.PushBack(data[i], allocator);
         }
+
+        obj.AddMember("data", jsonArray, allocator);
       }
+      else if (eRESOURCETYPE::SOUND == type)
+      {
+        const int16* audioData = REINTERPRETPOINTER(AudioClip, resource.second)->getSamples();
 
-      obj.AddMember("data", data, allocator);
+      }
+      else if (eRESOURCETYPE::MUSIC == type)
+      {
 
+      }
+      else if (eRESOURCETYPE::ANIMATION == type)
+      {
+
+      }
+      else if (eRESOURCETYPE::ATLAS == type)
+      {
+
+      }
+      else if (eRESOURCETYPE::FONT == type)
+      {
+
+      }
       document.PushBack(obj, allocator);
     }
     return document;
   }
 
-  Map<std::size_t, SharedPtr<Resource>> m_resources;
+  Map<SizeT, SharedPtr<Resource>> m_resources;
 
   Vector<Callback<void, bool, String>> m_resourceLoadedCallbacks;
 

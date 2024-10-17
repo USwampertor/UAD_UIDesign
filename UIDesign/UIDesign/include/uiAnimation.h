@@ -9,11 +9,11 @@
 class Animation : public Resource
 {
 public:
-  Animation() = default;
-  
+  Animation() : Resource(Animation::StaticType()) {}
+
   ~Animation() = default;
 
-  static eRESOURCETYPE GetType() { return eRESOURCETYPE::ANIMATION; }
+  static eRESOURCETYPE StaticType() { return eRESOURCETYPE::ANIMATION; }
 
   void Initialize(Vector<SharedPtr<Texture>> newTextures, const float& duration);
 
@@ -25,11 +25,11 @@ public:
 
 public:
 
-  float m_animationTime;
+  float m_animationTime = 0.0f;
 
   Vector<SharedPtr<Texture>> m_frames;
 
-  bool m_loop;
+  bool m_loop = false;
 
 };
 

@@ -9,10 +9,10 @@ class Atlas : public Resource
 {
 public:
 
-  Atlas() = default;
+  Atlas() : Resource(Atlas::StaticType()) {}
   ~Atlas() = default;
 
-  static eRESOURCETYPE GetType() { return eRESOURCETYPE::ATLAS; }
+  static eRESOURCETYPE StaticType() { return eRESOURCETYPE::ATLAS; }
 
   Vector<SharedPtr<Texture>> m_atlas;
 };

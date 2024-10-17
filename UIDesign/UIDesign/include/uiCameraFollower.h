@@ -11,6 +11,9 @@ class Camera;
 class CameraFollowerEntity : public Entity
 {
 public:
+
+  static String GetType() { return "CameraFollowerEntity"; }
+
   CameraFollowerEntity() = default;
 
   CameraFollowerEntity(const String& name) : Entity(name) {}

@@ -13,7 +13,7 @@ struct ProjectSettings
   Vector<VideoMode*> m_resolutions;
   String m_projectDir;
   String m_projectName;
-  Texture* m_icon;
+  Texture* m_projectIcon;
   void Serialize();
 };
 
@@ -23,5 +23,6 @@ public:
   void Initialize();
   void BuildProject();
   ProjectSettings m_settings;
+  String m_projectIconStr = "gizmo";
 };
 
