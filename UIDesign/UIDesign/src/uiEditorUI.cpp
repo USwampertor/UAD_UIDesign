@@ -255,13 +255,39 @@ void EditorUI::DrawUI()
         {
           App::Instance().m_projectBuilder->m_settings.m_projectName = "UIGame";
         }
-        App::Instance().m_projectBuilder->BuildProject();
+        m_windowVisibilities["buildingPopup"] = true;
+        App::Instance().m_projectBuilder->StartBuildingThread();
       }
 
       // close
       ImGuiFileDialog::Instance()->Close();
     }
 
+    if (m_windowVisibilities["buildingPopup"])
+    {
+      ImVec2 pos = ImGui::GetIO().DisplaySize;
+      pos.x = pos.x / 2;
+      pos.y = pos.y / 2;
+      ImGui::SetNextWindowPos(pos);
+      ImGui::OpenPopup("building_popup");
+    }
+    if (ImGui::BeginPopup("building_popup"))
+    {
+      ImGui::Text("Building...");
+      ImGui::Separator();
+      ImGui::Text(Utils::Format("%2f", App::Instance().m_projectBuilder->m_buildingPercentage).c_str());
+      ImGui::Separator();
+      if (App::Instance().m_projectBuilder->m_buildingPercentage == 100)
+      {
+        if (ImGui::Button("Build Completed"))
+        {
+          m_windowVisibilities["buildingPopup"] = false;
+          ImGui::CloseCurrentPopup();
+        }
+      }
+      // App::Instance().m_projectBuilder->BuildProject();
+      ImGui::EndPopup();
+    }
 
     if (m_windowVisibilities["iconPopup"])
     {
@@ -272,9 +298,6 @@ void EditorUI::DrawUI()
     {
       ImGui::Text("Set Image");
       ImGui::Separator();
-
-
-      
 
       Map<SizeT, SharedPtr<Resource>>::iterator res;
       for (res = ResourceManager::Instance().m_resources.begin(); 

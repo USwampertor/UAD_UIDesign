@@ -13,5 +13,6 @@ class MusicClip : public Resource, public Music
 public:
   MusicClip() : Resource(MusicClip::StaticType()) {}
   static eRESOURCETYPE StaticType() { return eRESOURCETYPE::MUSIC; }
+  String m_filePath = "";
 };
 

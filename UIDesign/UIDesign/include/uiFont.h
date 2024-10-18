@@ -10,4 +10,5 @@ class Font : public Resource, public sf::Font
 public:
   Font() : Resource(Font::StaticType()) {}
   static eRESOURCETYPE StaticType() { return (eRESOURCETYPE::FONT); }
+  String m_filePath = "";
 };

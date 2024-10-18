@@ -10,6 +10,7 @@ using DirectoryEntry = std::filesystem::directory_entry;
 using FileStatus = std::filesystem::file_status;
 using FileType = std::filesystem::file_type;
 
+// TODO: Simplify this
 struct FileSystem
 {
   static const Path ExePath()
@@ -45,6 +46,18 @@ struct FileSystem
   {
     IFStream f;
     f.open(p.string().c_str());
+    if (!f.is_open())
+    {
+      return "";
+    }
+    SStream buffer;
+    buffer << f.rdbuf();
+    return buffer.str();
+  }
+  static String GetAllStringFromFile(const String& p)
+  {
+    IFStream f;
+    f.open(p.c_str());
     if (!f.is_open())
     {
       return "";

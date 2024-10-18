@@ -22,7 +22,10 @@ class ProjectBuilder
 public:
   void Initialize();
   void BuildProject();
+  void StartBuildingThread();
   ProjectSettings m_settings;
   String m_projectIconStr = "gizmo";
+  float m_buildingPercentage;
+  Thread* t;
 };
 

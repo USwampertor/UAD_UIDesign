@@ -50,9 +50,15 @@ void ProjectBuilder::Initialize()
 
 }
 
+void ProjectBuilder::StartBuildingThread()
+{
+  m_buildingPercentage = 0;
+  t = new Thread(&ProjectBuilder::BuildProject, this);
+}
+
 void ProjectBuilder::BuildProject()
 {
-
+  m_buildingPercentage = 0;
   // App Settings
 
   // Copy the folder of the executable
@@ -107,7 +113,7 @@ void ProjectBuilder::BuildProject()
   JSONOStream os(ofs);
   JSONWriter<JSONOStream> writer(os);
   gameDocument.Accept(writer);
-
+  m_buildingPercentage = 99;
   //////////////////////////////////////////////////////////////////////////
   // ICON STUFF
 
@@ -142,6 +148,7 @@ void ProjectBuilder::BuildProject()
 
   OFStream icoFile(Utils::Format("%s/%s", newDirPath.string().c_str(), "icon.ico"), std::ios::binary);
   if (!icoFile) {
+    m_buildingPercentage = 100;
     return;
   }
 
@@ -215,12 +222,14 @@ void ProjectBuilder::BuildProject()
 
   HANDLE hUpdate = BeginUpdateResource(newExePath.string().c_str(), FALSE);
   if (!hUpdate) {
+    m_buildingPercentage = 100;
     return;
   }
 
   IFStream iconFile(Utils::Format("%s/%s", newDirPath.string().c_str(), "icon.ico"), std::ios::binary | std::ios::ate);
   if (!iconFile.is_open()) {
     EndUpdateResource(hUpdate, TRUE);
+    m_buildingPercentage = 100;
     return;
   }
 
@@ -230,6 +239,7 @@ void ProjectBuilder::BuildProject()
   Vector<char> iconData(iconSize);
   if (!iconFile.read(iconData.data(), iconSize)) {
     EndUpdateResource(hUpdate, TRUE);
+    m_buildingPercentage = 100;
     return;
   }
 
@@ -246,6 +256,7 @@ void ProjectBuilder::BuildProject()
       iconImage,
       iconEntries[i].dwBytesInRes)) {
       EndUpdateResource(hUpdate, TRUE);
+      m_buildingPercentage = 100;
       return;
     }
   }
@@ -279,10 +290,12 @@ void ProjectBuilder::BuildProject()
     groupIconData.data(),
     groupSize)) {
     EndUpdateResource(hUpdate, TRUE);
+    m_buildingPercentage = 100;
     return;
   }
 
   if (!EndUpdateResource(hUpdate, FALSE)) {
+    m_buildingPercentage = 100;
     return;
   }
 
@@ -294,4 +307,5 @@ void ProjectBuilder::BuildProject()
   //////////////////////////////////////////////////////////////////////////
   Gdiplus::GdiplusShutdown(token);
 
+  m_buildingPercentage = 100;
 }

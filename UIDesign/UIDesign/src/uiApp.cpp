@@ -26,7 +26,7 @@
 
 void App::OnStartUp()
 {
-  m_splashScreen.Initialize();
+  // m_splashScreen.Initialize();
   // Thread t(&SplashScreen::Show, &m_splashScreen);
 
 

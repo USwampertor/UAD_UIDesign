@@ -5,6 +5,7 @@
 #include "uiResource.h"
 #include "uiTexture.h"
 
+// TODO: Change the way Atlases work. They should contain the whole sprite and the positions to cut
 class Atlas : public Resource
 {
 public:

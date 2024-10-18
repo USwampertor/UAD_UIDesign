@@ -6,6 +6,7 @@
 #include "uiAudioClip.h"
 #include "uiAtlas.h"
 #include "uiFileSystem.h"
+#include "uiFont.h"
 #include "uiJSON.h"
 #include "uiModule.h"
 #include "uiMusicClip.h"
@@ -59,7 +60,13 @@ public:
     }
     else if (eRESOURCETYPE::MUSIC == type)
     {
+      REINTERPRETPOINTER(MusicClip, newResource)->m_filePath = path;
       REINTERPRETPOINTER(MusicClip, newResource)->openFromFile(path);
+    }
+    else if (eRESOURCETYPE::FONT == type)
+    {
+      REINTERPRETPOINTER(Font, newResource)->m_filePath = path;
+      REINTERPRETPOINTER(Font, newResource)->loadFromFile(path);
     }
     else if (eRESOURCETYPE::TEXTURE == type)
     {
@@ -114,6 +121,56 @@ public:
     return {};
   }
 
+  void Deserialize(const JSONValue& resources)
+  {
+    for (JSONValue::ConstValueIterator itr = resources.Begin(); itr != resources.End(); ++itr)
+    {
+      JSONValue obj = itr->GetObject();
+
+      SizeT id = obj["id"].GetInt64();
+      String name = obj["name"].GetString();
+      int32 type = obj["type"].GetInt();
+      eRESOURCETYPE resType = eRESOURCETYPE::_from_integral(type);
+      if (resType == eRESOURCETYPE::TEXTURE)
+      {
+        SharedPtr<Texture> newResource = CreateResource<Texture>(name);
+        Vector<uint8> data;
+        for (auto& pixel : obj["data"].GetArray())
+        {
+          data.push_back(pixel.GetUint());
+        }
+
+        newResource->loadFromMemory(data.data(), data.size());
+      }
+      else if (resType == eRESOURCETYPE::SOUND)
+      {
+        SharedPtr<AudioClip> newResource = CreateResource<AudioClip>(name);
+        SizeT sampleCount = obj["sampleCount"].GetInt64();
+        uint32 sampleRate = obj["sampleRate"].GetUint();
+        uint32 channelCount = obj["channelCount"].GetUint();
+        Vector<int16> data;
+        for (auto& pixel : obj["data"].GetArray())
+        {
+          data.push_back(pixel.GetInt());
+        }
+
+        newResource->loadFromSamples(data.data(), sampleCount, channelCount, sampleRate);
+      }
+      else if (eRESOURCETYPE::MUSIC == resType) 
+      {
+        // TODO: Finish this
+      }
+      else if (eRESOURCETYPE::ANIMATION == type)
+      {
+        float animationTime = obj["animationTime"].GetFloat();
+        bool loop = obj["loop"].GetBool();
+        JSONValue jsonArray(rapidjson::kArrayType);
+        
+      }
+
+    }
+  }
+
   JSONDocument Serialize()
   {
     JSONDocument document;
@@ -137,9 +194,10 @@ public:
         const uint8* pixelData = img.getPixelsPtr();
         Vector2u imageSize = img.getSize();
         SizeT dataSize = imageSize.x * imageSize.y * 4;
-        Vector<uint8> data(pixelData, pixelData + dataSize);
         obj.AddMember("width", imageSize.x, allocator);
         obj.AddMember("height", imageSize.y, allocator);
+
+        Vector<uint8> data(pixelData, pixelData + dataSize);
         JSONValue jsonArray(rapidjson::kArrayType);
         
         for (int i = 0; i < data.size(); ++i)
@@ -152,23 +210,57 @@ public:
       else if (eRESOURCETYPE::SOUND == type)
       {
         const int16* audioData = REINTERPRETPOINTER(AudioClip, resource.second)->getSamples();
+        SizeT sampleCount = REINTERPRETPOINTER(AudioClip, resource.second)->getSampleCount();
+        uint32 sampleRate = REINTERPRETPOINTER(AudioClip, resource.second)->getSampleRate();
+        uint32 channelCount = REINTERPRETPOINTER(AudioClip, resource.second)->getChannelCount();
 
+        obj.AddMember("sampleCount", sampleCount, allocator);
+        obj.AddMember("sampleRate", sampleRate, allocator);
+        obj.AddMember("channelCount", channelCount, allocator);
+
+        Vector<int16> data(audioData, audioData + sampleCount);
+
+        JSONValue jsonArray(rapidjson::kArrayType);
+        for (int i = 0; i < data.size(); ++i)
+        {
+          jsonArray.PushBack(data[i], allocator);
+        }
+        obj.AddMember("data", jsonArray, allocator);
       }
       else if (eRESOURCETYPE::MUSIC == type)
       {
-
+        String musicBuffer = FileSystem::GetAllStringFromFile(REINTERPRETPOINTER(MusicClip, resource.second)->m_filePath);
+        obj.AddMember("data", musicBuffer, allocator);
       }
       else if (eRESOURCETYPE::ANIMATION == type)
       {
-
+        obj.AddMember("animationTime", REINTERPRETPOINTER(Animation, resource.second)->m_animationTime, allocator);
+        obj.AddMember("loop", REINTERPRETPOINTER(Animation, resource.second)->m_loop, allocator);
+        JSONValue jsonArray(rapidjson::kArrayType);
+        for (int i = 0; i < REINTERPRETPOINTER(Animation, resource.second)->m_frames.size(); ++i)
+        {
+          String str = REINTERPRETPOINTER(Animation, resource.second)->m_frames[i]->m_resName;
+          JSONValue v(str, allocator);
+          jsonArray.PushBack(v, allocator);
+        }
+        obj.AddMember("data", jsonArray, allocator);
       }
       else if (eRESOURCETYPE::ATLAS == type)
       {
-
+        // TODO: Change how Atlases work. They should contain the whole sprite and create an array from it
+        JSONValue jsonArray(rapidjson::kArrayType);
+        for (int i = 0; i < REINTERPRETPOINTER(Atlas, resource.second)->m_atlas.size(); ++i)
+        {
+          String str = REINTERPRETPOINTER(Atlas, resource.second)->m_atlas[i]->m_resName;
+          JSONValue v(str, allocator);
+          jsonArray.PushBack(v, allocator);
+        }
+        obj.AddMember("data", jsonArray, allocator);
       }
       else if (eRESOURCETYPE::FONT == type)
       {
-
+        String fontBuffer = FileSystem::GetAllStringFromFile(REINTERPRETPOINTER(Font, resource.second)->m_filePath);
+        obj.AddMember("data", fontBuffer, allocator);
       }
       document.PushBack(obj, allocator);
     }
@@ -178,6 +270,31 @@ public:
   Map<SizeT, SharedPtr<Resource>> m_resources;
 
   Vector<Callback<void, bool, String>> m_resourceLoadedCallbacks;
+
+private:
+  
+  SharedPtr<Resource> MakeFromType(const String& name, const eRESOURCETYPE& type)
+  {
+    String realName = Utils::Format("%s_%s", type._to_string(), name.c_str());
+
+    if (m_resources.find(Hash<String>()(realName)) != m_resources.end())
+    {
+      return  m_resources.at(Hash<String>()(realName));
+    }
+
+    // eRESOURCETYPE type = T::StaticType();
+    SharedPtr<Resource> newResource;
+
+    if (eRESOURCETYPE::TEXTURE == type)
+    {
+      newResource = MakeSharedObject<Texture>();
+    }
+
+    newResource->m_resName = name;
+    m_resources.insert(Utils::MakePair(Hash<String>()(realName), newResource));
+    return newResource;
+  }
+
 
 };
 
