@@ -121,8 +121,18 @@ public:
     return {};
   }
 
+  struct QueueFrames
+  {
+    Vector<String> m_frames;
+    SizeT hashID;
+    eRESOURCETYPE type = eRESOURCETYPE::NONE;
+  };
+
   void Deserialize(const JSONValue& resources)
   {
+
+    Vector<QueueFrames*> queueResources;
+
     for (JSONValue::ConstValueIterator itr = resources.Begin(); itr != resources.End(); ++itr)
     {
       JSONValue obj = itr->GetObject();
@@ -159,16 +169,69 @@ public:
       else if (eRESOURCETYPE::MUSIC == resType) 
       {
         // TODO: Finish this
+        SharedPtr<MusicClip> newResource = CreateResource<MusicClip>(name);
       }
       else if (eRESOURCETYPE::ANIMATION == type)
       {
+        SharedPtr<Animation> newResource = CreateResource<Animation>(name);
+
         float animationTime = obj["animationTime"].GetFloat();
         bool loop = obj["loop"].GetBool();
-        JSONValue jsonArray(rapidjson::kArrayType);
-        
+        // Extract textures that conform animation
+        newResource->m_loop = loop;
+        newResource->m_animationTime = animationTime;
+
+        QueueFrames* queue = new QueueFrames();
+        queue->hashID = id;
+        queue->type = resType;
+        for (auto& frame : obj["data"].GetArray())
+        {
+          queue->m_frames.push_back(frame.GetString());
+        }
+        queueResources.push_back(queue);
+      }
+      else if (eRESOURCETYPE::ATLAS == type)
+      {
+        SharedPtr<Atlas> newResource = CreateResource<Atlas>(name);
+
+        QueueFrames* queue = new QueueFrames();
+        queue->hashID = id;
+        queue->type = resType;
+        for (auto& frame : obj["data"].GetArray())
+        {
+          queue->m_frames.push_back(frame.GetString());
+        }
+        queueResources.push_back(queue);
+      }
+      else if (eRESOURCETYPE::FONT == type)
+      {
+        SharedPtr<Font> newResource = CreateResource<Font>(name);
+
       }
 
     }
+
+    // Process resources that need previously loaded resources
+    for (QueueFrames* queue : queueResources)
+    {
+      if (eRESOURCETYPE::ANIMATION == queue->type)
+      {
+        for (int i = 0; i < queue->m_frames.size(); ++i)
+        {
+          SharedPtr<Animation> a = REINTERPRETPOINTER(Animation, m_resources.at(queue->hashID));
+          a->m_frames.push_back(GetResource<Texture>(queue->m_frames[i]));
+        }
+      }
+      else if (eRESOURCETYPE::ATLAS == queue->type)
+      {
+        for (int i = 0; i < queue->m_frames.size(); ++i)
+        {
+          SharedPtr<Atlas> a = REINTERPRETPOINTER(Atlas, m_resources.at(queue->hashID));
+          a->m_atlas.push_back(GetResource<Texture>(queue->m_frames[i]));
+        }
+      }
+    }
+
   }
 
   JSONDocument Serialize()

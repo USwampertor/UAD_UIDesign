@@ -43,22 +43,17 @@ void App::OnStartUp()
   if (!StartSystems())
   {
     // Send systems error
-    m_splashScreen.m_loaded = true;
     exit(403);
   }
   // t.join();
   if (!LoadResources())
   {
     // Send Resources error
-    m_splashScreen.m_loaded = true;
   }
-  m_splashScreen.m_loaded = true;
 }
 
 bool App::StartSystems()
 {
-  m_splashScreen.SetTaskString("Loading Systems");
-  m_splashScreen.SetTaskString("Setting up Remotery");
   Remotery* rmt;
   rmtError error = rmt_CreateGlobalInstance(&rmt);
   
@@ -68,12 +63,10 @@ bool App::StartSystems()
     return false;
   }
 
-  m_splashScreen.SetTaskString("Binding up Remotery for OpenGL");
   rmt_BindOpenGL();
 
   rmt_ScopedCPUSample(StartSystems, 0);
 
-  m_splashScreen.SetTaskString("Setting up Resource Manager");
   ResourceManager::StartUp();
   if (!ResourceManager::IsStarted())
   {
@@ -83,38 +76,32 @@ bool App::StartSystems()
   }
   else
   {
-    m_splashScreen.SetTaskString("Resource Manager working correctly");
     std::cout << "Resource Manager working correctly" << std::endl;
   }
-  m_splashScreen.SetTaskString("Setting up Input Manager");
   InputManager::StartUp();
   if (!InputManager::IsStarted())
   {
     // Error loading Input Manager
     return false;
   }
-  m_splashScreen.SetTaskString("Setting up Scene Manager");
   SceneManager::StartUp();
   if (!SceneManager::IsStarted())
   {
     // Error loading Scene Manager
     return false;
   }
-  m_splashScreen.SetTaskString("Setting up Physics Manager");
   Physics::StartUp();
   if (!Physics::IsStarted())
   {
     // Error loading Physics
     return false;
   }
-  m_splashScreen.SetTaskString("Setting up Window Manager Manager");
   WindowManager::StartUp();
   if (!WindowManager::IsStarted())
   {
     // Error loading Window Manager
     return false;
   }
-  m_splashScreen.SetTaskString("Setting up UI Manager");
   UI::StartUp();
   if (!UI::IsStarted())
   {
@@ -124,65 +111,98 @@ bool App::StartSystems()
 
   if (m_parser.GetFlag("editor") == "true")
   {
-    m_splashScreen.SetTaskString("Setting up ProjectBuilder");
     m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
     m_projectBuilder->Initialize();
   }
 
   /************************************************************************/
-  m_splashScreen.SetTaskString("Everything finished correctly");
   return true;
 }
 
 bool App::LoadResources()
 {
-  m_splashScreen.SetTaskString("Loading Resources");
-  ResourceManager::Instance().LoadResource<Texture>(Utils::Format("%s/../resources/gizmo.png", FileSystem::CurrentPath().string().c_str()));
-  String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
-  m_splashScreen.SetTaskString(Utils::Format("Loading %s", atlasPath1.c_str()));
-  ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
-  ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
-  ResourceManager::Instance().GetResource<Animation>("idleEnemy")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite1")->m_atlas, 400.0f);
-  ResourceManager::Instance().GetResource<Animation>("idleEnemy")->SetLoop(true);
-  String atlasPath2 = Utils::Format("%s/../resources/sprite2.json", FileSystem::CurrentPath().string().c_str());
-  m_splashScreen.SetTaskString(Utils::Format("Loading %s", atlasPath2.c_str()));
-  ResourceManager::Instance().LoadResource<Atlas>(atlasPath2);
-  ResourceManager::Instance().CreateResource<Animation>("idleBullet");
-  ResourceManager::Instance().GetResource<Animation>("idleBullet")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite2")->m_atlas, 400.0f);
-  ResourceManager::Instance().GetResource<Animation>("idleBullet")->SetLoop(true);
-  String playerPath = Utils::Format("%s/../resources/player.json", FileSystem::CurrentPath().string().c_str());
-  m_splashScreen.SetTaskString(Utils::Format("Loading %s", playerPath.c_str()));
-  ResourceManager::Instance().LoadResource<Atlas>(playerPath);
-  ResourceManager::Instance().CreateResource<Animation>("idlePlayer");
-  ResourceManager::Instance().GetResource<Animation>("idlePlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("player")->m_atlas, 800.0f);
-  ResourceManager::Instance().GetResource<Animation>("idlePlayer")->SetLoop(true);
-  String playerWalkingPath = Utils::Format("%s/../resources/playerwalking.json", FileSystem::CurrentPath().string().c_str());
-  m_splashScreen.SetTaskString(Utils::Format("Loading %s", playerWalkingPath.c_str()));
-  ResourceManager::Instance().LoadResource<Atlas>(playerWalkingPath);
-  ResourceManager::Instance().CreateResource<Animation>("walkingPlayer");
-  ResourceManager::Instance().GetResource<Animation>("walkingPlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("playerwalking")->m_atlas, 400.0f);
-  ResourceManager::Instance().GetResource<Animation>("walkingPlayer")->SetLoop(true);
-
-  String audioPath = Utils::Format("%s/../resources/pingas.mp3", FileSystem::CurrentPath().string().c_str());
-  ResourceManager::Instance().LoadResource<AudioClip>(audioPath);
-  String audioPath2 = Utils::Format("%s/../resources/ping.mp3", FileSystem::CurrentPath().string().c_str());
-  ResourceManager::Instance().LoadResource<AudioClip>(audioPath2);
-  ResourceManager::Instance().LoadResource<AudioClip>(Utils::Format("%s/../resources/fart.mp3", FileSystem::CurrentPath().string().c_str()));
-
-
-  // TODO: Change location of this section
-  String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
   AppSettings settings;
-  settings.FromFile(settingsPath);
+  
+  if (m_parser.GetFlag("editor") == "true")
+  {
+    // TODO: Make this a dynamic load
+    ResourceManager::Instance().LoadResource<Texture>(Utils::Format("%s/../resources/gizmo.png", FileSystem::CurrentPath().string().c_str()));
+    String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
+    ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
+    ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
+    ResourceManager::Instance().GetResource<Animation>("idleEnemy")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite1")->m_atlas, 400.0f);
+    ResourceManager::Instance().GetResource<Animation>("idleEnemy")->SetLoop(true);
+    String atlasPath2 = Utils::Format("%s/../resources/sprite2.json", FileSystem::CurrentPath().string().c_str());
+    ResourceManager::Instance().LoadResource<Atlas>(atlasPath2);
+    ResourceManager::Instance().CreateResource<Animation>("idleBullet");
+    ResourceManager::Instance().GetResource<Animation>("idleBullet")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite2")->m_atlas, 400.0f);
+    ResourceManager::Instance().GetResource<Animation>("idleBullet")->SetLoop(true);
+    String playerPath = Utils::Format("%s/../resources/player.json", FileSystem::CurrentPath().string().c_str());
+    ResourceManager::Instance().LoadResource<Atlas>(playerPath);
+    ResourceManager::Instance().CreateResource<Animation>("idlePlayer");
+    ResourceManager::Instance().GetResource<Animation>("idlePlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("player")->m_atlas, 800.0f);
+    ResourceManager::Instance().GetResource<Animation>("idlePlayer")->SetLoop(true);
+    String playerWalkingPath = Utils::Format("%s/../resources/playerwalking.json", FileSystem::CurrentPath().string().c_str());
+    ResourceManager::Instance().LoadResource<Atlas>(playerWalkingPath);
+    ResourceManager::Instance().CreateResource<Animation>("walkingPlayer");
+    ResourceManager::Instance().GetResource<Animation>("walkingPlayer")->Initialize(ResourceManager::Instance().GetResource<Atlas>("playerwalking")->m_atlas, 400.0f);
+    ResourceManager::Instance().GetResource<Animation>("walkingPlayer")->SetLoop(true);
+
+    String audioPath = Utils::Format("%s/../resources/pingas.mp3", FileSystem::CurrentPath().string().c_str());
+    ResourceManager::Instance().LoadResource<AudioClip>(audioPath);
+    String audioPath2 = Utils::Format("%s/../resources/ping.mp3", FileSystem::CurrentPath().string().c_str());
+    ResourceManager::Instance().LoadResource<AudioClip>(audioPath2);
+    ResourceManager::Instance().LoadResource<AudioClip>(Utils::Format("%s/../resources/fart.mp3", FileSystem::CurrentPath().string().c_str()));
+
+
+    // TODO: Change location of this section
+    String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
+    
+    // TODO: Change this as this is only for testing
+    SceneManager::Instance().CreateScene("TestScene");
+    SceneManager::Instance().CreateScene("TestScene2");
+    SceneManager::Instance().CreateScene("TestScene3");
+    SceneManager::Instance().CreateScene("TestScene4");
+    SceneManager::Instance().ChangeScene("TestScene");
+    settings.FromFile(settingsPath);
+  
+  }
+  else
+  {
+    Path workingDirPath = FileSystem::ExePath().parent_path();
+    String packageStr = Utils::Format("%s/%s", workingDirPath.string().c_str(), "game.package");
+    if (FileSystem::Exists(packageStr))
+    {
+      IFStream gamePackageFile(packageStr.c_str());
+      JSONIStream isw(gamePackageFile);
+
+      JSONDocument gameDoc;
+      gameDoc.ParseStream(isw);
+
+      // game settings
+      JSONValue& settingsObj = gameDoc["settings"].GetObject();
+      settings.m_gameName = settingsObj["name"].GetString();
+      settings.m_framerate = settingsObj["framerate"].GetInt();
+      settings.m_displaySize = { settingsObj["resolutions"].GetArray()[0].GetArray()[0].GetUint(),
+                                 settingsObj["resolutions"].GetArray()[0].GetArray()[1].GetUint() };
+      settings.m_shouldUseVerticalSync = settingsObj["verticalSync"].GetBool();
+
+      // Scenes
+      JSONValue& scenesObj = gameDoc["scenes"].GetObject();
+
+
+      // Resources
+
+    }
+    else
+    {
+      // Throw error showing there is no package
+      exit(404);
+    }
+  }
   WindowManager::Instance().Initialize(settings);
   UI::Instance().Initialize(*WindowManager::Instance().m_mainWindow.get());
 
-
-  SceneManager::Instance().CreateScene("TestScene");
-  SceneManager::Instance().CreateScene("TestScene2");
-  SceneManager::Instance().CreateScene("TestScene3");
-  SceneManager::Instance().CreateScene("TestScene4");
-  SceneManager::Instance().ChangeScene("TestScene");
 
   return true;
 }

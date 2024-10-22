@@ -171,6 +171,9 @@
     <ClCompile Include="src\uiEditorController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\uiProject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\imconfig.h">
@@ -408,6 +411,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\uiEditorController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uiProject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

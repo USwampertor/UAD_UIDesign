@@ -45,6 +45,12 @@ struct Utils
     return prefix + stream.str();
   }
 
+  static bool
+  IsStringNumber(const String& s)
+  {
+    return !s.empty() && std::find_if(s.begin(), s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
+  }
+
   static void
   runCommand(const String& commandLine) {
     system(commandLine.c_str());

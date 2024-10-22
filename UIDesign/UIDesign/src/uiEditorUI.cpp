@@ -109,6 +109,56 @@ void EditorUI::DrawUI()
             Vector2f(32.0f, 32.0f));
       }
       ImGui::Separator();
+
+      ImGui::Text("Video Resolutions");
+
+      for (int32 i = 0; i < App::Instance().m_projectBuilder->m_settings.m_resolutions.size(); ++i)
+      {
+        String x = Utils::Format("%d", App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->width);
+        String y = Utils::Format("%d", App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->height);
+        ImGui::PushItemWidth(ImGui::GetWindowSize().x / 3);
+        // ImGui::SetNextWindowContentSize(ImVec2(ImGui::GetWindowSize().x / 8, ImGui::CalcItemWidth()));
+        ImGui::InputText(Utils::Format("##VideoResolution_%d_x", i).c_str(), &x[0], ImGuiInputTextFlags_CharsDecimal | 
+                                                                                   ImGuiInputTextFlags_CharsNoBlank | 
+                                                                                   ImGuiInputTextFlags_AlwaysOverwrite);
+        // bool xisValid = !x.empty() && std::find_if(x.begin(), x.end(), [](unsigned char c) { return !std::isdigit(c); }) == x.end();
+        x = Utils::IsStringNumber(x) ? x : "0";
+        ImGui::SameLine();
+        // ImGui::SetNextWindowContentSize(ImVec2(ImGui::GetWindowSize().x / 4, ImGui::CalcItemWidth()));
+        ImGui::InputText(Utils::Format("##VideoResolution_%d_y", i).c_str(), &y[0], ImGuiInputTextFlags_CharsDecimal |
+                                                                                   ImGuiInputTextFlags_CharsNoBlank |
+                                                                                   ImGuiInputTextFlags_AlwaysOverwrite);
+        // bool yisValid = !y.empty() && std::find_if(y.begin(), y.end(), [](unsigned char c) { return !std::isdigit(c); }) == y.end();
+        y = Utils::IsStringNumber(y) ? y : "0";
+        ImGui::PopItemWidth();
+
+        App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->width = std::stoi(x);
+        App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->height = std::stoi(y);
+        ImGui::SameLine();
+
+        if (ImGui::Button("x"))
+        {
+          App::Instance().m_projectBuilder->m_settings.m_resolutions.erase(App::Instance().m_projectBuilder->m_settings.m_resolutions.begin() + i);
+          break;
+        }
+      }
+
+      if (ImGui::Button("+"))
+      {
+        App::Instance().m_projectBuilder->m_settings.m_resolutions.push_back(new VideoMode(0, 0));
+      }
+
+      ImGui::Separator();
+
+      ImGui::Checkbox("Use vertical sync", &App::Instance().m_projectBuilder->m_settings.m_shouldUseVerticalSync);
+      
+      String framerate = Utils::Format("%d", App::Instance().m_projectBuilder->m_settings.m_framerate);
+      ImGui::InputText("Framerate", &framerate[0], ImGuiInputTextFlags_CharsDecimal |
+                                                   ImGuiInputTextFlags_CharsNoBlank |
+                                                   ImGuiInputTextFlags_AlwaysOverwrite);
+      framerate = Utils::IsStringNumber(framerate) ? framerate : "60";
+      App::Instance().m_projectBuilder->m_settings.m_framerate = std::stoi(framerate);
+      ImGui::Separator();
       ImGui::Text("Cookable Scenes");
 
 
@@ -119,17 +169,24 @@ void EditorUI::DrawUI()
         SharedPtr<Scene> item = SceneManager::Instance().m_scenes[i];
         ImGui::Text(Utils::Format("%d )", i).c_str());
         ImGui::SameLine();
-        if (ImGui::Checkbox(Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str()).c_str(),
-                            &m_windowVisibilities[Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str())]))
+        ImGui::Checkbox(Utils::Format("##CkbxScn_%s", 
+                                      item->m_sceneName.c_str()).c_str(),
+                        &m_windowVisibilities[Utils::Format("##CkbxScn_%s", 
+                                                            item->m_sceneName.c_str())]);
+
+        if (m_windowVisibilities[Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str())])
         {
-          App::Instance().m_projectBuilder->m_settings.m_cookableScenes[i] = SceneManager::Instance().FindScene(item->m_sceneName);
+          Scene* toCook = SceneManager::Instance().FindScene(item->m_sceneName);
+          App::Instance().m_projectBuilder->m_settings.m_cookableScenes[i] = toCook;
         }
         else 
         {
           App::Instance().m_projectBuilder->m_settings.m_cookableScenes[i] = nullptr;
         }
         ImGui::SameLine();
-        ImGui::Button(item->m_sceneName.c_str(), ImVec2(ImGui::GetWindowWidth() - ImGui::CalcItemWidth() / 2, ImGui::GetFrameHeight()));
+        ImGui::Button(item->m_sceneName.c_str(), 
+                      ImVec2(ImGui::GetWindowWidth() - ImGui::CalcItemWidth() / 2, 
+                             ImGui::GetFrameHeight()));
 
         // Our buttons are both drag sources and drag targets here!
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))

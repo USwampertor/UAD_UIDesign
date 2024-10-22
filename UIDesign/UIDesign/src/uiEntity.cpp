@@ -8,6 +8,7 @@ JSONDocument Entity::Serialize()
 {
   
   JSONDocument d;
+  d.SetObject();
   JSONDocument::AllocatorType& allocator = d.GetAllocator();
 
   JSONValue name;

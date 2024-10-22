@@ -87,20 +87,35 @@ void ProjectBuilder::BuildProject()
   JSONDocument::AllocatorType& allocator = gameDocument.GetAllocator();
   JSONValue settingsData(rapidjson::kObjectType);
 
-  settingsData.AddMember("name", m_settings.m_projectName, allocator);
+  settingsData.AddMember("gameName", m_settings.m_projectName, allocator);
+
+  JSONValue resolutionArray(rapidjson::kArrayType);
+
+  for (VideoMode* vMode : m_settings.m_resolutions)
+  {
+    JSONValue resolutionValue(rapidjson::kArrayType);
+    resolutionValue.PushBack(vMode->width , allocator);
+    resolutionValue.PushBack(vMode->height, allocator);
+    resolutionArray.PushBack(resolutionValue, allocator);
+  }
+
+  settingsData.AddMember("resolutions", resolutionArray, allocator);
+  settingsData.AddMember("verticalSync", m_settings.m_shouldUseVerticalSync, allocator);
+  settingsData.AddMember("framerate", m_settings.m_framerate, allocator);
 
   gameDocument.AddMember("settings", settingsData, allocator);
 
+  // TODO: Check errors in scene serialization
   JSONValue sceneData(rapidjson::kArrayType);
 
-  for (int i = 0; i < m_settings.m_cookableScenes.size(); ++i)
-  {
-    if (m_settings.m_cookableScenes[i] != nullptr)
-    {
-      JSONDocument scene = m_settings.m_cookableScenes[i]->Serialize();
-      sceneData.PushBack(std::move(scene), allocator);
-    }
-  }
+  // for (int i = 0; i < m_settings.m_cookableScenes.size(); ++i)
+  // {
+  //   if (m_settings.m_cookableScenes[i] != nullptr)
+  //   {
+  //     JSONDocument scene = m_settings.m_cookableScenes[i]->Serialize();
+  //     sceneData.PushBack(std::move(scene), allocator);
+  //   }
+  // }
 
   gameDocument.AddMember("scenes", sceneData, allocator);
 

@@ -223,6 +223,7 @@
     <ClCompile Include="src\uiPhysics.cpp" />
     <ClCompile Include="src\uiPlayer.cpp" />
     <ClCompile Include="src\uiPlayerController.cpp" />
+    <ClCompile Include="src\uiProject.cpp" />
     <ClCompile Include="src\uiProjectBuilder.cpp" />
     <ClCompile Include="src\uiResourceManager.cpp" />
     <ClCompile Include="src\uiScene.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="include\uiPlayer.h" />
     <ClInclude Include="include\uiPlayerController.h" />
     <ClInclude Include="include\uiPrerequisites.h" />
+    <ClInclude Include="include\uiProject.h" />
     <ClInclude Include="include\uiProjectBuilder.h" />
     <ClInclude Include="include\uiResource.h" />
     <ClInclude Include="include\uiResourceManager.h" />
