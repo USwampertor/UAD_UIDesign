@@ -116,3 +116,35 @@ void SceneManager::UpdateRender(sf::RenderWindow& w)
   }
 }
 
+JSONDocument SceneManager::Serialize(const Vector<String>& names)
+{
+  JSONDocument document;
+  document.SetArray();
+  JSONDocument::AllocatorType& allocator = document.GetAllocator();
+
+  for (const auto& name : names)
+  {
+    JSONValue obj(rapidjson::kObjectType);
+
+    Scene* sceneToSave = FindScene(name);
+    obj.AddMember("sceneName", sceneToSave->m_sceneName, allocator);
+    obj.AddMember("gameSettings", sceneToSave->m_settings->m_gameSettings, allocator);
+    
+    JSONValue gravity(rapidjson::kArrayType);
+    gravity.PushBack(sceneToSave->m_settings->m_levelGravity.x, allocator);
+    gravity.PushBack(sceneToSave->m_settings->m_levelGravity.y, allocator);
+    obj.AddMember("gravity", gravity, allocator);
+
+    JSONValue entitiesDoc(rapidjson::kArrayType);
+    for (int i = 0; i < sceneToSave->m_entities.size(); ++i)
+    {
+      JSONDocument entityDoc = sceneToSave->m_entities[i]->Serialize();
+      entitiesDoc.PushBack(JSONValue(entityDoc, allocator), allocator);
+    }
+    obj.AddMember("entityData", entitiesDoc, allocator);
+
+    document.PushBack(obj, allocator);
+  }
+  return document;
+
+}

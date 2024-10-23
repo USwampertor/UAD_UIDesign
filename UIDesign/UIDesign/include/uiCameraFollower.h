@@ -22,6 +22,8 @@ public:
 
   virtual void Update(const float& delta) override;
 
+  virtual JSONDocument Serialize() override;
+
   Camera* m_camera = nullptr;
   AudioSource* m_source = nullptr;
 };

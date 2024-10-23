@@ -106,23 +106,27 @@ void ProjectBuilder::BuildProject()
   gameDocument.AddMember("settings", settingsData, allocator);
 
   // TODO: Check errors in scene serialization
-  JSONValue sceneData(rapidjson::kArrayType);
-
-  // for (int i = 0; i < m_settings.m_cookableScenes.size(); ++i)
-  // {
-  //   if (m_settings.m_cookableScenes[i] != nullptr)
-  //   {
-  //     JSONDocument scene = m_settings.m_cookableScenes[i]->Serialize();
-  //     sceneData.PushBack(std::move(scene), allocator);
-  //   }
-  // }
-
-  gameDocument.AddMember("scenes", sceneData, allocator);
 
 
   // Resources being used
   JSONDocument resourcesDocument = ResourceManager::Instance().Serialize();
   gameDocument.AddMember("resources", JSONValue(resourcesDocument, allocator), allocator);
+
+  JSONValue sceneData(rapidjson::kArrayType);
+
+
+  Vector<String> sceneNames;
+  for (int i = 0; i < m_settings.m_cookableScenes.size(); ++i)
+  {
+    if (m_settings.m_cookableScenes[i] != nullptr)
+    {
+      sceneNames.push_back(m_settings.m_cookableScenes[i]->m_sceneName);
+      // JSONDocument scene = m_settings.m_cookableScenes[i]->Serialize();
+      // sceneData.PushBack(std::move(m_settings.m_cookableScenes[i]->Serialize()), allocator);
+    }
+  }
+  JSONDocument sceneDocument = SceneManager::Instance().Serialize(sceneNames);
+  gameDocument.AddMember("sceneData", JSONValue(sceneDocument, allocator), allocator);
 
   OFStream ofs(Utils::Format("%s/%s", newDirPath.string().c_str(), "game.package").c_str());
   JSONOStream os(ofs);

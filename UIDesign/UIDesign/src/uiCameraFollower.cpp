@@ -27,3 +27,21 @@ void CameraFollowerEntity::Update(const float& delta)
     Rotate(delta);
   }
 }
+
+JSONDocument CameraFollowerEntity::Serialize()
+{
+  JSONDocument d = Entity::Serialize();
+  JSONDocument::AllocatorType& allocator = d.GetAllocator();
+  if (d.HasMember("type"))
+  {
+    d["type"].SetString(GetType().c_str(), allocator);
+  }
+  else
+  {
+    JSONValue v;
+    v.SetString(GetType().c_str(), allocator);
+    d.AddMember("type", v, allocator);
+  }
+  return d;
+}
+

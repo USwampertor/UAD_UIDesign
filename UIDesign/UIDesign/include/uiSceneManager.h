@@ -64,6 +64,10 @@ public:
   
   Scene* GetActiveScene();
 
+  JSONDocument Serialize(const Vector<String>& names);
+
+  void Deserialize(const JSONValue& v);
+
   SharedPtr<Scene> m_activeScene;
 
   Vector<SharedPtr<Scene>> m_scenes;
