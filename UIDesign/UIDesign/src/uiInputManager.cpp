@@ -21,7 +21,7 @@ void InputManager::PollEvents(const sf::Event& e)
 
 void InputManager::Update(const float& delta)
 {
-  if (!WindowManager::Instance().m_mainWindow->hasFocus())
+  if (!WindowManager::Instance().m_mainWindow.hasFocus())
   {
     return;
   }

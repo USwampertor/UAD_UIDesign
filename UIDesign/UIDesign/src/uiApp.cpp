@@ -7,6 +7,7 @@
 #include "uiEnemy.h"
 #include "uiFileSystem.h"
 #include "uiInputManager.h"
+#include "uiLogger.h"
 #include "uiPhysics.h"
 #include "uiPlayer.h"
 #include "uiProjectBuilder.h"
@@ -26,17 +27,16 @@
 
 void App::OnStartUp()
 {
-  // m_splashScreen.Initialize();
-  // Thread t(&SplashScreen::Show, &m_splashScreen);
+  m_splashScreen.Initialize();
+  Thread t(&SplashScreen::Show, &m_splashScreen);
 
 
   // TODO: Move this
-  m_parser.AddFlag("editor");
-  m_parser.SetFlag("editor", "true");
-
-  // Load Editor instead of game
-  if (m_parser.GetFlag("editor") == "true")
+ 
+  // Load Editor items instead of game
+  if (m_parser.HasFlag("editor"))
   {
+
   }
 
 
@@ -50,6 +50,9 @@ void App::OnStartUp()
   {
     // Send Resources error
   }
+  m_splashScreen.m_loaded = true;
+  t.join();
+  m_splashScreen.ShutDown();
 }
 
 bool App::StartSystems()
@@ -67,52 +70,73 @@ bool App::StartSystems()
 
   rmt_ScopedCPUSample(StartSystems, 0);
 
+  Logger::StartUp();
+  if (!Logger::IsStarted())
+  {
+    // You fucked up big time if you cant even dump your errors
+  }
+  Logger::Instance().AddLoggerCallback(std::bind(&SplashScreen::SetLog, &m_splashScreen, std::placeholders::_1));
+
+
   ResourceManager::StartUp();
   if (!ResourceManager::IsStarted())
   {
     // Error loading Resource Manager
-    std::cout << "Error starting up resource manager" << std::endl;
+    Logger::Instance().AddLog("Error starting up resource manager", eLOGLEVEL::ERROR);
     return false;
   }
-  else
-  {
-    std::cout << "Resource Manager working correctly" << std::endl;
-  }
+  Logger::Instance().AddLog("Started Resource Manager", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+  
   InputManager::StartUp();
   if (!InputManager::IsStarted())
   {
     // Error loading Input Manager
+    Logger::Instance().AddLog("Error starting up Input manager", eLOGLEVEL::ERROR);
     return false;
   }
+  Logger::Instance().AddLog("Started Input Manager", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+  
   SceneManager::StartUp();
   if (!SceneManager::IsStarted())
   {
-    // Error loading Scene Manager
+    // Error loading Input Manager
+    Logger::Instance().AddLog("Error starting up Scene manager", eLOGLEVEL::ERROR);
     return false;
   }
+  Logger::Instance().AddLog("Started Scene Manager", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+
   Physics::StartUp();
   if (!Physics::IsStarted())
   {
-    // Error loading Physics
+    // Error loading Input Manager
+    Logger::Instance().AddLog("Error starting up Physics manager", eLOGLEVEL::ERROR);
     return false;
   }
+  Logger::Instance().AddLog("Started Physics Manager", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+
   WindowManager::StartUp();
   if (!WindowManager::IsStarted())
   {
-    // Error loading Window Manager
+    // Error loading Input Manager
+    Logger::Instance().AddLog("Error starting up Window manager", eLOGLEVEL::ERROR);
     return false;
   }
+  Logger::Instance().AddLog("Started Window Manager", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+
   UI::StartUp();
   if (!UI::IsStarted())
   {
-    // Error loading UI
+    // Error loading Input Manager
+    Logger::Instance().AddLog("Error starting up UI manager", eLOGLEVEL::ERROR);
     return false;
   }
+  Logger::Instance().AddLog("Started UI Manager", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
 
-  if (m_parser.GetFlag("editor") == "true")
+  if (m_parser.HasFlag("editor"))
   {
     m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
     m_projectBuilder->Initialize();
+    Logger::Instance().AddLog("Started Project Builder", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
   }
 
   /************************************************************************/
@@ -123,7 +147,7 @@ bool App::LoadResources()
 {
   AppSettings settings;
   
-  if (m_parser.GetFlag("editor") == "true")
+  if (m_parser.HasFlag("editor"))
   {
     // TODO: Make this a dynamic load
     ResourceManager::Instance().LoadResource<Texture>(Utils::Format("%s/../resources/gizmo.png", FileSystem::CurrentPath().string().c_str()));
@@ -201,7 +225,7 @@ bool App::LoadResources()
     }
   }
   WindowManager::Instance().Initialize(settings);
-  UI::Instance().Initialize(*WindowManager::Instance().m_mainWindow.get());
+  UI::Instance().Initialize(WindowManager::Instance().m_mainWindow);
 
 
   return true;
@@ -232,17 +256,17 @@ void App::Update()
 
   dt = deltaClock.restart();
 
-  while (WindowManager::Instance().m_mainWindow->isOpen()) {
+  while (WindowManager::Instance().m_mainWindow.isOpen()) {
     InputManager::Instance().Update(dt.asMilliseconds());
-    HEvent event;
+    HEvent windowEvent;
     float delta = dt.asMilliseconds();
     float fps = 1000.0f / dt.asMilliseconds();
-    while (WindowManager::Instance().m_mainWindow->pollEvent(event)) {
-      ImGui::SFML::ProcessEvent(*WindowManager::Instance().m_mainWindow.get(), event);
-      InputManager::Instance().PollEvents(event);
-      if (event.type == HEvent::Closed) { WindowManager::Instance().m_mainWindow->close(); }
+    while (WindowManager::Instance().m_mainWindow.pollEvent(windowEvent)) {
+      ImGui::SFML::ProcessEvent(WindowManager::Instance().m_mainWindow, windowEvent);
+      InputManager::Instance().PollEvents(windowEvent);
+      if (windowEvent.type == HEvent::Closed) { WindowManager::Instance().m_mainWindow.close(); }
     }
-    UI::Instance().Update(*WindowManager::Instance().m_mainWindow.get(), dt);
+    UI::Instance().Update(WindowManager::Instance().m_mainWindow, dt);
 
     // TODO: Add this to a debugtools manager or something like that
     if (InputManager::Instance().m_values[Input::eINPUTCODE::KeyCodeL][0]->GetState() == Input::eINPUTSTATE::PRESSED)
@@ -257,9 +281,9 @@ void App::Update()
 
     WindowManager::Instance().Clear();
 
-    SceneManager::Instance().UpdateRender(*WindowManager::Instance().m_mainWindow.get());
+    SceneManager::Instance().UpdateRender(WindowManager::Instance().m_mainWindow);
 
-    UI::Instance().Render(*WindowManager::Instance().m_mainWindow.get());
+    UI::Instance().Render(WindowManager::Instance().m_mainWindow);
     WindowManager::Instance().Display();
 
     dt = deltaClock.restart();

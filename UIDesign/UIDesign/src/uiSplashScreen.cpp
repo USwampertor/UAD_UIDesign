@@ -1,9 +1,11 @@
 #include "uiSplashScreen.h"
 
 #include "uiFileSystem.h"
+#include "uiLogger.h"
 #include "uiUtilities.h"
 
 #include <SFML/Graphics.hpp>
+
 
 void SplashScreen::Initialize()
 {
@@ -23,10 +25,10 @@ void SplashScreen::Show()
   m_hwnd.create(VideoMode(800, 600), "UI", eWINDOWSTYLE::NONE);
   while (m_hwnd.isOpen())
   {
-    sf::Event event;
-    while (m_hwnd.pollEvent(event))
+    sf::Event windowEvent;
+    while (m_hwnd.pollEvent(windowEvent))
     {
-      if (event.type == sf::Event::Closed)
+      if (windowEvent.type == sf::Event::Closed)
         m_hwnd.close();
     }
 
@@ -46,6 +48,14 @@ void SplashScreen::Show()
 
 void SplashScreen::ShutDown()
 {
+  m_hwnd.setActive(false);
   m_hwnd.close();
 }
 
+void SplashScreen::SetLog(const Log& newLog)
+{
+  if (eLOGFLAG::SPLASH == newLog.m_flag)
+  {
+    SetTaskString(newLog.m_message);
+  }
+}

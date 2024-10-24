@@ -11,6 +11,19 @@
 class App : public Module<App>
 {
 public:
+
+  App() = default;
+
+  App(const String& params)
+  {
+    m_parser.Parse(params);
+  }
+
+  App(int argc, char* argv[])
+  {
+    m_parser.Parse(argc, argv);
+  }
+
   virtual void OnStartUp() override;
 
   bool StartSystems();

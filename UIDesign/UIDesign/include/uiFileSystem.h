@@ -17,6 +17,7 @@ struct FileSystem
   {
     return Path(m_exePath);
   }
+  static const Path WorkingPath() { return Path(m_exePath).parent_path(); }
   static const Path CurrentPath() { return std::filesystem::current_path(); }
   static const String CurrentPathString() { return std::filesystem::current_path().string(); }
   static const Path AbsolutePath(const Path& p) { return std::filesystem::absolute(p); }

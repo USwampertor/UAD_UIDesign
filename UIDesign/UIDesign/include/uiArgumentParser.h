@@ -9,10 +9,12 @@ public:
 
   ArgumentParser()
   {
-    m_argumentMap.insert(Utils::MakePair("NONE", "NONE"));
+
   }
 
   ~ArgumentParser() = default;
+
+  void Parse(int argc, char* argv[]);
 
   void Parse(const String& params);
 
@@ -20,8 +22,10 @@ public:
 
   void SetFlag(const String& param, const String& newValue);
 
-  const String& GetFlag(const String& param);
+  const Vector<String>& GetFlag(const String& flag);
 
-  Map<String, String> m_argumentMap;
+  bool HasFlag(const String& flag);
+
+  Map<String, Vector<String>> m_argumentMap;
 };
 

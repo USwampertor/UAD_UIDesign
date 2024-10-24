@@ -90,7 +90,7 @@ void SceneManager::Update(const float& delta)
   for (int j = 0; j < m_activeScene->m_entities.size(); ++j)
   {
     // TODO: Check a better way of doing this
-    if (App::Instance().m_parser.GetFlag("editor") != "true")
+    if (!App::Instance().m_parser.HasFlag("editor"))
     {
       m_activeScene->m_entities[j]->Update(delta);
     }

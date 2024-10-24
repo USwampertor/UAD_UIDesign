@@ -5,32 +5,57 @@
 #include "uiModule.h"
 
 BETTER_ENUM(
-  eLOGLEVEL, 
+  eLOGLEVEL,
   uint32,
   DEFAULT = 0,
   DEBUG,
   WARNING,
   ERROR
-  )
+)
+
+BETTER_ENUM(
+  eLOGFLAG,
+  uint32,
+  DEFAULT = 0,
+  SPLASH,
+  DEBUGGER,
+  SCREEN
+)
+
 
 struct Log
 {
-  Log(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT)
+  Log(const String& message, 
+      const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT, 
+      const eLOGFLAG& flag = eLOGFLAG::DEFAULT)
   : m_message(message),
-    m_warningLevel(warningLevel) {}
+    m_warningLevel(warningLevel),
+    m_flag(flag) {}
 
   String m_message;
   eLOGLEVEL m_warningLevel;
+  eLOGFLAG m_flag;
 };
+
+using LoggerCallback = Callback<void, const Log&>;
 
 class Logger : public Module<Logger>
 {
-  void AddLog(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT);
+public:
+  void AddLog(const String& message, 
+              const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT, 
+              const eLOGFLAG& flag = eLOGFLAG::DEFAULT);
 
-  void ToConsole(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT);
+  void AddLoggerCallback(const LoggerCallback& c);
 
-  void ToScreen(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT);
+  void OnLogAdded(const Log& newLog);
+
+  void Dump();
+
 private:
-  Map<uint32, Vector<UniquePtr<Log>>> m_logs;
+  Vector<UniquePtr<Log>> m_logs;
+
+  Vector<LoggerCallback> m_callbacks;
+
 };
 

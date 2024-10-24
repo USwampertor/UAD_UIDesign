@@ -22,6 +22,6 @@ public:
   void Initialize(const AppSettings& gameSettings);
 
 
-  SharedPtr<RenderWindow> m_mainWindow;
+  RenderWindow m_mainWindow;
 };
 

@@ -19,5 +19,5 @@ void Camera::PropagateTransform(const Transform2D& newTransform)
 
 void Camera::Update(const float& delta)
 {
-  WindowManager::Instance().m_mainWindow->setView(*this);
+  WindowManager::Instance().m_mainWindow.setView(*this);
 }

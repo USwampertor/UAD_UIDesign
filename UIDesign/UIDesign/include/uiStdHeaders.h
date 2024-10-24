@@ -15,6 +15,7 @@
 #include <memory>
 #include <mutex>
 #include <queue>
+#include <regex>
 #include <stack>
 #include <sstream>
 #include <string>
@@ -88,6 +89,8 @@ using RecursiveMutex = std::recursive_mutex;
 using RecursiveLock = std::unique_lock<RecursiveMutex>;
 
 using RunTimeError = std::runtime_error;
+
+using Regex = std::regex;
 
 template<typename T>
 using SharedPtr = std::shared_ptr<T>;

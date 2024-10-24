@@ -11,10 +11,14 @@
 #include "uiVector2.h"
 
 
+#ifndef IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_MATH_OPERATORS
+#endif
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "imgui_stdlib.h"
 #include "ImGuiFileDialog.h"
+#include "imspinner.h"
 
 void EditorUI::Initialize()
 {
@@ -323,18 +327,29 @@ void EditorUI::DrawUI()
     if (m_windowVisibilities["buildingPopup"])
     {
       ImVec2 pos = ImGui::GetIO().DisplaySize;
-      pos.x = pos.x / 2;
-      pos.y = pos.y / 2;
+      ImVec2 nextSize(pos.x / 7, pos.y / 7);
+      pos.x = pos.x / 2 - nextSize.x / 2;
+      pos.y = pos.y / 2 - nextSize.y / 2;
       ImGui::SetNextWindowPos(pos);
+      ImGui::SetNextWindowSize(nextSize);
       ImGui::OpenPopup("building_popup");
     }
     if (ImGui::BeginPopup("building_popup"))
     {
       ImGui::Text("Building...");
       ImGui::Separator();
-      ImGui::Text(Utils::Format("%2f", App::Instance().m_projectBuilder->m_buildingPercentage).c_str());
-      ImGui::Separator();
-      if (App::Instance().m_projectBuilder->m_buildingPercentage == 100)
+      if (App::Instance().m_projectBuilder->m_buildingPercentage < 100)
+      {
+        ImSpinner::SpinnerFadeDots("Building", 
+                                    ImSpinner::Radius(16),
+                                    ImSpinner::Thickness(6),
+                                    ImSpinner::Color(ImColor(255,255,255,255)),
+                                    ImSpinner::Speed(10));
+        ImGui::Text(Utils::Format("%2f", 
+                                  App::Instance().m_projectBuilder->m_buildingPercentage).c_str());
+        ImGui::Separator();
+      }
+      else if (App::Instance().m_projectBuilder->m_buildingPercentage == 100)
       {
         if (ImGui::Button("Build Completed"))
         {

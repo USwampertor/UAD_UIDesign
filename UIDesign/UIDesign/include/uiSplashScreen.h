@@ -7,6 +7,9 @@
 #include "uiFont.h"
 #include "uiText.h"
 
+// Forward declaration
+struct Log;
+
 class SplashScreen
 {
 public:
@@ -17,6 +20,8 @@ public:
   void ShutDown();
 
   bool m_loaded;
+
+  void SetLog(const Log& newLog);
 
   void SetTaskString(const String& newTaskString) 
   { 

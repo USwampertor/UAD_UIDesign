@@ -416,5 +416,8 @@
     <ClInclude Include="include\uiProject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\imspinner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

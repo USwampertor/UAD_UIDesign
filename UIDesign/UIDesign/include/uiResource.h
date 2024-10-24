@@ -10,7 +10,8 @@ BETTER_ENUM(eRESOURCETYPE,
             MUSIC,
             ANIMATION,
             ATLAS,
-            FONT
+            FONT,
+            SCENE
             )
 
 

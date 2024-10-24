@@ -9,6 +9,7 @@
 
 void UI::Initialize(RenderWindow& window)
 {
+  window.requestFocus();
   ImGui::SFML::Init(window);
   m_editorUI.Initialize();
 }
@@ -27,9 +28,10 @@ void UI::GenerateIMGUI()
 {
   rmt_ScopedCPUSample(GenerateIMGUI, 0);
 
-  if (App::Instance().m_parser.GetFlag("editor") == "true")
+  if (App::Instance().m_parser.HasFlag("editor"))
   {
     m_editorUI.DrawUI();
+    // ImGui::ShowDemoWindow();
   }
 }
 
