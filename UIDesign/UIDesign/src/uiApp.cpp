@@ -10,7 +10,6 @@
 #include "uiLogger.h"
 #include "uiPhysics.h"
 #include "uiPlayer.h"
-#include "uiProjectBuilder.h"
 #include "uiResourceManager.h"
 #include "uiSceneManager.h"
 #include "uiUI.h"
@@ -134,9 +133,7 @@ bool App::StartSystems()
 
   if (m_parser.HasFlag("editor"))
   {
-    m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
-    m_projectBuilder->Initialize();
-    Logger::Instance().AddLog("Started Project Builder", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+    
   }
 
   /************************************************************************/
@@ -190,6 +187,12 @@ bool App::LoadResources()
     SceneManager::Instance().ChangeScene("TestScene");
     settings.FromFile(settingsPath);
   
+
+    m_editor = MakeUniqueObject<Editor>();
+    m_editor->Initialize();
+    // m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
+    // m_projectBuilder->Initialize();
+    Logger::Instance().AddLog("Started Project Builder", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
   }
   else
   {
@@ -243,7 +246,7 @@ void App::Update()
 
   // TODO: Remove this and make it so it is loaded via a scene
   SceneManager::Instance().CreateObject<PlayerEntity>("Player");
-  SceneManager::Instance().CreateObject<CameraFollowerEntity>("Follower");
+  // SceneManager::Instance().CreateObject<CameraFollowerEntity>("Follower");
 
   std::srand(static_cast<uint32>(std::time(nullptr)));
   for (int i = 0; i < 10; ++i)
@@ -278,6 +281,10 @@ void App::Update()
 
     Physics::Instance().Update(10);
     SceneManager::Instance().Update(delta);
+
+#if UI_EDITOR_MODE
+    m_editor->Update(delta);
+#endif
 
     WindowManager::Instance().Clear();
 

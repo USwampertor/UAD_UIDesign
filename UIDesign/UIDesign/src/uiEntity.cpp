@@ -50,9 +50,11 @@ JSONDocument Entity::Serialize()
 void Entity::Initialize()
 {
   m_gizmoSprite = new Sprite();
+#if UI_EDITOR_MODE
   m_gizmoSprite->setTexture(*ResourceManager::Instance().GetResource<Texture>("gizmo"));
   m_gizmoSprite->setOrigin(m_gizmoSprite->getLocalBounds().width / 2, m_gizmoSprite->getLocalBounds().height / 2);
   m_gizmoSprite->setColor(sf::Color(255, 255, 255, 128));
+#endif
   SetPosition(sf::Vector2f(0.0f, 0.0f));
   SetRotation(0.0f);
   SetScale(sf::Vector2f(1.0f, 1.0f));

@@ -13,6 +13,12 @@ public:
 
   static String GetType() { return "ControllerEntity"; }
 
+  ControllerEntity() = default;
+
+  ControllerEntity(const String newName) : Entity(newName) {}
+
+  ~ControllerEntity() = default;
+
   void PossesPawn(SharedPtr<PawnEntity> newPawm);
 
   void UnPossesPawn();

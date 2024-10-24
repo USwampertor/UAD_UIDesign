@@ -3,7 +3,7 @@
 #include "uiApp.h"
 #include "uiInputManager.h"
 #include "uiClassRegisters.h"
-#include "uiProjectBuilder.h"
+#include "uiLogger.h"
 #include "uiResourceManager.h"
 #include "uiSceneManager.h"
 #include "uiTexture.h"
@@ -22,7 +22,12 @@
 
 void EditorUI::Initialize()
 {
+  Logger::Instance().AddLoggerCallback(std::bind(&EditorUI::AddDebuggerLog, this, std::placeholders::_1));
+}
 
+void EditorUI::AddDebuggerLog(const Log& newLog)
+{
+  m_debugLogs.push_back(&newLog);
 }
 
 void EditorUI::DrawUI()
@@ -103,23 +108,23 @@ void EditorUI::DrawUI()
         ImGui::Text("Project Settings");
         ImGui::Text("Name");
         ImGui::SameLine();
-        ImGui::InputText("##ProjectName", &App::Instance().m_projectBuilder->m_settings.m_projectName, ImGuiInputTextFlags_AlwaysOverwrite);
+        ImGui::InputText("##ProjectName", &App::Instance().m_editor->m_builder.m_settings.m_projectName, ImGuiInputTextFlags_AlwaysOverwrite);
         ImGui::Text("Icon:");
         ImGui::SameLine();
 
 
         m_windowVisibilities["iconPopup"] = ImGui::ImageButton("IconImage##1",
-            *ResourceManager::Instance().GetResource<Texture>(App::Instance().m_projectBuilder->m_projectIconStr).get(),
+            *ResourceManager::Instance().GetResource<Texture>(App::Instance().m_editor->m_builder.m_projectIconStr).get(),
             Vector2f(32.0f, 32.0f));
       }
       ImGui::Separator();
 
       ImGui::Text("Video Resolutions");
 
-      for (int32 i = 0; i < App::Instance().m_projectBuilder->m_settings.m_resolutions.size(); ++i)
+      for (int32 i = 0; i < App::Instance().m_editor->m_builder.m_settings.m_resolutions.size(); ++i)
       {
-        String x = Utils::Format("%d", App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->width);
-        String y = Utils::Format("%d", App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->height);
+        String x = Utils::Format("%d", App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->width);
+        String y = Utils::Format("%d", App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->height);
         ImGui::PushItemWidth(ImGui::GetWindowSize().x / 3);
         // ImGui::SetNextWindowContentSize(ImVec2(ImGui::GetWindowSize().x / 8, ImGui::CalcItemWidth()));
         ImGui::InputText(Utils::Format("##VideoResolution_%d_x", i).c_str(), &x[0], ImGuiInputTextFlags_CharsDecimal | 
@@ -136,32 +141,32 @@ void EditorUI::DrawUI()
         y = Utils::IsStringNumber(y) ? y : "0";
         ImGui::PopItemWidth();
 
-        App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->width = std::stoi(x);
-        App::Instance().m_projectBuilder->m_settings.m_resolutions[i]->height = std::stoi(y);
+        App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->width = std::stoi(x);
+        App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->height = std::stoi(y);
         ImGui::SameLine();
 
         if (ImGui::Button("x"))
         {
-          App::Instance().m_projectBuilder->m_settings.m_resolutions.erase(App::Instance().m_projectBuilder->m_settings.m_resolutions.begin() + i);
+          App::Instance().m_editor->m_builder.m_settings.m_resolutions.erase(App::Instance().m_editor->m_builder.m_settings.m_resolutions.begin() + i);
           break;
         }
       }
 
       if (ImGui::Button("+"))
       {
-        App::Instance().m_projectBuilder->m_settings.m_resolutions.push_back(new VideoMode(0, 0));
+        App::Instance().m_editor->m_builder.m_settings.m_resolutions.push_back(new VideoMode(0, 0));
       }
 
       ImGui::Separator();
 
-      ImGui::Checkbox("Use vertical sync", &App::Instance().m_projectBuilder->m_settings.m_shouldUseVerticalSync);
+      ImGui::Checkbox("Use vertical sync", &App::Instance().m_editor->m_builder.m_settings.m_shouldUseVerticalSync);
       
-      String framerate = Utils::Format("%d", App::Instance().m_projectBuilder->m_settings.m_framerate);
+      String framerate = Utils::Format("%d", App::Instance().m_editor->m_builder.m_settings.m_framerate);
       ImGui::InputText("Framerate", &framerate[0], ImGuiInputTextFlags_CharsDecimal |
                                                    ImGuiInputTextFlags_CharsNoBlank |
                                                    ImGuiInputTextFlags_AlwaysOverwrite);
       framerate = Utils::IsStringNumber(framerate) ? framerate : "60";
-      App::Instance().m_projectBuilder->m_settings.m_framerate = std::stoi(framerate);
+      App::Instance().m_editor->m_builder.m_settings.m_framerate = std::stoi(framerate);
       ImGui::Separator();
       ImGui::Text("Cookable Scenes");
 
@@ -181,11 +186,11 @@ void EditorUI::DrawUI()
         if (m_windowVisibilities[Utils::Format("##CkbxScn_%s", item->m_sceneName.c_str())])
         {
           Scene* toCook = SceneManager::Instance().FindScene(item->m_sceneName);
-          App::Instance().m_projectBuilder->m_settings.m_cookableScenes[i] = toCook;
+          App::Instance().m_editor->m_builder.m_settings.m_cookableScenes[i] = toCook;
         }
         else 
         {
-          App::Instance().m_projectBuilder->m_settings.m_cookableScenes[i] = nullptr;
+          App::Instance().m_editor->m_builder.m_settings.m_cookableScenes[i] = nullptr;
         }
         ImGui::SameLine();
         ImGui::Button(item->m_sceneName.c_str(), 
@@ -259,7 +264,42 @@ void EditorUI::DrawUI()
     {
       if (ImGui::Begin("Logger"))
       {
-        
+        if (ImGui::Button("Clear"))
+        {
+          m_debugLogs.clear();
+        }
+        ImGui::SameLine();
+        // TODO: Make Collapse be able to see the full log
+        // TODO: Make Collapse also make a shorter version of the log
+        ImGui::Button("Collapse");
+        ImGui::SameLine();
+        // TODO:: Add a Pause System
+        ImGui::Button("ErrorPause");
+        ImGui::SameLine();
+        ImGui::Checkbox("Error", &m_windowVisibilities["errorCheckbox"]);
+        ImGui::SameLine();
+        ImGui::Checkbox("Warnings", &m_windowVisibilities["warningCheckbox"]);
+        ImGui::SameLine();
+        ImGui::Checkbox("Logs", &m_windowVisibilities["logCheckbox"]);
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        ImGui::BeginChild("LogsArea", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
+        for (const auto& log : m_debugLogs)
+        {
+          if (m_windowVisibilities["errorCheckbox"] && log->m_warningLevel == eLOGLEVEL::ERROR)
+          {
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255, 0, 0, 255));
+            if (ImGui::Selectable(log->m_message.c_str(), &m_windowVisibilities["selectedLog"]))
+            {
+              // TODO: Add an extra string that you can see with more precision
+            }
+            ImGui::PopStyleColor();
+          }
+        }
+        ImGui::EndChild();
+
       }
       ImGui::End();
     }
@@ -310,14 +350,14 @@ void EditorUI::DrawUI()
       if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
         std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
         std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-        App::Instance().m_projectBuilder->m_settings.m_projectDir = filePath;
+        App::Instance().m_editor->m_builder.m_settings.m_projectDir = filePath;
         // action
-        if (App::Instance().m_projectBuilder->m_settings.m_projectName.empty())
+        if (App::Instance().m_editor->m_builder.m_settings.m_projectName.empty())
         {
-          App::Instance().m_projectBuilder->m_settings.m_projectName = "UIGame";
+          App::Instance().m_editor->m_builder.m_settings.m_projectName = "UIGame";
         }
         m_windowVisibilities["buildingPopup"] = true;
-        App::Instance().m_projectBuilder->StartBuildingThread();
+        App::Instance().m_editor->m_builder.StartBuildingThread();
       }
 
       // close
@@ -338,7 +378,7 @@ void EditorUI::DrawUI()
     {
       ImGui::Text("Building...");
       ImGui::Separator();
-      if (App::Instance().m_projectBuilder->m_buildingPercentage < 100)
+      if (App::Instance().m_editor->m_builder.m_buildingPercentage < 100)
       {
         ImSpinner::SpinnerFadeDots("Building", 
                                     ImSpinner::Radius(16),
@@ -346,10 +386,10 @@ void EditorUI::DrawUI()
                                     ImSpinner::Color(ImColor(255,255,255,255)),
                                     ImSpinner::Speed(10));
         ImGui::Text(Utils::Format("%2f", 
-                                  App::Instance().m_projectBuilder->m_buildingPercentage).c_str());
+                                  App::Instance().m_editor->m_builder.m_buildingPercentage).c_str());
         ImGui::Separator();
       }
-      else if (App::Instance().m_projectBuilder->m_buildingPercentage == 100)
+      else if (App::Instance().m_editor->m_builder.m_buildingPercentage == 100)
       {
         if (ImGui::Button("Build Completed"))
         {
@@ -380,7 +420,7 @@ void EditorUI::DrawUI()
         {
           if (ImGui::Selectable(res->second->m_resName.c_str()))
           {
-            App::Instance().m_projectBuilder->m_projectIconStr = res->second->m_resName;
+            App::Instance().m_editor->m_builder.m_projectIconStr = res->second->m_resName;
           }
         }
         // if (ResourceManager::Instance().GetResource<Texture>(res->second->m_resName) != nullptr)
@@ -399,8 +439,8 @@ void EditorUI::DrawUI()
     /*                                                                      */
     /************************************************************************/
 
-    ImGui::SetNextWindowSize(ImVec2(300, 150));
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2) );
+    // ImGui::SetNextWindowSize(ImVec2(300, 150));
+    // ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2) );
 
 
   }

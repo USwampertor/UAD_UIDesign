@@ -1,5 +1,5 @@
 #include "uiWindowManager.h"
-
+#include "uiApp.h"
 
 void WindowManager::Initialize(const AppSettings& gameSettings)
 {
@@ -12,7 +12,11 @@ void WindowManager::Initialize(const AppSettings& gameSettings)
 
 void WindowManager::Clear()
 {
+#if UI_EDITOR_MODE
+  m_mainWindow.clear(App::Instance().m_editor->m_editorColor);
+#else
   m_mainWindow.clear();
+#endif
 }
 
 void WindowManager::Display()

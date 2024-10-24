@@ -199,6 +199,8 @@
     <ClCompile Include="src\uiAudioListener.cpp" />
     <ClCompile Include="src\uiCameraFollower.cpp" />
     <ClCompile Include="src\uiCreature.cpp" />
+    <ClCompile Include="src\uiEditor.cpp" />
+    <ClCompile Include="src\uiEditorCamera.cpp" />
     <ClCompile Include="src\uiEditorController.cpp" />
     <ClCompile Include="src\uiEditorUI.cpp" />
     <ClCompile Include="src\uiFileSystem.cpp" />
@@ -266,8 +268,11 @@
     <ClInclude Include="include\uiCameraFollower.h" />
     <ClInclude Include="include\uiClassRegisters.h" />
     <ClInclude Include="include\uiCollision.h" />
+    <ClInclude Include="include\uiColor.h" />
     <ClInclude Include="include\uiController.h" />
     <ClInclude Include="include\uiCreature.h" />
+    <ClInclude Include="include\uiEditor.h" />
+    <ClInclude Include="include\uiEditorCamera.h" />
     <ClInclude Include="include\uiEditorController.h" />
     <ClInclude Include="include\uiEditorUI.h" />
     <ClInclude Include="include\uiEnemy.h" />

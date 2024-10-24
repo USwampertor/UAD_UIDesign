@@ -8,7 +8,7 @@
 using FloatRect = sf::FloatRect;
 using View = sf::View;
 
-class Camera : public Component, View
+class Camera : public Component, public View
 {
 public:
 

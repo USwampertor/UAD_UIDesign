@@ -73,5 +73,6 @@ public:
   Vector<SharedPtr<Scene>> m_scenes;
 
   bool m_isDebug = false;
+
 };
 
