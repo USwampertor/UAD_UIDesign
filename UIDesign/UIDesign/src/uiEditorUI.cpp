@@ -22,7 +22,7 @@
 
 void EditorUI::Initialize()
 {
-  Logger::Instance().AddLoggerCallback(std::bind(&EditorUI::AddDebuggerLog, this, std::placeholders::_1));
+  Logger::Instance().AddOnLogAddedCallback(std::bind(&EditorUI::AddDebuggerLog, this, std::placeholders::_1));
 }
 
 void EditorUI::AddDebuggerLog(const Log& newLog)

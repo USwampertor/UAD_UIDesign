@@ -3,7 +3,7 @@
 #include "uiFileSystem.h"
 #include "uiUtilities.h"
 
-#include <chrono>
+#include <iostream>
 
 void Logger::AddLog(const String& message, 
                     const eLOGLEVEL& warningLevel,
@@ -11,7 +11,6 @@ void Logger::AddLog(const String& message,
 {
   m_logs.push_back(MakeUniqueObject<Log>(message, warningLevel, flag));
   OnLogAdded(*m_logs.back());
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
 void Logger::OnLogAdded(const Log& newLog)
@@ -22,7 +21,7 @@ void Logger::OnLogAdded(const Log& newLog)
   }
 }
 
-void Logger::AddLoggerCallback(const LoggerCallback& c)
+void Logger::AddOnLogAddedCallback(const LoggerCallback& c)
 {
   m_callbacks.push_back(c);
 }
@@ -44,5 +43,26 @@ void Logger::Dump()
     output << log->m_message << std::endl;
   }
 
+}
+
+void Logger::ToSplashScreen(const String& message, const eLOGLEVEL& warningLevel)
+{
+  AddLog(message, warningLevel, eLOGFLAG::SPLASH);
+}
+
+void Logger::ToDebugger(const String& message, const eLOGLEVEL& warningLevel)
+{
+  AddLog(message, warningLevel, eLOGFLAG::DEBUGGER);
+}
+
+void Logger::ToConsole(const String& message, const eLOGLEVEL& warningLevel)
+{
+  AddLog(message, warningLevel, eLOGFLAG::CONSOLE);
+  std::cout << message << std::endl;
+}
+
+void Logger::ToScreen(const String& message, const eLOGLEVEL& warningLevel)
+{
+  AddLog(message, warningLevel, eLOGFLAG::SCREEN);
 }
 

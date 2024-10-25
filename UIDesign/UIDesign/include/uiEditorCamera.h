@@ -26,5 +26,6 @@ public:
   ImGuiDockNode* m_centralNode = nullptr;
   float m_cameraMoveSpeed = 15;
   float m_cameraZoomSpeed = 15;
+  float m_cameraActualZoom = 1.0f;
 };
 

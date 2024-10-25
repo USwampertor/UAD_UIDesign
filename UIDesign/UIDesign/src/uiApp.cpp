@@ -76,7 +76,7 @@ bool App::StartSystems()
   {
     // You fucked up big time if you cant even dump your errors
   }
-  Logger::Instance().AddLoggerCallback(std::bind(&SplashScreen::SetLog, &m_splashScreen, std::placeholders::_1));
+  Logger::Instance().AddOnLogAddedCallback(std::bind(&SplashScreen::SetLog, &m_splashScreen, std::placeholders::_1));
 
 
   ResourceManager::StartUp();

@@ -19,7 +19,8 @@ BETTER_ENUM(
   DEFAULT = 0,
   SPLASH,
   DEBUGGER,
-  SCREEN
+  SCREEN,
+  CONSOLE
 )
 
 
@@ -46,11 +47,20 @@ public:
               const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT, 
               const eLOGFLAG& flag = eLOGFLAG::DEFAULT);
 
-  void AddLoggerCallback(const LoggerCallback& c);
+  void AddOnLogAddedCallback(const LoggerCallback& c);
 
   void OnLogAdded(const Log& newLog);
 
   void Dump();
+
+  void ToSplashScreen(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT);
+
+  void ToConsole(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT);
+
+  void ToScreen(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT);
+
+  void ToDebugger(const String& message, const eLOGLEVEL& warningLevel = eLOGLEVEL::DEFAULT);
+
 
 private:
   Vector<UniquePtr<Log>> m_logs;

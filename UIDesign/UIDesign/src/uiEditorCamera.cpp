@@ -26,14 +26,17 @@ void EditorCameraEntity::SetToAvailableArea()
   ImVec2 centralNodeStartPos = m_centralNode->CentralNode->Pos;
   // ImGui::DockBuilderGetCentralNode(id);
   // Retrieve the top-left position and size of the node
-  Vector2f position(centralNodeStartPos.x / availableArea.x, centralNodeStartPos.y / availableArea.y);
-  Vector2f size(centralNodeSize.x / availableArea.x, centralNodeSize.y / availableArea.y);
+  Vector2f position(centralNodeStartPos.x / availableArea.x, 
+                    centralNodeStartPos.y / availableArea.y);
+  Vector2f size(centralNodeSize.x / availableArea.x, 
+                centralNodeSize.y / availableArea.y);
   m_camera->setViewport(FloatRect(position.x, position.y, size.x, size.y));
-  m_camera->setSize(Vector2f(centralNodeSize.x, centralNodeSize.y));
+  m_camera->setSize(Vector2f(centralNodeSize.x * m_cameraActualZoom, 
+                             centralNodeSize.y * m_cameraActualZoom));
 }
 
 void EditorCameraEntity::Update(const float& deltaMS)
 {
-  // SetToAvailableArea();
+  SetToAvailableArea();
   Entity::Update(deltaMS);
 }

@@ -1,9 +1,13 @@
 #include "uiEditorController.h"
-#include "uiInputManager.h"
 
-#include "uiEditorCamera.h"
-#include "uiCameraFollower.h"
 #include "uiCamera.h"
+#include "uiCameraFollower.h"
+#include "uiEditorCamera.h"
+#include "uiInputManager.h"
+#include "uiLogger.h"
+#include "uiUtilities.h"
+
+#include "imgui.h"
 
 void EditorControllerEntity::Initialize()
 {
@@ -62,8 +66,9 @@ void EditorControllerEntity::Update(const float& deltaMS)
 
 void EditorControllerEntity::MoveCameraUp(SharedPtr<InputValue> value)
 {
-  if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
-    value->GetState() == Input::eINPUTSTATE::HELD)
+  if ((value->GetState() == Input::eINPUTSTATE::PRESSED ||
+      value->GetState() == Input::eINPUTSTATE::HELD) && 
+      !ImGui::GetIO().WantCaptureMouse)
   {
     m_direction.y = -1;
   }
@@ -75,8 +80,9 @@ void EditorControllerEntity::MoveCameraUp(SharedPtr<InputValue> value)
 
 void EditorControllerEntity::MoveCameraDown(SharedPtr<InputValue> value)
 {
-  if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
-    value->GetState() == Input::eINPUTSTATE::HELD)
+  if ((value->GetState() == Input::eINPUTSTATE::PRESSED ||
+      value->GetState() == Input::eINPUTSTATE::HELD) && 
+      !ImGui::GetIO().WantCaptureMouse)
   {
     m_direction.y = 1;
   }
@@ -89,8 +95,9 @@ void EditorControllerEntity::MoveCameraDown(SharedPtr<InputValue> value)
 
 void EditorControllerEntity::MoveCameraLeft(SharedPtr<InputValue> value)
 {
-  if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
-    value->GetState() == Input::eINPUTSTATE::HELD)
+  if ((value->GetState() == Input::eINPUTSTATE::PRESSED ||
+      value->GetState() == Input::eINPUTSTATE::HELD) && 
+      !ImGui::GetIO().WantCaptureMouse)
   {
     m_direction.x = -1;
   }
@@ -102,9 +109,11 @@ void EditorControllerEntity::MoveCameraLeft(SharedPtr<InputValue> value)
 
 void EditorControllerEntity::MoveCameraRight(SharedPtr<InputValue> value)
 {
-  if (value->GetState() == Input::eINPUTSTATE::PRESSED ||
-    value->GetState() == Input::eINPUTSTATE::HELD)
+  if ((value->GetState() == Input::eINPUTSTATE::PRESSED ||
+      value->GetState() == Input::eINPUTSTATE::HELD) && 
+      !ImGui::GetIO().WantCaptureMouse)
   {
+    
     m_direction.x = 1;
   }
   else if (value->GetState() == Input::eINPUTSTATE::RELEASED)
@@ -115,7 +124,13 @@ void EditorControllerEntity::MoveCameraRight(SharedPtr<InputValue> value)
 
 void EditorControllerEntity::Zoom(SharedPtr<InputValue> value)
 {
-  m_editorCamera->m_camera->zoom(m_editorCamera->m_cameraZoomSpeed * value->m_value * 0.001f);
+  if (!ImGui::GetIO().WantCaptureMouse)
+  {
+    m_editorCamera->m_cameraActualZoom += 0.1f * -(value->m_value);
+    m_editorCamera->m_cameraActualZoom = std::clamp(m_editorCamera->m_cameraActualZoom, 0.1f, 1000.0f);
+    Logger::Instance().ToConsole(Utils::Format("%f", m_editorCamera->m_cameraActualZoom));
+  }
+
 }
 
 void EditorControllerEntity::SelectEntity(SharedPtr<InputValue> value)
