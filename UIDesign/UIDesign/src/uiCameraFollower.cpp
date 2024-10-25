@@ -24,7 +24,6 @@ void CameraFollowerEntity::Update(const float& delta)
   {
     Vector2f speed = Boid::Approach(GetTransform().position, player->GetTransform().position, 150, 10) * (delta / 1000);
     Move(speed);
-    Rotate(delta);
   }
 }
 

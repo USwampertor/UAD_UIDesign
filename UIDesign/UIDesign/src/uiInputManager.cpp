@@ -11,10 +11,12 @@ void InputManager::PollEvents(const sf::Event& e)
     if (e.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
     {
       m_values[Input::eINPUTCODE::MouseWheelVertical][0]->UpdateValue(e.mouseWheelScroll.delta);
+      NotifyInputChange(Input::eINPUTCODE::MouseWheelVertical, 0);
     }
     else if (e.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
     {
       m_values[Input::eINPUTCODE::MouseWheelHorizontal][0]->UpdateValue(e.mouseWheelScroll.delta);
+      NotifyInputChange(Input::eINPUTCODE::MouseWheelHorizontal, 0);
     }
   }
 }

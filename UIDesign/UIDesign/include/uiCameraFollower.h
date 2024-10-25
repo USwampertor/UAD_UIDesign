@@ -1,5 +1,4 @@
 #pragma once
-
 #include "uiPrerequisites.h"
 #include "uiClassRegisters.h"
 

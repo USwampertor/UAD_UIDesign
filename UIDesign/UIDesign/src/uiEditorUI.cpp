@@ -61,7 +61,9 @@ void EditorUI::DrawUI()
         ImGui::MenuItem("Save", "CTRL+S");
         ImGui::MenuItem("Save as", "CTRL+SHIFT+S");
         ImGui::MenuItem("Preferences", "");
-        ImGui::MenuItem("Project Settings", "CTRL+SHIFT+P", &m_windowVisibilities["ProjectSettings"]);
+        ImGui::MenuItem("Project Settings", 
+                        "CTRL+SHIFT+P", 
+                        &m_windowVisibilities["ProjectSettings"]);
         ImGui::EndMenu();
       }
       // 
@@ -84,7 +86,9 @@ void EditorUI::DrawUI()
       {
         if (ImGui::BeginMenu("Entities", ""))
         {
-          for (auto it = ClassRegisters::GetEntityRegistry().begin(); it != ClassRegisters::GetEntityRegistry().end(); ++it)
+          for (auto it = ClassRegisters::GetEntityRegistry().begin(); 
+               it != ClassRegisters::GetEntityRegistry().end(); 
+               ++it)
           {
             ImGui::MenuItem(it->first.c_str());
           }
@@ -95,8 +99,13 @@ void EditorUI::DrawUI()
     }
     ImGui::EndMainMenuBar();
 
+
     ImGuiID dockSpaceID = ImGui::GetID("MainDock##2");
-    ImGui::DockSpace(dockSpaceID, ImVec2(0, 0), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoDockingOverCentralNode);
+     
+    ImGui::DockSpace(dockSpaceID, 
+                     ImVec2(0, 0), 
+                     ImGuiDockNodeFlags_PassthruCentralNode | 
+                     ImGuiDockNodeFlags_NoDockingOverCentralNode);
 
     /************************************************************************/
     /*                                                                      */
@@ -108,7 +117,9 @@ void EditorUI::DrawUI()
         ImGui::Text("Project Settings");
         ImGui::Text("Name");
         ImGui::SameLine();
-        ImGui::InputText("##ProjectName", &App::Instance().m_editor->m_builder.m_settings.m_projectName, ImGuiInputTextFlags_AlwaysOverwrite);
+        ImGui::InputText("##ProjectName", 
+                         &App::Instance().m_editor->m_builder.m_settings.m_projectName, 
+                         ImGuiInputTextFlags_AlwaysOverwrite);
         ImGui::Text("Icon:");
         ImGui::SameLine();
 
@@ -123,8 +134,10 @@ void EditorUI::DrawUI()
 
       for (int32 i = 0; i < App::Instance().m_editor->m_builder.m_settings.m_resolutions.size(); ++i)
       {
-        String x = Utils::Format("%d", App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->width);
-        String y = Utils::Format("%d", App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->height);
+        String x = Utils::Format("%d", 
+                                 App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->width);
+        String y = Utils::Format("%d", 
+                                 App::Instance().m_editor->m_builder.m_settings.m_resolutions[i]->height);
         ImGui::PushItemWidth(ImGui::GetWindowSize().x / 3);
         // ImGui::SetNextWindowContentSize(ImVec2(ImGui::GetWindowSize().x / 8, ImGui::CalcItemWidth()));
         ImGui::InputText(Utils::Format("##VideoResolution_%d_x", i).c_str(), &x[0], ImGuiInputTextFlags_CharsDecimal | 
@@ -435,10 +448,38 @@ void EditorUI::DrawUI()
       ImGui::EndPopup();
     }
 
+
+
+    ImGuiDockNode* centralNode = ImGui::DockBuilderGetNode(ImGui::GetID("MainDock##2"));
+    App::Instance().m_editor->m_camera.m_centralNode = centralNode;
+    ImVec2 centralNodeSize = centralNode->CentralNode->Size;
+    ImVec2 centralNodeStartPos = centralNode->CentralNode->Pos;
+    float menuBarSize = ImGui::GetFrameHeight();  // Get height of menu bar
+    ImGui::SetNextWindowPos(ImVec2(centralNodeStartPos.x, menuBarSize));
+
+    // Set the bar to be the full width of the window, but with a small fixed height
+    ImGui::SetNextWindowSize(ImVec2(centralNodeSize.x, menuBarSize));
+
+    ImGui::Begin("##CameraInformation",
+      nullptr,
+      ImGuiWindowFlags_NoTitleBar |
+      ImGuiWindowFlags_NoResize |
+      ImGuiWindowFlags_NoMove |
+      ImGuiWindowFlags_NoScrollbar |
+      ImGuiWindowFlags_NoDocking);
+
+    ImGui::Text("Camera Position");
+    ImGui::SameLine();
+    ImGui::Text(Utils::Format("X: %f --- Y: %f",
+      App::Instance().m_editor->m_camera.GetTransform().position.x,
+      App::Instance().m_editor->m_camera.GetTransform().position.y).c_str());
+
+    ImGui::End();
+
     /************************************************************************/
     /*                                                                      */
     /************************************************************************/
-
+    // Wtf was this supposed to do?
     // ImGui::SetNextWindowSize(ImVec2(300, 150));
     // ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2) );
 

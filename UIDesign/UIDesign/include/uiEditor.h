@@ -2,6 +2,7 @@
 #include "uiPrerequisites.h"
 
 #include "uiEditorCamera.h"
+#include "uiCameraFollower.h"
 #include "uiEditorController.h"
 #include "uiProjectBuilder.h"
 #include "uiColor.h"

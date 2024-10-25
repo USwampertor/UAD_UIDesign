@@ -1,11 +1,13 @@
 #pragma once
 #include "uiPrerequisites.h"
 #include "uiEntity.h"
+#include "uiVector2.h"
 
 // No uiClassRegisters.h file as this should not be able to be instantiable except
 // by editor
 
 class Camera;
+class ImGuiDockNode;
 
 class EditorCameraEntity : public Entity
 {
@@ -21,8 +23,8 @@ public:
   void SetToAvailableArea();
 
   Camera* m_camera = nullptr;
-
-  float m_cameraMoveSpeed;
-  float m_cameraZoomSpeed;
+  ImGuiDockNode* m_centralNode = nullptr;
+  float m_cameraMoveSpeed = 15;
+  float m_cameraZoomSpeed = 15;
 };
 

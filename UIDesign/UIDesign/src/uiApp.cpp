@@ -3,7 +3,9 @@
 #include "uiAudioSource.h"
 #include "uiAudioListener.h"
 #include "uiBullet.h"
+#include "uiCamera.h"
 #include "uiCameraFollower.h"
+#include "uiEditorCamera.h"
 #include "uiEnemy.h"
 #include "uiFileSystem.h"
 #include "uiInputManager.h"
@@ -188,11 +190,7 @@ bool App::LoadResources()
     settings.FromFile(settingsPath);
   
 
-    m_editor = MakeUniqueObject<Editor>();
-    m_editor->Initialize();
-    // m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
-    // m_projectBuilder->Initialize();
-    Logger::Instance().AddLog("Started Project Builder", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+    
   }
   else
   {
@@ -230,6 +228,14 @@ bool App::LoadResources()
   WindowManager::Instance().Initialize(settings);
   UI::Instance().Initialize(WindowManager::Instance().m_mainWindow);
 
+  if (m_parser.HasFlag("editor"))
+  {
+    m_editor = MakeUniqueObject<Editor>();
+    m_editor->Initialize();
+    // m_projectBuilder = MakeUniqueObject<ProjectBuilder>();
+    // m_projectBuilder->Initialize();
+    Logger::Instance().AddLog("Started Project Builder", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
+  }
 
   return true;
 }
@@ -245,8 +251,9 @@ void App::Update()
 {
 
   // TODO: Remove this and make it so it is loaded via a scene
-  SceneManager::Instance().CreateObject<PlayerEntity>("Player");
-  // SceneManager::Instance().CreateObject<CameraFollowerEntity>("Follower");
+  auto player = SceneManager::Instance().CreateObject<PlayerEntity>("Player");
+  player->Move(Vector2f(500, 500));
+  SceneManager::Instance().CreateObject<CameraFollowerEntity>("Follower");
 
   std::srand(static_cast<uint32>(std::time(nullptr)));
   for (int i = 0; i < 10; ++i)
@@ -279,12 +286,14 @@ void App::Update()
 
     UI::Instance().GenerateIMGUI();
 
-    Physics::Instance().Update(10);
-    SceneManager::Instance().Update(delta);
-
 #if UI_EDITOR_MODE
     m_editor->Update(delta);
 #endif
+    // m_editor->m_camera.GetComponent<Camera>()->setSize(1200, 640);
+    // m_editor->m_camera.SetPosition(Vector2f(0,0));
+    // m_editor->m_camera.GetComponent<Camera>()->Update(delta);
+    Physics::Instance().Update(10);
+    SceneManager::Instance().Update(delta);
 
     WindowManager::Instance().Clear();
 

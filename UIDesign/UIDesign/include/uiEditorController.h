@@ -1,12 +1,13 @@
 #pragma once
 #include "uiPrerequisites.h"
-#include "uiClassRegisters.h"
+// #include "uiClassRegisters.h"
 
 #include "uiController.h"
 #include "uiInputMapping.h"
 
 
 class EditorCameraEntity;
+class CameraFollowerEntity;
 
 class EditorControllerEntity : public ControllerEntity
 {
@@ -40,7 +41,8 @@ public:
 
   EditorCameraEntity* m_editorCamera = nullptr;
   SharedPtr<InputMapping> m_editorBindings;
+  Vector2f m_direction;
 
 };
 
-REGISTER_CLASS(EditorControllerEntity)
+// REGISTER_CLASS(EditorControllerEntity)
