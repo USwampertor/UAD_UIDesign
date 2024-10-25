@@ -66,7 +66,7 @@ public:
 
   JSONDocument Serialize(const Vector<String>& names);
 
-  void Deserialize(const JSONValue& v);
+  void Deserialize(const JSONValue& sceneArray);
 
   SharedPtr<Scene> m_activeScene;
 

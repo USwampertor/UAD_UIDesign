@@ -91,6 +91,11 @@ void ProjectBuilder::BuildProject()
 
   JSONValue resolutionArray(rapidjson::kArrayType);
 
+  if (m_settings.m_resolutions.empty())
+  {
+    m_settings.m_resolutions.push_back(new VideoMode(1920, 1080));
+  }
+
   for (VideoMode* vMode : m_settings.m_resolutions)
   {
     JSONValue resolutionValue(rapidjson::kArrayType);
@@ -104,9 +109,6 @@ void ProjectBuilder::BuildProject()
   settingsData.AddMember("framerate", m_settings.m_framerate, allocator);
 
   gameDocument.AddMember("settings", settingsData, allocator);
-
-  // TODO: Check errors in scene serialization
-
 
   // Resources being used
   JSONDocument resourcesDocument = ResourceManager::Instance().Serialize();

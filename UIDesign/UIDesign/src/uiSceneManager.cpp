@@ -3,6 +3,7 @@
 #include "uiAnimator.h"
 #include "uiApp.h"
 #include "uiBoxCollider.h"
+#include "uiJSON.h"
 #include "uiSprite.h"
 
 #include "uiClassRegisters.h"
@@ -147,4 +148,33 @@ JSONDocument SceneManager::Serialize(const Vector<String>& names)
   }
   return document;
 
+}
+
+void SceneManager::Deserialize(const JSONValue& sceneArray)
+{
+  for (auto& itr : sceneArray.GetArray())
+  {
+    // String sceneName = itr.GetObject()["sceneName"].GetString();
+    auto obj = itr.GetObject();
+    String sceneName = obj["sceneName"].GetString();
+    String gameSettings = obj["gameSettings"].GetString();
+    
+    Vector2f gravity;
+    // JSONValue gravityObj = obj["gravity"].GetArray()[0];
+    gravity.x = obj["gravity"].GetArray()[0].GetFloat();
+    gravity.y = obj["gravity"].GetArray()[1].GetFloat();
+    
+    Scene* newScene = CreateScene(sceneName);
+    newScene->m_settings->m_levelGravity = gravity;
+    newScene->m_settings->m_gameSettings = gameSettings;
+    
+    // JSONValue entityData = obj["entityData"].GetArray();
+    
+    for (auto& entity : obj["entityData"].GetArray())
+    {
+      SharedPtr<Entity> e = ClassRegisters::CreateEntity(entity["type"].GetString());
+      newScene->m_entities.push_back(e);
+    }
+  }
+  m_activeScene = m_scenes[0];
 }

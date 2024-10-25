@@ -7,8 +7,9 @@
 # define UI_DEBUG_MODE 0
 #endif
 
+static bool g_isEditor;
 
-#if UI_DEBUG_MODE == 1
+#if UI_DEBUG_MODE
 #define UI_EDITOR_MODE 1
 #endif
 

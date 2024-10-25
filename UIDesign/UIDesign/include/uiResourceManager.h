@@ -130,12 +130,11 @@ public:
 
   void Deserialize(const JSONValue& resources)
   {
-
     Vector<QueueFrames*> queueResources;
-
-    for (JSONValue::ConstValueIterator itr = resources.Begin(); itr != resources.End(); ++itr)
+// 
+    for (auto& itr : resources.GetArray())
     {
-      JSONValue obj = itr->GetObject();
+      auto obj = itr.GetObject();
 
       SizeT id = obj["id"].GetInt64();
       String name = obj["name"].GetString();
@@ -143,6 +142,7 @@ public:
       eRESOURCETYPE resType = eRESOURCETYPE::_from_integral(type);
       if (resType == eRESOURCETYPE::TEXTURE)
       {
+        // TODO: Fix texture loading as it needs a way to load raw pixel data
         SharedPtr<Texture> newResource = CreateResource<Texture>(name);
         Vector<uint8> data;
         for (auto& pixel : obj["data"].GetArray())
@@ -150,7 +150,14 @@ public:
           data.push_back(pixel.GetUint());
         }
 
-        newResource->loadFromMemory(data.data(), data.size());
+        Vector2f imgSize;
+        imgSize.x = obj["imgSize"].GetArray()[0].GetUint();
+        imgSize.y = obj["imgSize"].GetArray()[1].GetUint();
+
+        sf::Image i;
+        i.create(imgSize.x, imgSize.y, data.data());
+        // newResource->loadFromMemory(data.data(), data.size());
+        newResource->loadFromImage(i);
       }
       else if (resType == eRESOURCETYPE::SOUND)
       {
@@ -205,12 +212,12 @@ public:
       }
       else if (eRESOURCETYPE::FONT == type)
       {
+        // TODO: Finish this
         SharedPtr<Font> newResource = CreateResource<Font>(name);
-
       }
 
     }
-
+// 
     // Process resources that need previously loaded resources
     for (QueueFrames* queue : queueResources)
     {
@@ -269,6 +276,9 @@ public:
         }
 
         obj.AddMember("data", jsonArray, allocator);
+        JSONValue jsonSize(rapidjson::kArrayType);
+        jsonSize.PushBack(img.getSize().x, allocator).PushBack(img.getSize().y, allocator);
+        obj.AddMember("imgSize", jsonSize, allocator);
       }
       else if (eRESOURCETYPE::SOUND == type)
       {

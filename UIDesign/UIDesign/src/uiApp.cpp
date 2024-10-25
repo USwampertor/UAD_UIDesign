@@ -9,6 +9,7 @@
 #include "uiEnemy.h"
 #include "uiFileSystem.h"
 #include "uiInputManager.h"
+#include "uiJSON.h"
 #include "uiLogger.h"
 #include "uiPhysics.h"
 #include "uiPlayer.h"
@@ -28,16 +29,13 @@
 
 void App::OnStartUp()
 {
-  m_splashScreen.Initialize();
-  Thread t(&SplashScreen::Show, &m_splashScreen);
-
-
   // TODO: Move this
- 
+  Thread* t;
   // Load Editor items instead of game
   if (m_parser.HasFlag("editor"))
   {
-
+    m_splashScreen.Initialize();
+    t = new Thread(&SplashScreen::Show, &m_splashScreen);
   }
 
 
@@ -51,9 +49,13 @@ void App::OnStartUp()
   {
     // Send Resources error
   }
-  m_splashScreen.m_loaded = true;
-  t.join();
-  m_splashScreen.ShutDown();
+
+  if (m_parser.HasFlag("editor"))
+  {
+    m_splashScreen.m_loaded = true;
+    t->join();
+    m_splashScreen.ShutDown();
+  }
 }
 
 bool App::StartSystems()
@@ -63,7 +65,7 @@ bool App::StartSystems()
   
   if (RMT_ERROR_NONE != error)
   {
-    std::cout << "Error starting up Remotery" << std::endl;
+    std::cout << "Error starting up Remotery " << error << std::endl;
     return false;
   }
 
@@ -206,17 +208,18 @@ bool App::LoadResources()
 
       // game settings
       JSONValue& settingsObj = gameDoc["settings"].GetObject();
-      settings.m_gameName = settingsObj["name"].GetString();
-      settings.m_framerate = settingsObj["framerate"].GetInt();
+      settings.m_gameName = settingsObj["gameName"].GetString();
       settings.m_displaySize = { settingsObj["resolutions"].GetArray()[0].GetArray()[0].GetUint(),
                                  settingsObj["resolutions"].GetArray()[0].GetArray()[1].GetUint() };
       settings.m_shouldUseVerticalSync = settingsObj["verticalSync"].GetBool();
-
-      // Scenes
-      JSONValue& scenesObj = gameDoc["scenes"].GetObject();
-
+      settings.m_framerate = settingsObj["framerate"].GetInt();
 
       // Resources
+      ResourceManager::Instance().Deserialize(gameDoc["resources"]);
+
+      // Scenes
+      // JSONValue& scenesObj = .GetArray();
+      SceneManager::Instance().Deserialize(gameDoc["sceneData"]);
 
     }
     else
