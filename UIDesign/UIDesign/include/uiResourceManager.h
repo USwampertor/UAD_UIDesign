@@ -8,6 +8,7 @@
 #include "uiFileSystem.h"
 #include "uiFont.h"
 #include "uiJSON.h"
+#include "uiLogger.h"
 #include "uiModule.h"
 #include "uiMusicClip.h"
 #include "uiResource.h"
@@ -135,10 +136,20 @@ public:
     for (auto& itr : resources.GetArray())
     {
       auto obj = itr.GetObject();
+      
+      static const char* kTypeNames[] =
+      { "Null", "False", "True", "Object", "Array", "String", "Number" };
+      for (auto& m : itr.GetObject())
+      {
+        printf("Type of member %s is %s\n",
+               m.name.GetString(), 
+               kTypeNames[m.value.GetType()]);
+      }
 
-      SizeT id = obj["id"].GetInt64();
+      SizeT id = obj["id"].GetUint64();
       String name = obj["name"].GetString();
       int32 type = obj["type"].GetInt();
+
       eRESOURCETYPE resType = eRESOURCETYPE::_from_integral(type);
       if (resType == eRESOURCETYPE::TEXTURE)
       {
@@ -249,9 +260,12 @@ public:
 
     for (const auto& resource : m_resources)
     {
+      String toParseStr = Utils::Format("%s - %s", resource.second->m_resName.c_str(), resource.second->GetType()._to_string());
+      Logger::Instance().ToDebugger(toParseStr);
+      Logger::Instance().ToConsole(toParseStr);
       JSONValue obj(rapidjson::kObjectType);
 
-      obj.AddMember("id", resource.first, allocator);
+      obj.AddMember("id", static_cast<uint64>(resource.first), allocator);
       obj.AddMember("name", resource.second->m_resName, allocator);
 
       eRESOURCETYPE type = resource.second->GetType();
@@ -335,6 +349,9 @@ public:
         String fontBuffer = FileSystem::GetAllStringFromFile(REINTERPRETPOINTER(Font, resource.second)->m_filePath);
         obj.AddMember("data", fontBuffer, allocator);
       }
+
+
+
       document.PushBack(obj, allocator);
     }
     return document;

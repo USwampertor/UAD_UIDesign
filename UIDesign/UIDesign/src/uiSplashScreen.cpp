@@ -54,7 +54,9 @@ void SplashScreen::ShutDown()
 
 void SplashScreen::SetLog(const Log& newLog)
 {
-  if (eLOGFLAG::SPLASH == newLog.m_flag)
+  int flag = newLog.m_flag._to_integral();
+  eLOGFLAG toCheck = eLOGFLAG::SPLASH;
+  if (flag & toCheck._to_integral())
   {
     SetTaskString(newLog.m_message);
   }

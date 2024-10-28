@@ -26,7 +26,7 @@ void UI::Update( RenderWindow& window, Time& dt)
 
 void UI::GenerateIMGUI()
 {
-  rmt_ScopedCPUSample(GenerateIMGUI, 0);
+  // rmt_ScopedCPUSample(GenerateIMGUI, 0);
 
   if (App::Instance().m_parser.HasFlag("editor"))
   {
@@ -37,7 +37,7 @@ void UI::GenerateIMGUI()
 
 void UI::Render(RenderWindow& window)
 {
-  rmt_ScopedCPUSample(Render, 0);
+  // rmt_ScopedCPUSample(Render, 0);
   ImGui::SFML::Render(window);
 }
 

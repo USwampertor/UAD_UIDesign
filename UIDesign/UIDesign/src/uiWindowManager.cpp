@@ -12,11 +12,14 @@ void WindowManager::Initialize(const AppSettings& gameSettings)
 
 void WindowManager::Clear()
 {
-#if UI_EDITOR_MODE
-  m_mainWindow.clear(App::Instance().m_editor->m_editorColor);
-#else
-  m_mainWindow.clear();
-#endif
+  if (App::Instance().m_parser.HasFlag("editor"))
+  {
+    m_mainWindow.clear(App::Instance().m_editor->m_editorColor);
+  }
+  else
+  {
+    m_mainWindow.clear();
+  }
 }
 
 void WindowManager::Display()

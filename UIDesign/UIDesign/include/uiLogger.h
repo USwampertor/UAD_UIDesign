@@ -16,11 +16,11 @@ BETTER_ENUM(
 BETTER_ENUM(
   eLOGFLAG,
   uint32,
-  DEFAULT = 0,
-  SPLASH,
-  DEBUGGER,
-  SCREEN,
-  CONSOLE
+  DEFAULT   = 1 << 0,
+  SPLASH    = 1 << 1,
+  DEBUGGER  = 1 << 2,
+  SCREEN    = 1 << 3,
+  CONSOLE   = 1 << 4
 )
 
 

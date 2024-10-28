@@ -67,7 +67,7 @@ Scene* SceneManager::FindScene(const String& sceneToFind)
 
 void SceneManager::Update(const float& delta)
 {
-  rmt_ScopedCPUSample(Update, 0);
+  // rmt_ScopedCPUSample(Update, 0);
   // Delete Entities that are marked for delete
   for (Entity* toDelete : m_activeScene->m_toRemove)
   {
@@ -101,7 +101,7 @@ void SceneManager::Update(const float& delta)
 
 void SceneManager::UpdateRender(sf::RenderWindow& w)
 {
-  rmt_ScopedCPUSample(UpdateRender, 0);
+  // rmt_ScopedCPUSample(UpdateRender, 0);
   for (int i = 0; i < SceneManager::Instance().GetActiveScene()->m_entities.size(); ++i)
   {
     

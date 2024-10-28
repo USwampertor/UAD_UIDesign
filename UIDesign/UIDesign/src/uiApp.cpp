@@ -61,17 +61,17 @@ void App::OnStartUp()
 bool App::StartSystems()
 {
   Remotery* rmt;
-  rmtError error = rmt_CreateGlobalInstance(&rmt);
+  // rmtError error = rmt_CreateGlobalInstance(&rmt);
   
-  if (RMT_ERROR_NONE != error)
-  {
-    std::cout << "Error starting up Remotery " << error << std::endl;
-    return false;
-  }
+  // if (RMT_ERROR_NONE != error)
+  // {
+  //   std::cout << "Error starting up Remotery " << error << std::endl;
+  //   return false;
+  // }
 
-  rmt_BindOpenGL();
+  // rmt_BindOpenGL();
 
-  rmt_ScopedCPUSample(StartSystems, 0);
+  // rmt_ScopedCPUSample(StartSystems, 0);
 
   Logger::StartUp();
   if (!Logger::IsStarted())
@@ -289,9 +289,10 @@ void App::Update()
 
     UI::Instance().GenerateIMGUI();
 
-#if UI_EDITOR_MODE
-    m_editor->Update(delta);
-#endif
+    if (m_parser.HasFlag("editor"))
+    {
+      m_editor->Update(delta);
+    }
     // m_editor->m_camera.GetComponent<Camera>()->setSize(1200, 640);
     // m_editor->m_camera.SetPosition(Vector2f(0,0));
     // m_editor->m_camera.GetComponent<Camera>()->Update(delta);
@@ -312,5 +313,5 @@ void App::Update()
 void App::Exit()
 {
   UI::Instance().Finish();
-  rmt_UnbindOpenGL();
+  // rmt_UnbindOpenGL();
 }
