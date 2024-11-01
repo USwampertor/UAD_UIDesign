@@ -42,7 +42,7 @@ public:
   EditorCameraEntity* m_editorCamera = nullptr;
   SharedPtr<InputMapping> m_editorBindings;
   Vector2f m_direction;
-
+  Vector<Entity*> m_selectedEntities;
 };
 
 // REGISTER_CLASS(EditorControllerEntity)

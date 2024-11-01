@@ -141,6 +141,11 @@ public:
     return m_name;
   }
 
+  void SetName(const String& newName)
+  {
+    m_name = newName;
+  }
+
   void AttachChildren(Entity* newChild);
 
   void RemoveChildren(const String& name);

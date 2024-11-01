@@ -8,6 +8,7 @@
 #include "uiEditorCamera.h"
 #include "uiEnemy.h"
 #include "uiFileSystem.h"
+#include "uiIcon.h"
 #include "uiInputManager.h"
 #include "uiJSON.h"
 #include "uiLogger.h"
@@ -15,6 +16,8 @@
 #include "uiPlayer.h"
 #include "uiResourceManager.h"
 #include "uiSceneManager.h"
+#include "uiShader.h"
+#include "uiShaderFile.h"
 #include "uiUI.h"
 #include "uiTexture.h"
 #include "uiWindowManager.h"
@@ -137,9 +140,8 @@ bool App::StartSystems()
 
   if (m_parser.HasFlag("editor"))
   {
-    
-  }
 
+  }
   /************************************************************************/
   return true;
 }
@@ -151,8 +153,13 @@ bool App::LoadResources()
   if (m_parser.HasFlag("editor"))
   {
     // TODO: Make this a dynamic load
-    ResourceManager::Instance().LoadResource<Texture>(Utils::Format("%s/../resources/gizmo.png", FileSystem::CurrentPath().string().c_str()));
-    String atlasPath1 = Utils::Format("%s/../resources/sprite1.json", FileSystem::CurrentPath().string().c_str());
+    String resourcePath = Utils::Format("%s/../resources", FileSystem::ExeDir().string().c_str());
+
+    ResourceManager::Instance().LoadResource<Texture>(Utils::Format("%s/gizmo.png", 
+                                                                    resourcePath.c_str()));
+    ResourceManager::Instance().LoadResource<ShaderFile>(Utils::Format("%s/grid.frag", 
+                                                                       resourcePath.c_str()));
+    String atlasPath1 = Utils::Format("%s/sprite1.json", resourcePath.c_str());
     ResourceManager::Instance().LoadResource<Atlas>(atlasPath1);
     ResourceManager::Instance().CreateResource<Animation>("idleEnemy");
     ResourceManager::Instance().GetResource<Animation>("idleEnemy")->Initialize(ResourceManager::Instance().GetResource<Atlas>("sprite1")->m_atlas, 400.0f);
@@ -179,6 +186,14 @@ bool App::LoadResources()
     ResourceManager::Instance().LoadResource<AudioClip>(audioPath2);
     ResourceManager::Instance().LoadResource<AudioClip>(Utils::Format("%s/../resources/fart.mp3", FileSystem::CurrentPath().string().c_str()));
 
+    Texture* camera_gizmo = ResourceManager::Instance().CreateResource<Texture>("editor_camera").get();
+    sf::Image cameraImage;
+    cameraImage.create(32, 32, reinterpret_cast<uint8*>(&g_cameraIcon[0]));
+    camera_gizmo->loadFromImage(cameraImage);
+    Texture* light_gizmo = ResourceManager::Instance().CreateResource<Texture>("editor_light").get();
+    sf::Image lightImage;
+    lightImage.create(32, 32, reinterpret_cast<uint8*>(&g_lightIcon[0]));
+    light_gizmo->loadFromImage(lightImage);
 
     // TODO: Change location of this section
     String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
@@ -239,7 +254,6 @@ bool App::LoadResources()
     // m_projectBuilder->Initialize();
     Logger::Instance().AddLog("Started Project Builder", eLOGLEVEL::DEFAULT, eLOGFLAG::SPLASH);
   }
-
   return true;
 }
 
@@ -255,7 +269,7 @@ void App::Update()
 
   // TODO: Remove this and make it so it is loaded via a scene
   auto player = SceneManager::Instance().CreateObject<PlayerEntity>("Player");
-  player->Move(Vector2f(500, 500));
+  player->Move(Vector2f(0, 0));
   SceneManager::Instance().CreateObject<CameraFollowerEntity>("Follower");
 
   std::srand(static_cast<uint32>(std::time(nullptr)));
@@ -302,6 +316,7 @@ void App::Update()
     WindowManager::Instance().Clear();
 
     SceneManager::Instance().UpdateRender(WindowManager::Instance().m_mainWindow);
+    m_editor->RenderEditorItems(WindowManager::Instance().m_mainWindow);
 
     UI::Instance().Render(WindowManager::Instance().m_mainWindow);
     WindowManager::Instance().Display();

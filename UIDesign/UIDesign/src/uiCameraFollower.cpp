@@ -14,6 +14,7 @@ void CameraFollowerEntity::Initialize()
   m_camera = CreateComponent<Camera>(Vector2f(0, 0), s);
   m_source = CreateComponent<AudioSource>();
   m_source->SetClip(ResourceManager::Instance().GetResource<AudioClip>("fart"));
+  SetPosition(Vector2f(0, 0));
 }
 
 void CameraFollowerEntity::Update(const float& delta)

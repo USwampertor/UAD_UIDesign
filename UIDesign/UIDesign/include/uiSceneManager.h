@@ -3,9 +3,10 @@
 
 #include "uiModule.h"
 #include "uiScene.h"
+#include "uiWindow.h"
 
 // TODO: Change this to another location
-#include <SFML/Graphics/RenderWindow.hpp>
+// #include <SFML/Graphics/RenderWindow.hpp>
 
 class SceneManager : public Module<SceneManager>
 {
@@ -60,7 +61,7 @@ public:
 
   void Update(const float& delta);
 
-  void UpdateRender(sf::RenderWindow& w);
+  void UpdateRender(RenderWindow& w);
   
   Scene* GetActiveScene();
 

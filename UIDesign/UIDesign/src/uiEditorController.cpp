@@ -5,7 +5,10 @@
 #include "uiEditorCamera.h"
 #include "uiInputManager.h"
 #include "uiLogger.h"
+#include "uiSceneManager.h"
 #include "uiUtilities.h"
+#include "uiVector2.h"
+#include "uiWindowManager.h"
 
 #include "imgui.h"
 
@@ -128,14 +131,29 @@ void EditorControllerEntity::Zoom(SharedPtr<InputValue> value)
   {
     m_editorCamera->m_cameraActualZoom += 0.1f * -(value->m_value);
     m_editorCamera->m_cameraActualZoom = std::clamp(m_editorCamera->m_cameraActualZoom, 0.1f, 1000.0f);
-    Logger::Instance().ToConsole(Utils::Format("%f", m_editorCamera->m_cameraActualZoom));
   }
 
 }
 
 void EditorControllerEntity::SelectEntity(SharedPtr<InputValue> value)
 {
-
+  if (value->GetState() == Input::eINPUTSTATE::PRESSED && !ImGui::GetIO().WantCaptureMouse)
+  {
+    m_selectedEntities.clear();
+    for (const auto& e : SceneManager::Instance().m_activeScene->m_entities)
+    {
+      Vector2f entityPos(e->GetTransform().position.x, e->GetTransform().position.y);
+      Vector2i mouseWndPos = Input::Mouse::getPosition(WindowManager::Instance().m_mainWindow);
+      Vector2f mousePos = WindowManager::Instance().m_mainWindow.mapPixelToCoords(mouseWndPos);
+      float d = Vec2::Length(entityPos - mousePos);
+      Logger::Instance().ToConsole(Utils::Format("%f", d));
+      if (d < 100.0f)
+      {
+        m_selectedEntities.push_back(e.get());
+        break;
+      }
+    }
+  }
 }
 
 void EditorControllerEntity::MoveEntity(SharedPtr<InputValue> value)

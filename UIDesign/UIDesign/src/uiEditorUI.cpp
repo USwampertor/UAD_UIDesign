@@ -1,6 +1,7 @@
 #include "uiEditorUI.h"
 
 #include "uiApp.h"
+#include "uiAnimator.h"
 #include "uiInputManager.h"
 #include "uiClassRegisters.h"
 #include "uiLogger.h"
@@ -239,16 +240,6 @@ void EditorUI::DrawUI()
           }
           ImGui::PopID();
 
-          // ImGui::Selectable(item->m_sceneName.c_str());
-          // if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
-          // {
-          //   int n_next = i + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-          //   if (n_next >= 0 && n_next < SceneManager::Instance().m_scenes.size())
-          //   {
-          //     std::swap(SceneManager::Instance().m_scenes[n_next], SceneManager::Instance().m_scenes[i]);
-          //     ImGui::ResetMouseDragDelta();
-          //   }
-          // }
         }
 
         ImGui::Separator();
@@ -272,7 +263,53 @@ void EditorUI::DrawUI()
       {
         if (ImGui::Begin("Entity Inspector"))
         {
+          for (auto& e : App::Instance().m_editor->m_controller.m_selectedEntities)
+          {
+            String n = e->GetName();
+            ImGui::Text("EntityName");
+            ImGui::SameLine();
+            if (ImGui::InputText("##entityName", &n[0], ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+              e->SetName(n);
+            }
+            ImGui::Text("Transform");
+            ImGui::Separator();
+            ImGui::Text("Position");
+            Vector2f pos = e->GetTransform().position;
+            ImGui::Text("X: ");
+            ImGui::SameLine();
+            ImGui::PushItemWidth(ImGui::GetWindowSize().x / 4);
+            ImGui::DragFloat("##entityX", &pos.x, 0.05f, -1000000.0f, +1000000.0f, "%.3f");
+            ImGui::PopItemWidth();
+            ImGui::SameLine();
+            ImGui::Text("Y: ");
+            ImGui::SameLine();
+            ImGui::PushItemWidth(ImGui::GetWindowSize().x / 4);
+            ImGui::DragFloat("##entityY", &pos.y, 0.05f, -1000000.0f, +1000000.0f, "%.3f");
+            ImGui::PopItemWidth();
+            e->SetPosition(pos);
 
+            // Components
+            if (e->GetComponent<Animator>() != nullptr)
+            {
+              ImGui::Separator();
+              ImGui::Text("Animator");
+              for (auto& animation : e->GetComponent<Animator>()->m_animations)
+              {
+                ImGui::Text(animation.first.c_str());
+              }
+            }
+            if (e->GetComponent<Sprite>() != nullptr)
+            {
+              ImGui::Separator();
+              ImGui::Text("Sprite");
+              ImGui::ImageButton("##entitySprite", 
+                                 static_cast<sf::Sprite>(*e->GetComponent<Sprite>()), 
+                                 Vector2f(ImGui::GetWindowSize().x / 2, 
+                                          ImGui::GetWindowSize().x / 2));
+            }
+            // End Components
+          }
         }
         ImGui::End();
       }

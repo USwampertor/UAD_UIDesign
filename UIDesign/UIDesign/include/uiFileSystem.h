@@ -13,10 +13,8 @@ using FileType = std::filesystem::file_type;
 // TODO: Simplify this
 struct FileSystem
 {
-  static const Path ExePath()
-  {
-    return Path(m_exePath);
-  }
+  static const Path ExePath() { return Path(m_exePath); }
+  static const Path ExeDir() { return Path(m_exePath).parent_path(); }
   static const Path WorkingPath() { return Path(m_exePath).parent_path(); }
   static const Path CurrentPath() { return std::filesystem::current_path(); }
   static const String CurrentPathString() { return std::filesystem::current_path().string(); }

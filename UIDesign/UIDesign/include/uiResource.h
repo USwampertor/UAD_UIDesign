@@ -11,7 +11,8 @@ BETTER_ENUM(eRESOURCETYPE,
             ANIMATION,
             ATLAS,
             FONT,
-            SCENE
+            SCENE,
+            SHADER
             )
 
 

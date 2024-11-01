@@ -12,6 +12,7 @@
 #include "uiModule.h"
 #include "uiMusicClip.h"
 #include "uiResource.h"
+#include "uiShaderFile.h"
 #include "uiScene.h"
 #include "uiTexture.h"
 #include "uiUtilities.h"
@@ -97,6 +98,10 @@ public:
                         sf::IntRect(pos[0].GetInt(), pos[1].GetInt(), size[0].GetInt(), size[1].GetInt()));
         REINTERPRETPOINTER(Atlas, newResource)->m_atlas.push_back(t);
       }
+    }
+    else if (eRESOURCETYPE::SHADER == type)
+    {
+      REINTERPRETPOINTER(ShaderFile, newResource)->LoadFromFile(path);
     }
     return newResource;
   }
@@ -226,6 +231,12 @@ public:
         // TODO: Finish this
         SharedPtr<Font> newResource = CreateResource<Font>(name);
       }
+      else if (eRESOURCETYPE::SHADER == type)
+      {
+        // TODO: Finish this
+        SharedPtr<ShaderFile> newResource = CreateResource<ShaderFile>(name);
+        newResource->LoadFromString(obj["data"].GetString());
+      }
 
     }
 // 
@@ -348,6 +359,12 @@ public:
       {
         String fontBuffer = FileSystem::GetAllStringFromFile(REINTERPRETPOINTER(Font, resource.second)->m_filePath);
         obj.AddMember("data", fontBuffer, allocator);
+      }
+      else if (eRESOURCETYPE::SHADER == type)
+      {
+        // TODO: Finish this
+        String str = REINTERPRETPOINTER(ShaderFile, resource.second)->GetShader();
+        obj.AddMember("data", str, allocator);
       }
 
 

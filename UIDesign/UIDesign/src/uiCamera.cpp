@@ -1,10 +1,11 @@
 #include "uiCamera.h"
 #include "uiMath.h"
+#include "uiResourceManager.h"
 #include "uiWindowManager.h"
 
 void Camera::Initialize()
 {
-
+  m_parent->m_gizmoSprite->setTexture(*ResourceManager::Instance().GetResource<Texture>("editor_camera").get());
 }
 
 void Camera::OnDestroy()

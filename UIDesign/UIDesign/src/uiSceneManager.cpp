@@ -5,6 +5,7 @@
 #include "uiBoxCollider.h"
 #include "uiJSON.h"
 #include "uiSprite.h"
+#include "uiApp.h"
 
 #include "uiClassRegisters.h"
 
@@ -99,7 +100,7 @@ void SceneManager::Update(const float& delta)
   }
 }
 
-void SceneManager::UpdateRender(sf::RenderWindow& w)
+void SceneManager::UpdateRender(RenderWindow& w)
 {
   // rmt_ScopedCPUSample(UpdateRender, 0);
   for (int i = 0; i < SceneManager::Instance().GetActiveScene()->m_entities.size(); ++i)
@@ -109,9 +110,12 @@ void SceneManager::UpdateRender(sf::RenderWindow& w)
     {
       w.draw(*m_activeScene->m_entities[i]->GetComponent<Sprite>());
     }
-    if (m_activeScene->m_entities[i]->GetComponent<BoxCollider>() && m_isDebug)
+    if (m_activeScene->m_entities[i]->GetComponent<BoxCollider>())
     {
       w.draw(*m_activeScene->m_entities[i]->GetComponent<BoxCollider>());
+    }
+    if (App::Instance().m_parser.HasFlag("editor"))
+    {
       w.draw(*m_activeScene->m_entities[i]->m_gizmoSprite);
     }
   }

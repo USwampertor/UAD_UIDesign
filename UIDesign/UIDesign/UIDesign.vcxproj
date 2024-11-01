@@ -313,6 +313,7 @@
     <ClInclude Include="include\uiSceneManager.h" />
     <ClInclude Include="include\uiSceneSettings.h" />
     <ClInclude Include="include\uiShader.h" />
+    <ClInclude Include="include\uiShaderFile.h" />
     <ClInclude Include="include\uiSpawner.h" />
     <ClInclude Include="include\uiSplashScreen.h" />
     <ClInclude Include="include\uiSprite.h" />
