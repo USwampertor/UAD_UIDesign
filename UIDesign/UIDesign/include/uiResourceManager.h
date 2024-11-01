@@ -4,9 +4,11 @@
 
 #include "uiAnimation.h"
 #include "uiAudioClip.h"
+#include "uiApp.h"
 #include "uiAtlas.h"
 #include "uiFileSystem.h"
 #include "uiFont.h"
+#include "uiIcon.h"
 #include "uiJSON.h"
 #include "uiLogger.h"
 #include "uiModule.h"
@@ -23,6 +25,50 @@
 class ResourceManager : public Module<ResourceManager>
 {
 public:
+
+  virtual void OnStartUp() override
+  {
+    // We should always have an error texture, error text, error sound, and etc.
+    SharedPtr<Texture> missingTexture = CreateResource<Texture>("missing_texture");
+    sf::Image missingImage;
+    missingImage.create(32, 32, g_missingTex);
+    missingTexture->loadFromImage(missingImage);
+
+
+    // Editor icons and resources
+    if (App::Instance().m_parser.HasFlag("editor"))
+    {
+    
+      SharedPtr<Texture> camera_gizmo = ResourceManager::Instance().CreateResource<Texture>("editor_camera");
+      sf::Image cameraImage;
+      cameraImage.create(32, 32, g_cameraIcon);
+      camera_gizmo->loadFromImage(cameraImage);
+
+      SharedPtr<Texture> light_gizmo = ResourceManager::Instance().CreateResource<Texture>("editor_light");
+      sf::Image lightImage;
+      lightImage.create(32, 32, g_lightIcon);
+      light_gizmo->loadFromImage(lightImage);
+
+      SharedPtr<Texture> atlas_icon = ResourceManager::Instance().CreateResource<Texture>("editor_atlas");
+      sf::Image atlasImage;
+      atlasImage.create(32, 32, g_atlasIcon);
+      atlas_icon->loadFromImage(atlasImage);
+
+      SharedPtr<Texture> json_icon = ResourceManager::Instance().CreateResource<Texture>("editor_json");
+      sf::Image jsonImage;
+      jsonImage.create(32, 32, g_jsonIcon);
+      json_icon->loadFromImage(jsonImage);
+
+      // SharedPtr<Texture> json_icon = ResourceManager::Instance().CreateResource<Texture>("editor_json");
+      // sf::Image jsonImage;
+      // jsonImage.create(32, 32, g_jsonIcon);
+      // json_icon->loadFromImage(jsonImage);
+
+    }
+  }
+
+
+
   template<typename T, typename = std::enable_if_t<std::is_base_of<Resource, T>::value>>
   SharedPtr<T> CreateResource(const String& assetName)
   {

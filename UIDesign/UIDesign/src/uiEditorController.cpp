@@ -46,7 +46,10 @@ void EditorControllerEntity::Initialize()
                                 std::bind(&EditorControllerEntity::MoveEntity, 
                                           this,
                                           std::placeholders::_1));
-
+  m_editorBindings->BindAction(Input::eINPUTCODE::MouseRight,
+                                std::bind(&EditorControllerEntity::MoveCameraMouse, 
+                                          this,
+                                          std::placeholders::_1));
   m_editorBindings->BindAction(Input::eINPUTCODE::KeyCodeC,
                                 std::bind(&EditorControllerEntity::ToggleColliders, 
                                           this,
@@ -133,6 +136,22 @@ void EditorControllerEntity::Zoom(SharedPtr<InputValue> value)
     m_editorCamera->m_cameraActualZoom = std::clamp(m_editorCamera->m_cameraActualZoom, 0.1f, 1000.0f);
   }
 
+}
+
+void EditorControllerEntity::MoveCameraMouse(SharedPtr<InputValue> value)
+{
+  if (value->GetState() == Input::eINPUTSTATE::PRESSED && !ImGui::GetIO().WantCaptureMouse)
+  {
+    m_MousePos = Input::Mouse::getPosition(WindowManager::Instance().m_mainWindow);
+  }
+  if (value->GetState() == Input::eINPUTSTATE::HELD && !ImGui::GetIO().WantCaptureMouse)
+  {
+    Vector2i secondPosI = Input::Mouse::getPosition(WindowManager::Instance().m_mainWindow);
+    Vector2f startPos = WindowManager::Instance().m_mainWindow.mapPixelToCoords(m_MousePos);
+    Vector2f endPos = WindowManager::Instance().m_mainWindow.mapPixelToCoords(secondPosI);
+    Vector2f newPos = startPos - endPos;
+    m_editorCamera->Move(newPos * 0.01f);
+  }
 }
 
 void EditorControllerEntity::SelectEntity(SharedPtr<InputValue> value)

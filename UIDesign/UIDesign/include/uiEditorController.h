@@ -28,6 +28,7 @@ public:
   void MoveCameraDown(SharedPtr<InputValue> value);
   void MoveCameraLeft(SharedPtr<InputValue> value);
   void MoveCameraRight(SharedPtr<InputValue> value);
+  void MoveCameraMouse(SharedPtr<InputValue> value);
   void Zoom(SharedPtr<InputValue> value);
   // void ZoomOut(SharedPtr<InputValue> value);
 
@@ -43,6 +44,8 @@ public:
   SharedPtr<InputMapping> m_editorBindings;
   Vector2f m_direction;
   Vector<Entity*> m_selectedEntities;
+
+  Vector2i m_MousePos;
 };
 
 // REGISTER_CLASS(EditorControllerEntity)

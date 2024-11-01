@@ -7,39 +7,48 @@ class Log;
 class Entity;
 
 
-struct BrowserThumbnail
-{
-  uint32 id;
-  String path;
-};
-
-struct AssetBrowser
-{
-  float m_iconSize = 32;
-  uint32 m_iconSpacing = 10;
-  uint32 m_iconHitSpacing = 4;
-  bool m_stretchSpacing = true;
-
-  Vector<BrowserThumbnail> m_items;
-  // ImGuiSelectionBasicStorage m_selection;
-  uint32 m_nextItemID;
-
-  Vector2f m_layoutItemSize;
-  Vector2f m_layoutItemStep;
-
-  float           m_layoutItemSpacing = 0.0f;
-  float           m_layoutSelectableSpacing = 0.0f;
-  float           m_layoutOuterPadding = 0.0f;
-  uint32          m_layoutColumnCount = 0;
-  uint32          m_layoutLineCount = 0;
-
-
-  void Clear()
-  {
-    m_items.clear();
-    // m_selection.Clear();
-  }
-};
+// struct BrowserThumbnail
+// {
+//   uint32 id;
+//   String path;
+// };
+// 
+// struct AssetBrowser
+// {
+//   // Options
+//   bool            ShowTypeOverlay = true;
+//   bool            AllowSorting = true;
+//   bool            AllowDragUnselected = false;
+//   bool            AllowBoxSelect = true;
+//   float           IconSize = 32.0f;
+//   int             IconSpacing = 10;
+//   int             IconHitSpacing = 4;         // Increase hit-spacing if you want to make it possible to clear or box-select from gaps. Some spacing is required to able to amend with Shift+box-select. Value is small in Explorer.
+//   bool            StretchSpacing = true;
+// 
+//   // State
+//   Vector<ExampleAsset> Items;               // Our items
+//   ExampleSelectionWithDeletion Selection;     // Our selection (ImGuiSelectionBasicStorage + helper funcs to handle deletion)
+//   ImGuiID         NextItemId = 0;             // Unique identifier when creating new items
+//   bool            RequestDelete = false;      // Deferred deletion request
+//   bool            RequestSort = false;        // Deferred sort request
+//   float           ZoomWheelAccum = 0.0f;      // Mouse wheel accumulator to handle smooth wheels better
+// 
+//   // Calculated sizes for layout, output of UpdateLayoutSizes(). Could be locals but our code is simpler this way.
+//   ImVec2          LayoutItemSize;
+//   ImVec2          LayoutItemStep;             // == LayoutItemSize + LayoutItemSpacing
+//   float           LayoutItemSpacing = 0.0f;
+//   float           LayoutSelectableSpacing = 0.0f;
+//   float           LayoutOuterPadding = 0.0f;
+//   int             LayoutColumnCount = 0;
+//   int             LayoutLineCount = 0;
+// 
+// 
+//   void Clear()
+//   {
+//     m_items.clear();
+//     // m_selection.Clear();
+//   }
+// };
 
 class EditorUI
 {

@@ -186,15 +186,6 @@ bool App::LoadResources()
     ResourceManager::Instance().LoadResource<AudioClip>(audioPath2);
     ResourceManager::Instance().LoadResource<AudioClip>(Utils::Format("%s/../resources/fart.mp3", FileSystem::CurrentPath().string().c_str()));
 
-    Texture* camera_gizmo = ResourceManager::Instance().CreateResource<Texture>("editor_camera").get();
-    sf::Image cameraImage;
-    cameraImage.create(32, 32, reinterpret_cast<uint8*>(&g_cameraIcon[0]));
-    camera_gizmo->loadFromImage(cameraImage);
-    Texture* light_gizmo = ResourceManager::Instance().CreateResource<Texture>("editor_light").get();
-    sf::Image lightImage;
-    lightImage.create(32, 32, reinterpret_cast<uint8*>(&g_lightIcon[0]));
-    light_gizmo->loadFromImage(lightImage);
-
     // TODO: Change location of this section
     String settingsPath = Utils::Format("%s/../resources/game.settings", FileSystem::CurrentPath().string().c_str());
     
@@ -243,6 +234,7 @@ bool App::LoadResources()
       exit(404);
     }
   }
+
   WindowManager::Instance().Initialize(settings);
   UI::Instance().Initialize(WindowManager::Instance().m_mainWindow);
 
